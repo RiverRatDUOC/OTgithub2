@@ -36,4 +36,14 @@ class DispositivoOt extends Model
     {
         return $this->belongsTo(Ot::class, 'cod_ot', 'numero_ot');
     }
+
+    public function detalles()
+    {
+        return $this->hasOne(DetalleDispositivoOt::class, 'cod_dispositivo_ot', 'id');
+    }
+
+    public function accesorios()
+    {
+        return $this->hasOne(AccesorioDispositivoOt::class, 'cod_dispositivo_ot', 'id');
+    }
 }

@@ -83,4 +83,14 @@ class Ot extends Model
     {
         return $this->hasMany(ContactoOt::class, 'cod_ot', 'numero_ot');
     }
+
+    public function EquipoTecnico()
+    {
+        return $this->hasMany(EquipoTecnico::class, 'cod_ot', 'numero_ot');
+    }
+
+    public function DispositivoOT()
+    {
+        return $this->hasMany(DispositivoOt::class, 'cod_ot', 'numero_ot');
+    }
 }
