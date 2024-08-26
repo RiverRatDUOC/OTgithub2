@@ -48,7 +48,8 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link pl-0 text-white {{ Request::is('equipos*') ? 'active' : '' }}" href="{{ route('modelos.index') }}"><i class="fas fa-desktop"></i> <span>Equipos</span></a>
+                    <a class="nav-link pl-0 text-white {{ Request::is('modelos*') ? 'active' : '' }}" href="{{ route('modelos.index') }}">
+                        <i class="fas fa-desktop"></i> <span>Modelos</span></a>
                 </li>
 
 

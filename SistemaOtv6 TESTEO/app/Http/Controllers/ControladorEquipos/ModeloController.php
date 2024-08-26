@@ -5,36 +5,63 @@ namespace App\Http\Controllers\ControladorEquipos;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Modelo;
+use App\Models\Categoria;
+use App\Models\Subcategoria;
+use App\Models\Linea;
+use App\Models\Sublinea;
+use App\Models\Marca;
 
 class ModeloController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Ordenar los modelos de manera descendente por el campo 'id' o cualquier otro campo relevante
-        $modelos = Modelo::orderBy('id', 'desc')->paginate(50); // Ajusta el número de elementos por página según tus necesidades
+        // Obtener los filtros de la solicitud
+        $categoriaId = $request->input('categoria');
+        $subcategoriaId = $request->input('subcategoria');
+        $lineaId = $request->input('linea');
+        $sublineaId = $request->input('sublinea');
+        $marcaId = $request->input('marca');
+        $modeloId = $request->input('modelo');
 
-        return view('modelos.modelos', compact('modelos'));
-    }
+        // Inicializar la consulta
+        $query = Modelo::query();
 
-    public function create()
-    {
-        return view('modelos.agregar');
-    }
+        // Aplicar filtros
+        if ($categoriaId) {
+            $query->whereHas('sublinea.linea.subcategoria.categoria', function ($q) use ($categoriaId) {
+                $q->where('id', $categoriaId);
+            });
+        }
+        if ($subcategoriaId) {
+            $query->whereHas('sublinea.linea.subcategoria', function ($q) use ($subcategoriaId) {
+                $q->where('id', $subcategoriaId);
+            });
+        }
+        if ($lineaId) {
+            $query->whereHas('sublinea.linea', function ($q) use ($lineaId) {
+                $q->where('id', $lineaId);
+            });
+        }
+        if ($sublineaId) {
+            $query->where('cod_sublinea', $sublineaId);
+        }
+        if ($marcaId) {
+            $query->where('marca_id', $marcaId);
+        }
+        if ($modeloId) {
+            $query->where('id', $modeloId);
+        }
 
-    public function buscar(Request $request)
-    {
-        $search = $request->input('search');
+        // Ordenar y paginar los resultados
+        $modelos = $query->orderBy('id', 'desc')->paginate(50); // Ajusta el número de elementos por página según tus necesidades
 
-        // Filtrar modelos por 'nombre_modelo', 'cod_sublinea', 'part_number_modelo' o 'nombre_marca' relacionado y ordenar los resultados de manera descendente
-        $modelos = Modelo::where('nombre_modelo', 'like', "%$search%")
-            ->orWhere('part_number_modelo', 'like', "%$search%")
-            ->orWhere('cod_sublinea', 'like', "%$search%")
-            ->orWhereHas('marca', function ($query) use ($search) {
-                $query->where('nombre_marca', 'like', "%$search%");
-            })
-            ->orderBy('id', 'desc') // Ordenar los resultados de manera descendente por el campo 'id' o cualquier otro campo relevante
-            ->paginate(20); // Ajusta el número de resultados por página según tus necesidades
+        // Obtener los datos para los filtros
+        $categorias = Categoria::all();
+        $subcategorias = Subcategoria::all();
+        $lineas = Linea::all();
+        $sublineas = Sublinea::all();
+        $marcas = Marca::all();
 
-        return view('modelos.modelos', compact('modelos'));
+        return view('modelos.modelos', compact('modelos', 'categorias', 'subcategorias', 'lineas', 'sublineas', 'marcas'));
     }
 }

@@ -10,8 +10,78 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
+                <!-- Filtros -->
                 <div class="d-flex justify-content-between align-items-center text-center mt-3">
-                    <h2>Modelos</h2>
+                    <div class="d-flex flex-column align-items-start">
+                        <h2>Filtrar Modelos</h2>
+                        <form id="filter-form" action="{{ route('modelos.index') }}" method="get" class="input-group mt-3">
+                            <div class="row">
+                                <div class="col">
+                                    <select name="categoria" class="form-control" onchange="this.form.submit()">
+                                        <option value="">Seleccionar Categoría</option>
+                                        @foreach ($categorias as $categoria)
+                                        <option value="{{ $categoria->id }}" {{ request('categoria') == $categoria->id ? 'selected' : '' }}>
+                                            {{ $categoria->nombre_categoria }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <select name="subcategoria" class="form-control" onchange="this.form.submit()">
+                                        <option value="">Seleccionar Subcategoría</option>
+                                        @foreach ($subcategorias as $subcategoria)
+                                        <option value="{{ $subcategoria->id }}" {{ request('subcategoria') == $subcategoria->id ? 'selected' : '' }}>
+                                            {{ $subcategoria->nombre_subcategoria }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <select name="linea" class="form-control" onchange="this.form.submit()">
+                                        <option value="">Seleccionar Línea</option>
+                                        @foreach ($lineas as $linea)
+                                        <option value="{{ $linea->id }}" {{ request('linea') == $linea->id ? 'selected' : '' }}>
+                                            {{ $linea->nombre_linea }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <select name="sublinea" class="form-control" onchange="this.form.submit()">
+                                        <option value="">Seleccionar Sublínea</option>
+                                        @foreach ($sublineas as $sublinea)
+                                        <option value="{{ $sublinea->id }}" {{ request('sublinea') == $sublinea->id ? 'selected' : '' }}>
+                                            {{ $sublinea->nombre_sublinea }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <select name="marca" class="form-control" onchange="this.form.submit()">
+                                        <option value="">Seleccionar Marca</option>
+                                        @foreach ($marcas as $marca)
+                                        <option value="{{ $marca->id }}" {{ request('marca') == $marca->id ? 'selected' : '' }}>
+                                            {{ $marca->nombre_marca }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <select name="modelo" class="form-control" onchange="this.form.submit()">
+                                        <option value="">Seleccionar Modelo</option>
+                                        @foreach ($modelos as $modelo)
+                                        <option value="{{ $modelo->id }}" {{ request('modelo') == $modelo->id ? 'selected' : '' }}>
+                                            {{ $modelo->nombre_modelo }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- No se necesita el botón de filtro ya que el formulario se envía automáticamente -->
+                        </form>
+
+
+                    </div>
                     <div class="d-flex align-items-center">
                         <a href="{{ route('modelos.create') }}" class="btn btn-primary ms-auto" style="background-color: #cc6633; border-color: #cc6633;">
                             <i class="bi bi-plus"></i> Agregar
@@ -30,26 +100,30 @@
                     <table class="table table-striped" id="modelos_tabledata">
                         <thead>
                             <tr>
-                                <th onclick="sortTable(0)">Id</th>
-                                <th onclick="sortTable(1)">Nombre Modelo</th>
-                                <th onclick="sortTable(2)">Descripción Corta</th>
-                                <th onclick="sortTable(3)">Part Number</th>
-                                <th onclick="sortTable(4)">Marca</th>
-                                <th onclick="sortTable(5)">Sublinea</th>
-                                <th onclick="sortTable(6)">Línea</th> <!-- Nueva columna para la Línea -->
+                                <th onclick="sortTable(0)">Categoría</th> <!-- Columna para Categoría -->
+                                <th onclick="sortTable(1)">Subcategoría</th> <!-- Columna para Subcategoría -->
+                                <th onclick="sortTable(2)">Línea</th> <!-- Columna para Línea -->
+                                <th onclick="sortTable(3)">Sublinea</th> <!-- Columna para Sublinea -->
+                                <th onclick="sortTable(4)">Marca</th> <!-- Columna para Marca -->
+                                <th onclick="sortTable(5)">Id</th> <!-- Columna para Id -->
+                                <th onclick="sortTable(6)">Nombre Modelo</th> <!-- Columna para Nombre Modelo -->
+                                <th onclick="sortTable(7)">Part Number</th> <!-- Columna para Part Number -->
+                                <th onclick="sortTable(8)">Descripción Corta</th> <!-- Columna para Descripción Corta -->
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($modelos as $modelo)
                             <tr>
+                                <td>{{ optional($modelo->sublinea->linea->subcategoria->categoria)->nombre_categoria }}</td>
+                                <td>{{ optional($modelo->sublinea->linea->subcategoria)->nombre_subcategoria }}</td>
+                                <td>{{ optional($modelo->sublinea->linea)->nombre_linea }}</td>
+                                <td>{{ optional($modelo->sublinea)->nombre_sublinea }}</td>
+                                <td>{{ optional($modelo->marca)->nombre_marca }}</td>
                                 <td>{{ $modelo->id }}</td>
                                 <td>{{ $modelo->nombre_modelo }}</td>
-                                <td>{{ $modelo->desc_corta_modelo }}</td>
                                 <td>{{ $modelo->part_number_modelo }}</td>
-                                <td>{{ optional($modelo->marca)->nombre_marca }}</td>
-                                <td>{{ optional($modelo->sublinea)->nombre_sublinea }}</td>
-                                <td>{{ optional($modelo->sublinea->linea)->nombre_linea }}</td> <!-- Nueva columna para mostrar la Línea -->
+                                <td>{{ $modelo->desc_corta_modelo }}</td>
                                 <td>
                                     <div class="d-flex">
                                         <a href="#" class="btn btn-primary me-1" style="background-color: #cc0066; border-color: #cc0066;">
@@ -68,7 +142,6 @@
                         </tbody>
                     </table>
                 </div>
-
 
                 <div class="d-flex justify-content-center mt-4">
                     @if ($modelos->hasPages())
@@ -135,5 +208,20 @@
     </div>
 </main>
 <script src="{{ asset('assets/js/ordenar/OrdenarModelo.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('search');
+
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                clearTimeout(window.searchTimeout);
+
+                window.searchTimeout = setTimeout(function() {
+                    document.getElementById('filter-form').submit();
+                }, 300); // Retraso de 300ms para evitar múltiples envíos mientras el usuario escribe
+            });
+        }
+    });
+</script>
 
 @endsection
