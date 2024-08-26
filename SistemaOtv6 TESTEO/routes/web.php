@@ -14,6 +14,7 @@ use App\Http\Controllers\ControladorEquipos\ModeloController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\UserController;
 
+use App\Http\Controllers\migrarController;
 
 // Ruta para procesar el envío del formulario de inicio de sesión
 Route::post('/login/submit', [LoginController::class, 'login'])->name('login.submit');
