@@ -3,8 +3,15 @@
 namespace App\Http\Controllers\ControladorOrdenes;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cliente;
+use App\Models\EstadoOt;
 use Illuminate\Http\Request;
 use App\Models\Ot;
+use App\Models\PrioridadOt;
+use App\Models\Servicio;
+use App\Models\Tecnico;
+use App\Models\TipoOt;
+use App\Models\TipoVisita;
 
 class OrdenesController extends Controller
 {
@@ -28,7 +35,15 @@ class OrdenesController extends Controller
 
     public function create()
     {
-        return view('ordenes.agregar');
+        $tipos = TipoOt::all();
+        $prioridades = PrioridadOt::all();
+        $estados = EstadoOt::all();
+        $tiposVisitas = TipoVisita::all();
+        $tecnicos = Tecnico::all();
+        $clientes = Cliente::all();
+        $servicios = Servicio::all();
+
+        return view('ordenes.agregar', compact('tipos', 'prioridades', 'estados', 'tiposVisitas', 'tecnicos', 'clientes', 'servicios'));
     }
 
     public function buscar(Request $request)
