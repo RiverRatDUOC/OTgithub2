@@ -34,4 +34,9 @@ class Servicio extends Model
     {
         return $this->belongsTo(Sublinea::class, 'cod_sublinea');
     }
+
+    public function tareas()
+    {
+        return $this->hasMany(Tarea::class, 'cod_servicio');
+    }
 }

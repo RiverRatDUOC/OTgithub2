@@ -32,7 +32,13 @@
                         </div>
                         <div class="mb-3">
                             <label for="sucursal" class="form-label">Sucursal</label>
-                            <input type="text" class="form-control" id="sucursal" name="sucursal">
+                            <select class="form-select form-control" id="sucursal" name="sucursal" disabled>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="contacto" class="form-label">Contacto</label>
+                            <select class="form-select form-control" id="contacto" name="contacto" disabled>
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label for="servicio" class="form-label">Servicio</label>
@@ -40,6 +46,11 @@
                                 @foreach ($servicios as $servicio)
                                     <option value="{{ $servicio->id }}">{{ $servicio->nombre_servicio }}</option>
                                 @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tareas" class="form-label">Tareas</label>
+                            <select class="form-select form-control" id="tareas" name="tareas" disabled>
                             </select>
                         </div>
                         <div class="mb-3">

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Ot;
 use App\Models\PrioridadOt;
 use App\Models\Servicio;
+use App\Models\Sucursal;
 use App\Models\Tecnico;
 use App\Models\TipoOt;
 use App\Models\TipoVisita;
@@ -127,5 +128,29 @@ class OrdenesController extends Controller
             ->findOrFail($id);
 
         return view('ordenes.detalle', compact('orden'));
+    }
+
+    public function tareas($id)
+    {
+        $servicio = Servicio::findOrFail($id);
+        $tareas = $servicio->tareas;
+
+        return response()->json($tareas);
+    }
+
+    public function sucursales($id)
+    {
+        $cliente = Cliente::findOrFail($id);
+        $sucursales = $cliente->sucursal;
+
+        return response()->json($sucursales);
+    }
+
+    public function contactos($id)
+    {
+        $sucursal = Sucursal::findOrFail($id);
+        $contactos = $sucursal->contacto;
+
+        return response()->json($contactos);
     }
 }

@@ -31,4 +31,9 @@ class Sucursal extends Model
     {
         return $this->belongsTo(Cliente::class, 'cod_cliente');
     }
+
+    public function contacto()
+    {
+        return $this->hasMany(Contacto::class, 'cod_sucursal');
+    }
 }

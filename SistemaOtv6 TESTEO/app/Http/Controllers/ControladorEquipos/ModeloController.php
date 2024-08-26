@@ -46,7 +46,7 @@ class ModeloController extends Controller
             $query->where('cod_sublinea', $sublineaId);
         }
         if ($marcaId) {
-            $query->where('marca_id', $marcaId);
+            $query->where('cod_marca', $marcaId);
         }
         if ($modeloId) {
             $query->where('id', $modeloId);

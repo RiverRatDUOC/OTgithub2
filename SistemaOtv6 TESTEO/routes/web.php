@@ -38,8 +38,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/ordenes/agregar', [OrdenesController::class, 'create'])->middleware('can:ordenes.create')->name('ordenes.create'); // Ruta para crear una nueva orden
     Route::get('/ordenes/buscar', [OrdenesController::class, 'buscar'])->name('ordenes.buscar'); // Ruta para buscar órdenes
     Route::get('/ordenes/{orden}', [OrdenesController::class, 'show'])->name('ordenes.show'); // Ruta para mostrar el detalle de una orden
-
-
+    Route::get('/tareas/{servicioId}', [OrdenesController::class, 'tareas']);
+    Route::get('/sucursal/{clienteId}', [OrdenesController::class, 'sucursales']);
+    Route::get('/contacto/{sucursalId}', [OrdenesController::class, 'contactos']);
     // RUTAS DE CLIENTES
     Route::get('/clientes', [ClientesController::class, 'index'])->middleware('can:clientes.index')->name('clientes.index'); // Rutas para la carpeta 'clientes'
     Route::get('/clientes/agregar', [ClientesController::class, 'create'])->middleware('can:clientes.create')->name('clientes.create'); // Ruta para crear un nuevo cliente

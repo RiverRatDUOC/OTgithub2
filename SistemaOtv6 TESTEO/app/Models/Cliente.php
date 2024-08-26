@@ -29,4 +29,9 @@ class Cliente extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    public function sucursal()
+    {
+        return $this->hasMany(Sucursal::class, 'cod_cliente');
+    }
 }
