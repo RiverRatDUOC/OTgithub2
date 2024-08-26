@@ -1,0 +1,57 @@
+@extends('layouts.master')
+@include('layouts.navbar.header')
+@section('content')
+@include('layouts.sidebar.dashboard')
+<link rel="stylesheet" href="{{ URL::to('assets/css/profile.css') }}">
+
+<main class="col bg-faded py-3 flex-grow-1">
+    <h3>Home / Roles / Crear</h3>
+    <br>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center text-center mt-3">
+            <h2>Crear Rol</h2>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-body">
+                <form action="{{ route('roles.store') }}" method="POST">
+                    @csrf
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Descripción</label>
+                        <input type="text" class="form-control" id="description" name="description">
+                    </div>
+                    <div class="form-group">
+                        <label for="color">Color:</label>
+                        <input type="color" id="color" name="color">
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label for="permissions" class="form-label">Permisos</label>
+                        <div class="form-check">
+                            @foreach($permissions as $permission)
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="permissions[]" value="{{ $permission->id }}" id="permission_{{ $permission->id }}">
+                                <label class="form-check-label" for="permission_{{ $permission->id }}">
+                                    {{ $permission->description }}
+                                </label>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="background-color: #cc6633; border-color: #cc6633;">Crear Rol</button>
+                    <a href="{{ route('roles.index') }}" class="btn btn-secondary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+@endsection
