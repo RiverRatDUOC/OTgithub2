@@ -60,6 +60,7 @@
                                 <option value="0">Seleccione un dispositivo</option>
                             </select>
                         </div> --}}
+                        {{-- Bloque para los dispositivos de la OT  --}}
                         <div class="row" id="bloqueDispositivos" style="display:none;">
                             <div class="col-md-12 block-relieve m-2">
                                 <div class="block-content">
@@ -77,30 +78,33 @@
                                             <!-- opciones de tareas -->
                                         </select>
                                     </div>
-                                    <div class="align-items-center m-5">
+                                    <div class="d-flex justify-content-between col-10 mt-3">
                                         <button class="btn btn-primary mr-5">Agregar detalles del equipo</button>
-                                        <button class="btn btn-primary">Agregar detalles del equipo</button>
-
+                                        <button class="btn btn-primary">Agregar accesorios del equipo</button>
                                     </div>
                                     <button class="btn btn-primary btn-add boton-inferior-derecha" type="button">+</button>
                                 </div>
                             </div>
                         </div>
+                        {{-- Bloque para tareas para la Ot --}}
                         <div id="bloqueTareas" class="card col-md-5" style="display:none;">
                             <div class="form-group  p-4">
                                 <label for="tareasSinDispositivo">Tareas:</label>
+                                <ul class="list-group" id="tareasSinDispositivo">
+                                </ul>
+                                {{-- <div id="tareasSinDispositivo"></div>
                                 <select id="tareasSinDispositivo" class="form-control" multiple>
                                     <option value="">Seleccione una tarea</option>
                                     <!-- Agrega opciones de tareas aquí -->
-                                </select>
+                                </select> --}}
                             </div>
                         </div>
-                        <div class="mb-3">
+                        {{-- <div class="mb-3">
                             <label for="tareas" class="form-label">Tareas</label>
                             <select class="form-select form-control" id="tareas" name="tareas">
                                 <option value="0">Seleccione una tarea</option>
                             </select>
-                        </div>
+                        </div> --}}
                         <div class="mb-3">
                             <label for="tecnicoEncargado" class="form-label">Técnico encargado</label>
                             <select class="form-select form-control" id="tecnicoEncargado" name="tecnicoEncargado">

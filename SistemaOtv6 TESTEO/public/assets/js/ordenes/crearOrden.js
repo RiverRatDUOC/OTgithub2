@@ -37,18 +37,33 @@ function cargarTareasSinDispositivo(servicioId) {
             type: "GET",
             url: "/tareas/" + servicioId,
             success: function (data) {
-                var listaTareas =
-                    "<option value='0'>Seleccione una tarea</option>";
+                // var listaTareas =
+                //     "<option value='0'>Seleccione una tarea</option>";
+                // $.each(data, function (index, tarea) {
+                //     listaTareas +=
+                //         '<option value="' +
+                //         tarea.id +
+                //         '">' +
+                //         tarea.nombre_tarea +
+                //         "</option>";
+                // });
+
+                var listaTareas = "";
                 $.each(data, function (index, tarea) {
                     listaTareas +=
-                        '<option value="' +
+                        "<li class='list-group-item'> <input style='margin-left:2px;' class='form-check-input ' type='checkbox' value='" +
                         tarea.id +
-                        '">' +
+                        "' id='" +
+                        tarea.id +
+                        "'>" +
+                        "<label style='margin-left:20px' class='form-check-label stretched-link' for='" +
+                        tarea.id +
+                        "'>" +
                         tarea.nombre_tarea +
-                        "</option>";
+                        "</label>" +
+                        "</li>";
+                    $("#tareasSinDispositivo").html(listaTareas);
                 });
-
-                $("#tareasSinDispositivo").html(listaTareas);
             },
         });
     }
