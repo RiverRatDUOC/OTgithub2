@@ -3,7 +3,7 @@
 @section('content')
     @include('layouts.sidebar.dashboard')
 
-    <link rel="stylesheet" href="{{ asset('css/estilos.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/ordenes.css') }}">
 
     <main class="col py-3 flex-grow-1">
         <div class="container-fluid">
@@ -25,6 +25,7 @@
                         <div class="mb-3">
                             <label for="cliente" class="form-label">Cliente</label>
                             <select class="form-select form-control" id="cliente" name="cliente">
+                                <option value="0">Seleccione un cliente</option>
                                 @foreach ($clientes as $cliente)
                                     <option value="{{ $cliente->id }}">{{ $cliente->nombre_cliente }}</option>
                                 @endforeach
@@ -32,34 +33,87 @@
                         </div>
                         <div class="mb-3">
                             <label for="sucursal" class="form-label">Sucursal</label>
-                            <select class="form-select form-control" id="sucursal" name="sucursal" disabled>
+
+                            <select class="form-select form-control" id="sucursal" name="sucursal">
+                                <option value="0">Seleccione una sucursal</option>
                             </select>
                         </div>
                         <div class="mb-3">
                             <label for="contacto" class="form-label">Contacto</label>
-                            <select class="form-select form-control" id="contacto" name="contacto" disabled>
+                            <select class="form-select form-control" id="contacto" name="contacto">
+                                <option value="0">Seleccione un contacto</option>
                             </select>
                         </div>
                         <div class="mb-3">
                             <label for="servicio" class="form-label">Servicio</label>
                             <select class="form-select form-control" id="servicio" name="servicio">
+                                <option value="0">Seleccione un servicio</option>
                                 @foreach ($servicios as $servicio)
                                     <option value="{{ $servicio->id }}">{{ $servicio->nombre_servicio }}</option>
                                 @endforeach
                             </select>
                         </div>
+                        <input type="text" name="tipoServicio" id="tipoServicio" value="" hidden>
+                        {{-- <div class="mb-3">
+                            <label for="dispositivo" class="form-label">Dispositivo(s)</label>
+                            <select class="form-select form-control" id="dispositivo" name="dispositivo">
+                                <option value="0">Seleccione un dispositivo</option>
+                            </select>
+                        </div> --}}
+                        <div class="row" id="bloqueDispositivos" style="display:none;">
+                            <div class="col-md-12 block-relieve m-2">
+                                <div class="block-content">
+                                    <div class="form-group col-12">
+                                        <label for="dispositivo">Dispositivo:</label>
+                                        <select id="dispositivo" class="form-control">
+                                            <option value="">Seleccione un dispositivo</option>
+                                            <!-- opciones de dispositivo -->
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-12">
+                                        <label for="tareas">Tareas:</label>
+                                        <select id="tareas" class="form-control" multiple>
+                                            <option value="">Seleccione una tarea</option>
+                                            <!-- opciones de tareas -->
+                                        </select>
+                                    </div>
+                                    <div class="align-items-center m-5">
+                                        <button class="btn btn-primary mr-5">Agregar detalles del equipo</button>
+                                        <button class="btn btn-primary">Agregar detalles del equipo</button>
+
+                                    </div>
+                                    <button class="btn btn-primary btn-add boton-inferior-derecha" type="button">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="bloqueTareas" class="card col-md-5" style="display:none;">
+                            <div class="form-group  p-4">
+                                <label for="tareasSinDispositivo">Tareas:</label>
+                                <select id="tareasSinDispositivo" class="form-control" multiple>
+                                    <option value="">Seleccione una tarea</option>
+                                    <!-- Agrega opciones de tareas aquí -->
+                                </select>
+                            </div>
+                        </div>
                         <div class="mb-3">
                             <label for="tareas" class="form-label">Tareas</label>
-                            <select class="form-select form-control" id="tareas" name="tareas" disabled>
+                            <select class="form-select form-control" id="tareas" name="tareas">
+                                <option value="0">Seleccione una tarea</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="responsable" class="form-label">Responsable</label>
-                            <input type="text" class="form-control" id="responsable" name="responsable">
+                            <label for="tecnicoEncargado" class="form-label">Técnico encargado</label>
+                            <select class="form-select form-control" id="tecnicoEncargado" name="tecnicoEncargado">
+                                <option value="0">Seleccione un técnico</option>
+                                @foreach ($tecnicos as $tecnico)
+                                    <option value="{{ $tecnico->id }}">{{ $tecnico->nombre_tecnico }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label for="estado" class="form-label">Estado</label>
                             <select class="form-select form-control" id="estado" name="estado">
+                                <option value="0">Seleccione un estado</option>
                                 @foreach ($estados as $estado)
                                     <option value="{{ $estado->id }}">{{ $estado->descripcion_estado_ot }}</option>
                                 @endforeach
@@ -68,6 +122,7 @@
                         <div class="mb-3">
                             <label for="prioridad" class="form-label">Prioridad</label>
                             <select class="form-select form-control" id="prioridad" name="prioridad">
+                                <option value="0">Seleccione una prioridad</option>
                                 @foreach ($prioridades as $prioridad)
                                     <option value="{{ $prioridad->id }}">{{ $prioridad->descripcion_prioridad_ot }}
                                     </option>
@@ -77,6 +132,7 @@
                         <div class="mb-3">
                             <label for="tipo" class="form-label">Tipo de orden de trabajo</label>
                             <select class="form-select form-control" id="tipo" name="tipo">
+                                <option value="0">Seleccione un tipo de orden de trabajo</option>
                                 @foreach ($tipos as $tipo)
                                     <option value="{{ $tipo->id }}">{{ $tipo->descripcion_tipo_ot }}</option>
                                 @endforeach
@@ -85,19 +141,13 @@
                         <div class="mb-3">
                             <label for="tipoVisita" class="form-label">Tipo de visita</label>
                             <select class="form-select form-control" id="tipoVisita" name="tipoVisita">
+                                <option value="0">Seleccione un tipo de visita</option>
                                 @foreach ($tiposVisitas as $tipo)
                                     <option value="{{ $tipo->id }}">{{ $tipo->descripcion_tipo_visita }}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label for="tecnicoEncargado" class="form-label">Técnico encargado</label>
-                            <select class="form-select form-control" id="tecnicoEncargado" name="tecnicoEncargado">
-                                @foreach ($tecnicos as $tecnico)
-                                    <option value="{{ $tecnico->id }}">{{ $tecnico->nombre_tecnico }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+
                         <div class="mb-3">
                             <label for="fecha" class="form-label">Fecha</label>
                             <input type="date" class="form-control" id="fecha" name="fecha">

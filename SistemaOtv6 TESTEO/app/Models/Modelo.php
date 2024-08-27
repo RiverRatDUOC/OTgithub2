@@ -40,4 +40,9 @@ class Modelo extends Model
     {
         return $this->belongsTo(Sublinea::class, 'cod_sublinea', 'id');
     }
+
+    public function dispositivos()
+    {
+        return $this->hasMany(Dispositivo::class, 'cod_modelo');
+    }
 }

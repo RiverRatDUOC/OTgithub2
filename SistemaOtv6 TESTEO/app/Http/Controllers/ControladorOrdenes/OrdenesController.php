@@ -44,6 +44,7 @@ class OrdenesController extends Controller
         $clientes = Cliente::all();
         $servicios = Servicio::all();
 
+
         return view('ordenes.agregar', compact('tipos', 'prioridades', 'estados', 'tiposVisitas', 'tecnicos', 'clientes', 'servicios'));
     }
 
@@ -152,5 +153,20 @@ class OrdenesController extends Controller
         $contactos = $sucursal->contacto;
 
         return response()->json($contactos);
+    }
+
+    public function dispositivos($id)
+    {
+        $sucursal = Sucursal::findOrFail($id);
+        $dispositivos = $sucursal->dispositivo()->with('modelo')->get();
+
+        return response()->json($dispositivos);
+    }
+
+    public function servicioTipo($id)
+    {
+        $servicio = Servicio::findOrFail($id);
+
+        return response()->json($servicio->only('cod_tipo_servicio'));
     }
 }

@@ -36,4 +36,9 @@ class Sucursal extends Model
     {
         return $this->hasMany(Contacto::class, 'cod_sucursal');
     }
+
+    public function dispositivo()
+    {
+        return $this->hasMany(Dispositivo::class, 'cod_sucursal');
+    }
 }
