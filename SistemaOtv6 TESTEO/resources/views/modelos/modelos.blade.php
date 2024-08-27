@@ -14,10 +14,13 @@
                 <div class="d-flex justify-content-between align-items-center text-center mt-3">
                     <div class="d-flex flex-column align-items-start">
                         <h2>Filtrar Modelos</h2>
+
+
+
                         <form id="filter-form" action="{{ route('modelos.index') }}" method="get" class="input-group mt-3">
-                            <div class="row">
-                                <div class="col">
-                                    <select name="categoria" class="form-control" onchange="this.form.submit()">
+                            <div class="row g-2">
+                                <div class="col-md-4 mb-2">
+                                    <select name="categoria" class="form-control form-control-sm w-100" onchange="this.form.submit()">
                                         <option value="">Seleccionar Categoría</option>
                                         @foreach ($categorias as $categoria)
                                         <option value="{{ $categoria->id }}" {{ request('categoria') == $categoria->id ? 'selected' : '' }}>
@@ -26,48 +29,48 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col">
-                                    <select name="subcategoria" class="form-control" onchange="this.form.submit()">
+                                <div class="col-md-4 mb-2">
+                                    <select name="subcategoria" class="form-control form-control-sm w-100" onchange="this.form.submit()">
                                         <option value="">Seleccionar Subcategoría</option>
                                         @foreach ($subcategorias as $subcategoria)
                                         <option value="{{ $subcategoria->id }}" {{ request('subcategoria') == $subcategoria->id ? 'selected' : '' }}>
-                                            {{ $subcategoria->nombre_subcategoria }}
+                                            {{ $subcategoria->nombre_subcategoria }} ({{ $subcategoriaCounts[$subcategoria->id] ?? 0 }})
                                         </option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col">
-                                    <select name="linea" class="form-control" onchange="this.form.submit()">
+                                <div class="col-md-4 mb-2">
+                                    <select name="linea" class="form-control form-control-sm w-100" onchange="this.form.submit()">
                                         <option value="">Seleccionar Línea</option>
                                         @foreach ($lineas as $linea)
                                         <option value="{{ $linea->id }}" {{ request('linea') == $linea->id ? 'selected' : '' }}>
-                                            {{ $linea->nombre_linea }}
+                                            {{ $linea->nombre_linea }} ({{ $lineaCounts[$linea->id] ?? 0 }})
                                         </option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col">
-                                    <select name="sublinea" class="form-control" onchange="this.form.submit()">
+                                <div class="col-md-4 mb-2">
+                                    <select name="sublinea" class="form-control form-control-sm w-100" onchange="this.form.submit()">
                                         <option value="">Seleccionar Sublínea</option>
                                         @foreach ($sublineas as $sublinea)
                                         <option value="{{ $sublinea->id }}" {{ request('sublinea') == $sublinea->id ? 'selected' : '' }}>
-                                            {{ $sublinea->nombre_sublinea }}
+                                            {{ $sublinea->nombre_sublinea }} ({{ $sublineaCounts[$sublinea->id] ?? 0 }})
                                         </option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col">
-                                    <select name="marca" class="form-control" onchange="this.form.submit()">
+                                <div class="col-md-4 mb-2">
+                                    <select name="marca" class="form-control form-control-sm w-100" onchange="this.form.submit()">
                                         <option value="">Seleccionar Marca</option>
                                         @foreach ($marcas as $marca)
                                         <option value="{{ $marca->id }}" {{ request('marca') == $marca->id ? 'selected' : '' }}>
-                                            {{ $marca->nombre_marca }}
+                                            {{ $marca->nombre_marca }} ({{ $marcaCounts[$marca->id] ?? 0 }})
                                         </option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col">
-                                    <select name="modelo" class="form-control" onchange="this.form.submit()">
+                                <div class="col-md-4 mb-2">
+                                    <select name="modelo" class="form-control form-control-sm w-100" onchange="this.form.submit()">
                                         <option value="">Seleccionar Modelo</option>
                                         @foreach ($modelos as $modelo)
                                         <option value="{{ $modelo->id }}" {{ request('modelo') == $modelo->id ? 'selected' : '' }}>
@@ -77,8 +80,13 @@
                                     </select>
                                 </div>
                             </div>
-                            <!-- No se necesita el botón de filtro ya que el formulario se envía automáticamente -->
                         </form>
+                        
+                        
+                        
+                        
+                        
+                        
 
 
                     </div>
@@ -87,14 +95,25 @@
                             <i class="bi bi-plus"></i> Agregar
                         </a>
                     </div>
+                    
+                    
                 </div>
+                
+                
 
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     <form action="{{ route('modelos.buscar') }}" method="get" class="input-group">
-                        <input type="text" name="search" id="search" class="form-control" placeholder="Buscar por...">
+                        <input type="text" name="search" id="search" class="form-control" placeholder="Buscar por ID, nombre, número de parte o descripción" value="{{ request('search') }}">
                         <button type="submit" class="btn btn-primary" style="background-color: #cc6633; border-color: #cc6633;">Buscar</button>
                     </form>
                 </div>
+                <div class="d-flex align-items-center">
+                    <!-- Opción para eliminar filtros -->
+                    <a href="{{ route('modelos.index') }}" class="btn btn-secondary ms-auto btn-sm" style="background-color: #cc6633; border-color: #cc6633;">
+                        <i class="bi bi-filter-slash"></i> Eliminar Filtro
+                    </a>
+                </div>
+                
 
                 <div class="table-responsive mt-3">
                     <table class="table table-striped" id="modelos_tabledata">
