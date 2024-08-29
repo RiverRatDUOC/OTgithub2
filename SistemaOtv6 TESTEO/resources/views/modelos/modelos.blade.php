@@ -14,9 +14,6 @@
                 <div class="d-flex justify-content-between align-items-center text-center mt-3">
                     <div class="d-flex flex-column align-items-start">
                         <h2>Filtrar Modelos</h2>
-
-
-
                         <form id="filter-form" action="{{ route('modelos.index') }}" method="get" class="input-group mt-3">
                             <div class="row g-2">
                                 <div class="col-md-4 mb-2">
@@ -81,40 +78,22 @@
                                 </div>
                             </div>
                         </form>
-                        
-                        
-                        
-                        
-                        
-                        
-
-
                     </div>
-                    <div class="d-flex align-items-center">
-                        <a href="{{ route('modelos.create') }}" class="btn btn-primary ms-auto" style="background-color: #cc6633; border-color: #cc6633;">
-                            <i class="bi bi-plus"></i> Agregar
-                        </a>
-                    </div>
-                    
-                    
                 </div>
-                
-                
-
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     <form action="{{ route('modelos.buscar') }}" method="get" class="input-group">
                         <input type="text" name="search" id="search" class="form-control" placeholder="Buscar por ID, nombre, número de parte o descripción" value="{{ request('search') }}">
                         <button type="submit" class="btn btn-primary" style="background-color: #cc6633; border-color: #cc6633;">Buscar</button>
                     </form>
                 </div>
-                <div class="d-flex align-items-center">
-                    <!-- Opción para eliminar filtros -->
-                    <a href="{{ route('modelos.index') }}" class="btn btn-secondary ms-auto btn-sm" style="background-color: #cc6633; border-color: #cc6633;">
+                <div class="d-flex align-items-center justify-content-end" style="gap: 1rem;">
+                    <a href="{{ route('modelos.create') }}" class="btn btn-secondary btn-sm" style="background-color: #cc6633; border-color: #cc6633;">
+                        <i class="bi bi-filter-slash"></i> Agregar
+                    </a>
+                    <a href="{{ route('modelos.index') }}" class="btn btn-secondary btn-sm" style="background-color: #cc6633; border-color: #cc6633;">
                         <i class="bi bi-filter-slash"></i> Eliminar Filtro
                     </a>
                 </div>
-                
-
                 <div class="table-responsive mt-3">
                     <table class="table table-striped" id="modelos_tabledata">
                         <thead>
@@ -145,11 +124,8 @@
                                 <td>{{ $modelo->desc_corta_modelo }}</td>
                                 <td>
                                     <div class="d-flex">
-                                        <a href="#" class="btn btn-primary me-1" style="background-color: #cc0066; border-color: #cc0066;">
+                                        <a href="{{ route('modelos.show', $modelo->id) }}" class="btn btn-primary me-1" style="background-color: #cc0066; border-color: #cc0066;">
                                             <i class="fas fa-eye"></i>
-                                        </a>
-                                        <a href="#" class="btn btn-primary me-1" style="background-color: #cc6633; border-color: #cc6633;">
-                                            <i class="fas fa-edit"></i>
                                         </a>
                                         <a href="#" class="btn btn-danger" style="background-color: #d9534f; border-color: #d43f3a;">
                                             <i class="fas fa-trash-alt"></i>
@@ -161,7 +137,6 @@
                         </tbody>
                     </table>
                 </div>
-
                 <div class="d-flex justify-content-center mt-4">
                     @if ($modelos->hasPages())
                     <nav>
@@ -176,7 +151,6 @@
                                 <a class="page-link" href="{{ $modelos->url(1) }}" rel="prev" style="color: #cc6633;">&laquo;</a>
                             </li>
                             @endif
-
                             {{-- Previous Page Link --}}
                             @if ($modelos->onFirstPage())
                             <li class="page-item disabled" aria-disabled="true">

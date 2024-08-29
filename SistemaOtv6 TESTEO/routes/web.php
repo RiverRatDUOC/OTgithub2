@@ -58,7 +58,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/sucursales', [SucursalesController::class, 'index'])->name('sucursales.index'); // Ruta para listar sucursales
     Route::get('/sucursales/agregar', [SucursalesController::class, 'create'])->name('sucursales.create'); // Ruta para crear una nueva sucursal
     Route::get('/sucursales/buscar', [SucursalesController::class, 'buscar'])->name('sucursales.buscar'); // Ruta para buscar sucursales
-
+    Route::get('/sucursales/{id}', [SucursalesController::class, 'show'])->name('sucursales.show'); // Ruta para ver el detalle de una sucursal
+    Route::post('/sucursales/agregar', [SucursalesController::class, 'store'])->name('sucursales.store'); // Ruta para almacenar la nueva sucursal
 
 
 
@@ -78,6 +79,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/modelos', [ModeloController::class, 'index'])->name('modelos.index'); // Ruta para listar modelos
     Route::get('/modelos/agregar', [ModeloController::class, 'create'])->name('modelos.create'); // Ruta para crear un nuevo modelo
     Route::get('/modelos/buscar', [ModeloController::class, 'buscar'])->name('modelos.buscar'); // Ruta para buscar modelos
+    Route::get('modelos/{id}', [ModeloController::class, 'show'])->name('modelos.show');
+    Route::delete('/modelos/{id}', [ModeloController::class, 'destroy'])->name('modelos.destroy'); // Ruta para eliminar un modelo
+
 
 
     // Ruta para usuarios utilizando el controlador

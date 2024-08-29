@@ -48,7 +48,7 @@
                                 <td>{{ $sucursal->cliente->nombre_cliente }}</td>
                                 <td>
                                     <div class="d-flex">
-                                        <a href="#" class="btn btn-primary me-1" style="background-color: #cc0066; border-color: #cc0066;">
+                                        <a href="{{ route('sucursales.show', $sucursal->id) }}" class="btn btn-primary me-1" style="background-color: #cc0066; border-color: #cc0066;">
                                             <i class="fas fa-eye"></i>
                                         </a>
                                         <a href="#" class="btn btn-primary me-1" style="background-color: #cc6633; border-color: #cc6633;">
