@@ -62,7 +62,7 @@
                         </div> --}}
                         {{-- Bloque para los dispositivos de la OT  --}}
                         <div class="row" id="bloqueDispositivos" style="display:none;">
-                            <div class="col-md-12 block-relieve m-2">
+                            <div class="col-md-12 block-relieve m-2" id="bloque">
                                 <div class="block-content">
                                     <div class="form-group col-12">
                                         <label for="dispositivo">Dispositivo:</label>
@@ -73,16 +73,329 @@
                                     </div>
                                     <div class="form-group col-12">
                                         <label for="tareas">Tareas:</label>
-                                        <select id="tareas" class="form-control" multiple>
+                                        <ul class="list-group" id="tareas">
+                                        </ul>
+                                        {{-- <select id="tareas" class="form-control" multiple>
                                             <option value="">Seleccione una tarea</option>
                                             <!-- opciones de tareas -->
-                                        </select>
+                                        </select> --}}
                                     </div>
-                                    <div class="d-flex justify-content-between col-10 mt-3">
-                                        <button class="btn btn-primary mr-5">Agregar detalles del equipo</button>
-                                        <button class="btn btn-primary">Agregar accesorios del equipo</button>
+                                    <div class="d-flex justify-content-between col-11 mt-3">
+                                        <div class="row col-12">
+                                            <div class="col-md-6">
+                                                <div id="detallesDispositivo" style="display: none;">
+                                                    <input type="text" class="detalleSiNo" id="detalleSiNo" hidden>
+                                                    <div class="m-2">
+                                                        <label for="rayones">¿El Equipo Posee Rayones?</label>
+                                                        <div class="form-check">
+                                                            <label>
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="rayones" id="rayonesSi" value="Mostrar">
+                                                                Si</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <label>
+
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="rayones" id="rayonesNo" value="NoMostrar">
+                                                                No</label>
+                                                        </div>
+                                                        <div class="form-check textoInf" id="rayonesTexto">
+                                                            <input class="form-control textoInf" type="text"
+                                                                name="detallesRayones" id="detallesRayones"
+                                                                placeholder="El equipo presenta..." style="display:none;">
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="m-2">
+                                                        <label for="rupturas">¿El Equipo Posee Rupturas?</label>
+                                                        <div class="form-check">
+                                                            <label>
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="rupturas" id="rupturasSi" value="Mostrar">
+                                                                Si</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <label>
+
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="rupturas" id="rupturasNo" value="NoMostrar">
+                                                                No</label>
+                                                        </div>
+                                                        <div class="form-check textoInf" id="rupturasTexto">
+                                                            <input class="form-control textoInf" type="text"
+                                                                name="detallesRupturas" id="detallesRupturas"
+                                                                placeholder="El equipo presenta..." style="display:none">
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="m-2">
+                                                        <label for="tornillos">¿El Equipo Posee Todos Los Tornillos De Su
+                                                            Carcasa?</label>
+                                                        <div class="form-check">
+                                                            <label>
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="tornillos" id="tornillosSi" value="NoMostrar">
+                                                                Si</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <label>
+
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="tornillos" id="tornillosNo" value="Mostrar">
+                                                                No</label>
+                                                        </div>
+                                                        <div class="form-check textoInf" id="tornillosTexto">
+                                                            <input class="form-control" type="text"
+                                                                name="detallesTornillos" id="detallesTornillos"
+                                                                placeholder="El equipo presenta..." style="display: none">
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="m-2">
+                                                        <label for="gomas">¿El Equipo Posee Las Gomas De La Base En Buen
+                                                            Estado?</label>
+                                                        <div class="form-check">
+                                                            <label>
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="gomas" id="gomasSi" value="NoMostrar">
+                                                                Si</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <label>
+
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="gomas" id="gomasNo" value="Mostrar">
+                                                                No</label>
+                                                        </div>
+                                                        <div class="form-check textoInf" id="gomasTexto">
+                                                            <input class="form-control" type="text"
+                                                                name="detallesGomas" id="detallesGomas"
+                                                                placeholder="El equipo presenta..." style="display: none">
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="m-2">
+                                                        <label for="estado">Estado del equipo</label>
+                                                        <input type="text" class="form-control" id="estado"
+                                                            name="estado">
+                                                    </div>
+                                                    <hr>
+                                                    <div class="m-2">
+                                                        <label for="observacion">Observaciones adicionales</label>
+                                                        <input type="text" class="form-control" id="observacion"
+                                                            name="observacion">
+                                                    </div>
+                                                </div>
+                                                <button class="btn btn-primary" id="botonAgregarDetalle" type="button"
+                                                    style="font-size:14px" onclick="mostrarDetalles()">Agregar
+                                                    detalles</button>
+                                                <input type="hidden" name="bloqueNumero" value="-1"
+                                                    class="bloqueNumero">
+                                                <button class="btn btn-danger botonCancelarDetalle"
+                                                    id="botonCancelarDetalle" type="button"
+                                                    style="font-size:14px; display:none">Cancelar</button>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div id="accesoriosDispositivo" style="display: none;">
+                                                    <input type="text" value="0" id="accesorioSiNo" hidden>
+
+                                                    <div class="m-2">
+                                                        <label for="cargador">¿El Equipo Posee Cargador?</label>
+                                                        <div class="form-check">
+                                                            <label>
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="cargador" id="cargadorSi" value="MostrarCB">
+                                                                Si</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <label>
+
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="cargador" id="cargadorNo" value="NoMostrarCB">
+                                                                No</label>
+                                                        </div>
+                                                        <div class="form-check textoInf" id="cargadorTexto">
+                                                            <input class="form-control textoInf" type="text"
+                                                                name="accesoriosCargador" id="accesoriosCargador"
+                                                                placeholder="El equipo presenta..." style="display:none;">
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="m-2">
+                                                        <label for="cable">¿El Equipo Posee Cable de Poder?</label>
+                                                        <div class="form-check">
+                                                            <label>
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="cable" id="cableSi" value="MostrarCA">
+                                                                Si</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <label>
+
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="cable" id="cableNo" value="NoMostrarCA">
+                                                                No</label>
+                                                        </div>
+                                                        <div class="form-check textoInf" id="cableTexto">
+                                                            <input class="form-control textoInf" type="text"
+                                                                name="accesoriosCable" id="accesoriosCable"
+                                                                placeholder="Ingrese observaciones" style="display:none;">
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="m-2">
+                                                        <label for="adaptador">¿El Equipo Posee Adaptador de Poder?</label>
+                                                        <div class="form-check">
+                                                            <label>
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="adaptador" id="adaptadorSi" value="MostrarCA">
+                                                                Si</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <label>
+
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="adaptador" id="adaptadorNo"
+                                                                    value="NoMostrarCA">
+                                                                No</label>
+                                                        </div>
+                                                        <div class="form-check textoInf" id="adaptadorTexto">
+                                                            <input class="form-control textoInf" type="text"
+                                                                name="accesoriosAdaptador" id="accesoriosAdaptador"
+                                                                placeholder="Ingrese observaciones" style="display:none;">
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="m-2">
+                                                        <label for="bateria">¿El Equipo Posee Batería?</label>
+                                                        <div class="form-check">
+                                                            <label>
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="bateria" id="bateriaSi" value="MostrarCB">
+                                                                Si</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <label>
+
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="bateria" id="bateriaNo" value="NoMostrarCB">
+                                                                No</label>
+                                                        </div>
+                                                        <div class="form-check textoInf" id="bateriaTexto">
+                                                            <input class="form-control textoInf" type="text"
+                                                                name="accesoriosBateria" id="accesoriosBateria"
+                                                                placeholder="El equipo presenta..." style="display:none;">
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="m-2">
+                                                        <label for="pantalla">¿El Equipo Posee Pantalla En Mal
+                                                            Estado?</label>
+                                                        <div class="form-check">
+                                                            <label>
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="pantalla" id="pantallaSi" value="MostrarPT">
+                                                                Si</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <label>
+
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="pantalla" id="pantallaNo" value="NoMostrarPT">
+                                                                No</label>
+                                                        </div>
+                                                        <div class="form-check textoInf" id="pantallaTexto">
+                                                            <input class="form-control textoInf" type="text"
+                                                                name="accesoriosPantalla" id="accesoriosPantalla"
+                                                                placeholder="El equipo presenta..." style="display:none;">
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="m-2">
+                                                        <label for="teclado">¿El Equipo Posee Teclado en Mal
+                                                            Estado?</label>
+                                                        <div class="form-check">
+                                                            <label>
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="teclado" id="tecladoSi" value="MostrarPT">
+                                                                Si</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <label>
+
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="teclado" id="tecladoNo" value="NoMostrarPT">
+                                                                No</label>
+                                                        </div>
+                                                        <div class="form-check textoInf" id="tecladoTexto">
+                                                            <input class="form-control textoInf" type="text"
+                                                                name="accesoriosTeclado" id="accesoriosTeclado"
+                                                                placeholder="El equipo presenta..." style="display:none;">
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="m-2">
+                                                        <label for="drum">¿El Equipo Posee Toner?</label>
+                                                        <div class="form-check">
+                                                            <label>
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="drum" id="drumSi" value="NoMostrarTD">
+                                                                Si</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <label>
+
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="drum" id="drumNo" value="MostrarTD">
+                                                                No</label>
+                                                        </div>
+                                                        <div class="form-check textoInf" id="drumTexto">
+                                                            <input class="form-control textoInf" type="text"
+                                                                name="accesoriosDrum" id="accesoriosDrum"
+                                                                placeholder="El equipo presenta..." style="display:none;">
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="m-2">
+                                                        <label for="toner">¿El Equipo Posee Drum?</label>
+                                                        <div class="form-check">
+                                                            <label>
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="toner" id="tonerSi" value="NoMostrarTD">
+                                                                Si</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <label>
+
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="toner" id="tonerNo" value="MostrarTD">
+                                                                No</label>
+                                                        </div>
+                                                        <div class="form-check textoInf" id="tonerTexto">
+                                                            <input class="form-control textoInf" type="text"
+                                                                name="accesoriosToner" id="accesoriosToner"
+                                                                placeholder="El equipo presenta..." style="display:none;">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button class="btn btn-primary" id="botonAgregarAccesorio"
+                                                    style="font-size:14px" type="button"
+                                                    onclick="mostrarAccesorios()">Agregar
+                                                    accesorios
+                                                </button>
+                                                <button class="btn btn-danger" id="botonCancelarAccesorio" type="button"
+                                                    style="font-size:14px; display:none"
+                                                    onclick="cancelarAccesorios()">Cancelar
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+
                                     </div>
-                                    <button class="btn btn-primary btn-add boton-inferior-derecha" type="button">+</button>
+                                    <button class="btn btn-primary btn-add boton-inferior-derecha"
+                                        type="button">+</button>
                                 </div>
                             </div>
                         </div>
