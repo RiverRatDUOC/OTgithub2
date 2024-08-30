@@ -187,6 +187,48 @@ function cargarContactos(sucursalId) {
     $("#contacto").prop("disabled", false);
 }
 
+function cargarTecnicosEncargados(servicioId) {
+    if (servicioId == 0) {
+        $("#tecnicoEncargado").html(
+            "<option value='0'>Seleccione un tecnico</option>"
+        );
+    }
+    $.ajax({
+        type: "GET",
+        url: "/tecnicos/" + servicioId,
+        success: function (data) {
+            var listaTecnicosEncargados =
+                "<option value='0'>Seleccione un técnico</option>";
+            var listsEquipoTecnico = "";
+            $.each(data, function (index, tecnico) {
+                listaTecnicosEncargados +=
+                    '<option value="' +
+                    tecnico.id +
+                    '">' +
+                    tecnico.nombre_tecnico +
+                    "</option>";
+
+                listsEquipoTecnico +=
+                "<li class='list-group-item'> <input style='margin-left:2px;' class='form-check-input ' type='checkbox' value='" +
+                tecnico.id +
+                "' id='" +
+                tecnico.id +
+                "'>" +
+                "<label style='margin-left:20px' class='form-check-label stretched-link' for='" +
+                tecnico.id +
+                "'>" +
+                tecnico.nombre_tecnico +
+                "</label>" +
+                "</li>";
+            });
+
+            $("#tecnicoEncargado").html(listaTecnicosEncargados);
+            $("#equipoTecnico").html(listsEquipoTecnico);
+        },
+    });
+    $("#tecnicoEncargado").prop("disabled", false);
+}
+
 function cargarTipoServicio(idServicio) {
     if (idServicio == 0) {
         $("#tipoServicio").val(0);
@@ -216,20 +258,52 @@ function cargarTipoServicio(idServicio) {
 
 $("#servicio").on("change", function () {
     var servicioId = $(this).val();
+    var sucursal = $("#sucursal").val();
     cargarTipoServicio(servicioId);
     // cargarTareas(servicioId);
+    cargarTecnicosEncargados(servicioId);
+    if (servicioId > 0) {
+        $("#bloqueEncargado").css("display", "block");
+        $("#bloqueEquipoTecnico").css("display", "block");
+    }else{
+        $("#bloqueEncargado").css("display", "none");
+        $("#bloqueEquipoTecnico").css("display", "none");
+    }
+
 });
 
 $("#cliente").on("change", function () {
     var clienteId = $(this).val();
     cargarSucursales(clienteId);
     $("#sucursal").prop("disabled", false);
+
+    if (clienteId == 0) {
+        $("#servicio").prop("disabled", true);
+        $("#servicio").prop("value", 0);
+        var servicioId = $("#servicio").val();
+        cargarTipoServicio(servicioId);
+        cargarTecnicosEncargados(servicioId);
+        $("#bloqueEncargado").css("display", "none");
+        $("#bloqueEquipoTecnico").css("display", "none");
+    }
 });
 
 $("#sucursal").on("change", function () {
     var sucursalId = $(this).val();
     cargarContactos(sucursalId);
     cargarDispositivos(sucursalId);
+    if (sucursalId > 0) {
+        $("#servicio").prop("disabled", false);
+    }else{
+        $("#servicio").prop("disabled", true);
+        $("#servicio").prop("value", 0);
+        var servicioId = $("#servicio").val();
+        cargarTipoServicio(servicioId);
+        cargarTecnicosEncargados(servicioId);
+        $("#bloqueEncargado").css("display", "none");
+        $("#bloqueEquipoTecnico").css("display", "none");
+    }
+
 });
 
 $("#tipoServicio").on("change", function () {
@@ -302,6 +376,18 @@ $(".btn-add").on("click", function () {
         var groupName = radio.attr("name");
         var newGroupName = groupName + "-" + blockCounter;
         radio.attr("name", newGroupName);
+    });
+
+    clone.find("div.form-check.textoInf").each(function () {
+        var div = $(this);
+        var groupName = div.attr("id");
+        var groupNames = groupName.split("-");
+        var newGroupName = groupNames[0] + "-" + blockCounter;
+        var finalGroupName = newGroupName + "-" + groupNames[1];
+
+        // div.attr("id", finalGroupName);
+        div.prop("id", finalGroupName);
+
     });
 
     blockCounter++; // Incrementar el contador global
@@ -421,89 +507,124 @@ function cancelarAccesorios() {
     // Desmarcar los radio buttons
     $(this).find("#accesoriosDispositivo").prop("checked", false);
 }
-$('input[type="radio"][value="Mostrar"]').on('change', function() {
 
-    $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').show();
-  });
 
-  $('input[type="radio"][value="NoMostrar"]').on('change', function() {
-    $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').hide();
-  });
-
-  //Accesorios - Cargador y bateria
-  $('input[type="radio"][value="MostrarCB"]').on('change', function() {
-
-    $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').show();
-    $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').attr('placeholder','Escriba N° de serie del accesorio');
-  });
-
-  $('input[type="radio"][value="NoMostrarCB"]').on('change', function() {
-    $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').show();
-
-    $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').attr('placeholder','Escriba Cotizar y el N° de serie del accesorio');
-  });
-
-  //Accesorios - Cable poder + adaptador de poder
-
-  $('input[type="radio"][value="MostrarCA"]').on('change', function() {
-
-    $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').show();
-  });
-
-  $('input[type="radio"][value="NoMostrarCA"]').on('change', function() {
-    $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').hide();
-  });
-
-  //Accesorios - Teclado + Pantalla
-
-  $('input[type="radio"][value="MostrarPT"]').on('change', function() {
-
-    $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').show();
-  });
-
-  $('input[type="radio"][value="NoMostrarPT"]').on('change', function() {
-    $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').hide();
-  });
-
-  //Accesorios - Drum + Toner
-//   $('input[type="radio"][value="MostrarTD"]').on('change', function() {
+// $('input[type="radio"][value="Mostrar"]').on('change', function() {
 
 //     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').show();
 //   });
 
-//   $('input[type="radio"][value="NoMostrarTD"]').on('change', function() {
+//   $('input[type="radio"][value="NoMostrar"]').on('change', function() {
 //     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').hide();
 //   });
 
+//   //Accesorios - Cargador y bateria
+//   $('input[type="radio"][value="MostrarCB"]').on('change', function() {
+
+//     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').show();
+//     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').attr('placeholder','Escriba N° de serie del accesorio');
+//   });
+
+//   $('input[type="radio"][value="NoMostrarCB"]').on('change', function() {
+//     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').show();
+
+//     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').attr('placeholder','Escriba Cotizar y el N° de serie del accesorio');
+//   });
+
+//   //Accesorios - Cable poder + adaptador de poder
+
+//   $('input[type="radio"][value="MostrarCA"]').on('change', function() {
+
+//     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').show();
+//   });
+
+//   $('input[type="radio"][value="NoMostrarCA"]').on('change', function() {
+//     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').hide();
+//   });
+
+//   //Accesorios - Teclado + Pantalla
+
+//   $('input[type="radio"][value="MostrarPT"]').on('change', function() {
+
+//     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').show();
+//   });
+
+//   $('input[type="radio"][value="NoMostrarPT"]').on('change', function() {
+//     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').hide();
+//   });
+
+//   //Accesorios - Drum + Toner
+// //   $('input[type="radio"][value="MostrarTD"]').on('change', function() {
+
+// //     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').show();
+// //   });
+
+// //   $('input[type="radio"][value="NoMostrarTD"]').on('change', function() {
+// //     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').hide();
+// //   });
+
+// // $(document).on("change", 'input[type="radio"][value="MostrarTD"]', function() {
+// //     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').show();
+// //   });
+
+// //   $(document).on("change", 'input[type="radio"][value="NoMostrarTD"]', function() {
+// //     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').hide();
+// //   });
+
+
+
+// //intento 1
+// //   $(document).on("change", 'input[type="radio"][value="MostrarTD"]', function() {
+// //     $(this).closest('.block-relieve').find('input[type="text"]').show();
+// //   });
+
+// //   $(document).on("change", 'input[type="radio"][value="NoMostrarTD"]', function() {
+// //     $(this).closest('.block-relieve').find('input["text"]').hide();
+// //   });
 // $(document).on("change", 'input[type="radio"][value="MostrarTD"]', function() {
-//     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').show();
+//     console.log($(this).closest('.block-relieve').find('#' + $(this).attr('name') + 'Texto'));
+//     $(this).closest('.block-relieve')
+//       .find('#' + $(this).attr('name') + 'Texto')
+//       .find('input[type="text"]').show();
 //   });
 
 //   $(document).on("change", 'input[type="radio"][value="NoMostrarTD"]', function() {
-//     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').hide();
+//     $(this).closest('.block-relieve')
+//       .find('#' + $(this).attr('name') + 'Texto')
+//       .find('input[type="text"]').hide();
 //   });
 
 
-
-//intento 1
-//   $(document).on("change", 'input[type="radio"][value="MostrarTD"]', function() {
-//     $(this).closest('.block-relieve').find('input[type="text"]').show();
-//   });
-
-//   $(document).on("change", 'input[type="radio"][value="NoMostrarTD"]', function() {
-//     $(this).closest('.block-relieve').find('input["text"]').hide();
-//   });
-$(document).on("change", 'input[type="radio"][value="MostrarTD"]', function() {
-    console.log($(this).closest('.block-relieve').find('#' + $(this).attr('name') + 'Texto'));
-    $(this).closest('.block-relieve')
-      .find('#' + $(this).attr('name') + 'Texto')
-      .find('input[type="text"]').show();
-  });
-
-  $(document).on("change", 'input[type="radio"][value="NoMostrarTD"]', function() {
-    $(this).closest('.block-relieve')
-      .find('#' + $(this).attr('name') + 'Texto')
-      .find('input[type="text"]').hide();
-  });
-
-
+  $('#bloqueDispositivos').on("change", 'input[type="radio"]', function(event) {
+    var radio = $(event.target);
+    var groupName = radio.attr("name");
+    var value = radio.val();
+    console.log(groupName);
+    if (value === "Mostrar") {
+        $('#' + groupName + '-Texto').find('input[type="text"]').show();
+    } else if (value === "NoMostrar") {
+        $('#' + groupName + '-Texto').find('input[type="text"]').hide();
+    } else if (value === "MostrarCB") {
+        $('#' + groupName + '-Texto').find('input[type="text"]').show();
+        $('#' + groupName + '-Texto').find('input[type="text"]').attr('placeholder', 'Escriba N° de serie del accesorio');
+    } else if (value === "NoMostrarCB") {
+        $('#' + groupName + '-Texto').find('input[type="text"]').show();
+        $('#' + groupName + '-Texto').find('input[type="text"]').attr('placeholder', 'Escriba Cotizar y el N° de serie del accesorio');
+    } else if (value === "MostrarCA") {
+        $('#' + groupName + '-Texto').find('input[type="text"]').show();
+    } else if (value === "NoMostrarCA") {
+        $('#' + groupName + '-Texto').find('input[type="text"]').hide();
+    } else if (value === "MostrarPT") {
+        $('#' + groupName + '-Texto').find('input[type="text"]').show();
+    } else if (value === "NoMostrarPT") {
+        $('#' + groupName + '-Texto').find('input[type="text"]').hide();
+    } else if (value === "MostrarTD") {
+        $(this).closest('.block-relieve')
+            .find('#' + groupName + '-Texto')
+            .find('input[type="text"]').show();
+    } else if (value === "NoMostrarTD") {
+        $(this).closest('.block-relieve')
+            .find('#' + groupName + '-Texto')
+            .find('input[type="text"]').hide();
+    }
+});

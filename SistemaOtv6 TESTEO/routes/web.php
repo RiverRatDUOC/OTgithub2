@@ -43,6 +43,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/contacto/{sucursalId}', [OrdenesController::class, 'contactos']);
     Route::get('/dispositivo/{sucursalId}', [OrdenesController::class, 'dispositivos']);
     Route::get('/servicio/{servicioId}', [OrdenesController::class, 'servicioTipo']);
+    Route::get('/tecnicos/{servicioId}', [OrdenesController::class, 'tecnicosServicio']);
     // RUTAS DE CLIENTES
     Route::get('/clientes', [ClientesController::class, 'index'])->middleware('can:clientes.index')->name('clientes.index'); // Rutas para la carpeta 'clientes'
     Route::get('/clientes/agregar', [ClientesController::class, 'create'])->middleware('can:clientes.create')->name('clientes.create'); // Ruta para crear un nuevo cliente

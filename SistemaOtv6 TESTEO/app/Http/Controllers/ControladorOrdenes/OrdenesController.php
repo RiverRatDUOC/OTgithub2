@@ -13,6 +13,7 @@ use App\Models\Sucursal;
 use App\Models\Tecnico;
 use App\Models\TipoOt;
 use App\Models\TipoVisita;
+use Illuminate\Support\Facades\DB;
 
 class OrdenesController extends Controller
 {
@@ -168,5 +169,17 @@ class OrdenesController extends Controller
         $servicio = Servicio::findOrFail($id);
 
         return response()->json($servicio->only('cod_tipo_servicio'));
+    }
+
+    public function tecnicosServicio($id)
+    {
+        $tecnicos = DB::table('tecnico')
+            ->join('tecnico_servicio', 'tecnico.id', '=', 'tecnico_servicio.cod_tecnico')
+            ->where('tecnico_servicio.cod_servicio', $id)
+            ->distinct()
+            ->select('tecnico.*')
+            ->get();
+
+        return response()->json($tecnicos);
     }
 }

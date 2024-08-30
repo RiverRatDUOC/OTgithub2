@@ -33,4 +33,9 @@ class Tecnico extends Model
     {
         return $this->belongsTo(Usuario::class, 'cod_usuario');
     }
+
+    public function tecnicoServicio()
+    {
+        return $this->hasMany(TecnicoServicio::class, 'cod_tecnico');
+    }
 }
