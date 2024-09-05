@@ -22,6 +22,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link pl-0 text-white {{ Request::is('contactos*') ? 'active' : '' }}" href="{{ route('contactos.index') }}">
+                        <i class="fas fa-address-book"></i> <span>Contactos</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a class="nav-link pl-0 text-white {{ Request::is('servicios*') ? 'active' : '' }}" href="{{ route('servicios.index') }}">
                         <i class="fas fa-concierge-bell"></i> <span>Servicios</span>
                     </a>

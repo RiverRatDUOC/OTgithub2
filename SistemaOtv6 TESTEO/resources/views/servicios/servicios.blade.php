@@ -10,22 +10,30 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <div class="d-flex justify-content-between align-items-center text-center mt-3">
+                <!-- Encabezado -->
+                <div class="d-flex justify-content-between align-items-center mt-3">
                     <h2>Servicios</h2>
-                    <div class="d-flex align-items-center">
-                        <a href="{{ route('servicios.create') }}" class="btn btn-primary ms-auto" style="background-color: #cc6633; border-color: #cc6633;">
-                            <i class="bi bi-plus"></i> Agregar
-                        </a>
-                    </div>
                 </div>
 
-                <div class="d-flex justify-content-between align-items-center mt-3">
+                <!-- Formulario de Búsqueda -->
+                <div>
                     <form action="{{ route('servicios.buscar') }}" method="get" class="input-group">
-                        <input type="text" name="search" id="search" class="form-control" placeholder="Buscar por...">
+                        <input type="text" name="search" id="search" class="form-control" placeholder="Buscar por ID, nombre, requerimiento o código sublinea" value="{{ request('search') }}">
                         <button type="submit" class="btn btn-primary" style="background-color: #cc6633; border-color: #cc6633;">Buscar</button>
                     </form>
                 </div>
 
+                <!-- Botones de Agregar y Eliminar Filtro -->
+                <div class="d-flex align-items-center justify-content-end mt-3" style="gap: 1rem;">
+                    <a href="{{ route('servicios.create') }}" class="btn btn-secondary btn-sm" style="background-color: #cc6633; border-color: #cc6633;">
+                        <i class="bi bi-plus"></i> Agregar
+                    </a>
+                    <a href="{{ route('servicios.index') }}" class="btn btn-secondary btn-sm" style="background-color: #cc6633; border-color: #cc6633;">
+                        <i class="bi bi-x-circle"></i> Eliminar Filtro
+                    </a>
+                </div>
+
+                <!-- Tabla de Servicios -->
                 <div class="table-responsive mt-3">
                     <table class="table table-striped" id="servicios_tabledata">
                         <thead>
@@ -43,15 +51,13 @@
                                 <td>{{ $servicio->id }}</td>
                                 <td>{{ $servicio->nombre_servicio }}</td>
                                 <td>{{ optional($servicio->tipoServicio)->descripcion_tipo_servicio }}</td>
-
                                 <td>{{ optional($servicio->sublinea)->nombre_sublinea }}</td>
-
                                 <td>
                                     <div class="d-flex">
-                                        <a href="#" class="btn btn-primary me-1" style="background-color: #cc0066; border-color: #cc0066;">
+                                        <a href="" class="btn btn-primary me-1" style="background-color: #cc0066; border-color: #cc0066;">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="#" class="btn btn-primary me-1" style="background-color: #cc6633; border-color: #cc6633;">
+                                        <a href="" class="btn btn-primary me-1" style="background-color: #cc6633; border-color: #cc6633;">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <a href="#" class="btn btn-danger" style="background-color: #d9534f; border-color: #d43f3a;">
@@ -65,6 +71,7 @@
                     </table>
                 </div>
 
+                <!-- Paginación -->
                 <div class="d-flex justify-content-center mt-4">
                     @if ($servicios->hasPages())
                     <nav>

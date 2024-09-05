@@ -11,6 +11,7 @@ use App\Http\Controllers\ControladorServicios\ServiciosController;
 use App\Http\Controllers\ControladorServicios\TareaServiciosController;
 use App\Http\Controllers\ControladorTecnicos\TecnicosController;
 use App\Http\Controllers\ControladorEquipos\ModeloController;
+use App\Http\Controllers\ControladorContactos\ContactosController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\UserController;
 
@@ -43,10 +44,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/contacto/{sucursalId}', [OrdenesController::class, 'contactos']);
     Route::get('/dispositivo/{sucursalId}', [OrdenesController::class, 'dispositivos']);
     Route::get('/servicio/{servicioId}', [OrdenesController::class, 'servicioTipo']);
+
     // RUTAS DE CLIENTES
     Route::get('/clientes', [ClientesController::class, 'index'])->middleware('can:clientes.index')->name('clientes.index'); // Rutas para la carpeta 'clientes'
     Route::get('/clientes/agregar', [ClientesController::class, 'create'])->middleware('can:clientes.create')->name('clientes.create'); // Ruta para crear un nuevo cliente
     Route::get('/clientes/buscar', [ClientesController::class, 'buscar'])->name('clientes.buscar'); // Ruta para buscar órdenes
+    Route::post('/clientes', [ClientesController::class, 'store'])->name('clientes.store'); // Manejar la creación de un nuevo cliente
+    Route::get('/clientes/{id}', [ClientesController::class, 'show'])->name('clientes.show'); // Ruta para ver el detalle del cliente
+    Route::put('/clientes/{id}', [ClientesController::class, 'update'])->name('clientes.update');
+    Route::get('/clientes/{id}/editar', [ClientesController::class, 'edit'])->name('clientes.edit');
+
+
 
     // RUTAS DE TÉCNICOS
     Route::get('/tecnicos', [TecnicosController::class, 'index'])->name('tecnicos.index'); // Ruta para listar técnicos
@@ -60,7 +68,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/sucursales/buscar', [SucursalesController::class, 'buscar'])->name('sucursales.buscar'); // Ruta para buscar sucursales
     Route::get('/sucursales/{id}', [SucursalesController::class, 'show'])->name('sucursales.show'); // Ruta para ver el detalle de una sucursal
     Route::post('/sucursales/agregar', [SucursalesController::class, 'store'])->name('sucursales.store'); // Ruta para almacenar la nueva sucursal
-
+    Route::get('/sucursales/{id}/editar', [SucursalesController::class, 'edit'])->name('sucursales.edit'); // Ruta para editar una sucursal
+    Route::put('/sucursales/{id}', [SucursalesController::class, 'update'])->name('sucursales.update'); // Ruta para actualizar una sucursal
 
 
     // Rutas de Servicios
@@ -68,6 +77,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/servicios/agregar', [ServiciosController::class, 'create'])->name('servicios.create'); // Ruta para crear un nuevo servicio
     Route::get('/servicios/buscar', [ServiciosController::class, 'buscar'])->name('servicios.buscar'); // Ruta para buscar servicios
 
+    // Rutas de Contactos
+    Route::get('/contactos', [ContactosController::class, 'index'])->name('contactos.index'); // Ruta para listar contactos
+    Route::get('/contactos/agregar', [ContactosController::class, 'create'])->name('contactos.create'); // Ruta para crear un nuevo contacto
+    Route::get('/contactos/buscar', [ContactosController::class, 'buscar'])->name('contactos.buscar'); // Ruta para buscar contactos
+    Route::get('/contactos/{id}', [ContactosController::class, 'show'])->name('contactos.show'); // Ruta para ver el detalle de un contacto
+    Route::post('/contactos/agregar', [ContactosController::class, 'store'])->name('contactos.store'); // Ruta para almacenar el nuevo contacto
+    Route::get('/contactos/{id}/editar', [ContactosController::class, 'edit'])->name('contactos.edit'); // Ruta para editar un contacto
+    Route::put('/contactos/{id}', [ContactosController::class, 'update'])->name('contactos.update'); // Ruta para actualizar un contacto
+    Route::delete('/contactos/{id}', [ContactosController::class, 'destroy'])->name('contactos.destroy'); // Ruta para eliminar un contacto
 
 
     // Rutas para el controlador TareaServiciosController

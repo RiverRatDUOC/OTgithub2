@@ -10,22 +10,30 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <div class="d-flex justify-content-between align-items-center text-center mt-3">
+                <!-- Encabezado -->
+                <div class="d-flex justify-content-between align-items-center mt-3">
                     <h2>Sucursales</h2>
-                    <div class="d-flex align-items-center">
-                        <a href="{{ route('sucursales.create') }}" class="btn btn-primary ms-auto" style="background-color: #cc6633; border-color: #cc6633;">
-                            <i class="bi bi-plus"></i> Agregar
-                        </a>
-                    </div>
                 </div>
 
-                <div class="d-flex justify-content-between align-items-center mt-3">
+                <!-- Formulario de Búsqueda -->
+                <div>
                     <form action="{{ route('sucursales.buscar') }}" method="get" class="input-group">
-                        <input type="text" name="search" id="search" class="form-control" placeholder="Buscar por...">
+                        <input type="text" name="search" id="search" class="form-control" placeholder="Buscar por nombre, dirección, teléfono o cliente" value="{{ request('search') }}">
                         <button type="submit" class="btn btn-primary" style="background-color: #cc6633; border-color: #cc6633;">Buscar</button>
                     </form>
                 </div>
 
+                <!-- Botones de Agregar y Eliminar Filtro -->
+                <div class="d-flex align-items-center justify-content-end mt-3" style="gap: 1rem;">
+                    <a href="{{ route('sucursales.create') }}" class="btn btn-secondary btn-sm" style="background-color: #cc6633; border-color: #cc6633;">
+                        <i class="bi bi-plus"></i> Agregar
+                    </a>
+                    <a href="{{ route('sucursales.index') }}" class="btn btn-secondary btn-sm" style="background-color: #cc6633; border-color: #cc6633;">
+                        <i class="bi bi-x-circle"></i> Eliminar Filtro
+                    </a>
+                </div>
+
+                <!-- Tabla de Sucursales -->
                 <div class="table-responsive mt-3">
                     <table class="table table-striped" id="sucursales_tabledata">
                         <thead>
@@ -51,7 +59,7 @@
                                         <a href="{{ route('sucursales.show', $sucursal->id) }}" class="btn btn-primary me-1" style="background-color: #cc0066; border-color: #cc0066;">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="#" class="btn btn-primary me-1" style="background-color: #cc6633; border-color: #cc6633;">
+                                        <a href="{{ route('sucursales.edit', $sucursal->id) }}" class="btn btn-primary me-1" style="background-color: #cc6633; border-color: #cc6633;">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <a href="#" class="btn btn-danger" style="background-color: #d9534f; border-color: #d43f3a;">
@@ -65,6 +73,7 @@
                     </table>
                 </div>
 
+                <!-- Paginación -->
                 <div class="d-flex justify-content-center mt-4">
                     @if ($sucursales->hasPages())
                     <nav>
@@ -129,7 +138,6 @@
         </div>
     </div>
 </main>
-
 <script src="{{ asset('assets/js/ordenar/OrdenarSucursal.js') }}"></script>
 
 @endsection
