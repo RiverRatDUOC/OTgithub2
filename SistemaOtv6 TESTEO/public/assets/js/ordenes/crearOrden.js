@@ -1,6 +1,8 @@
-function evento() {
-    console.log("Hola mundo");
-}
+
+var selectedContacts = {};
+var selectedTecnicos = {};
+var selectedTareasSinDispo = {};
+
 
 function cargarTareas(servicioId) {
     if (servicioId == 0) {
@@ -10,33 +12,8 @@ function cargarTareas(servicioId) {
             type: "GET",
             url: "/tareas/" + servicioId,
             success: function (data) {
-                // var listaTareas =
-                //     "<option value='0'>Seleccione una tarea</option>";
                 var listaTareas = "";
                 $.each(data, function (index, tarea) {
-                    // listaTareas +=
-                    //     '<option value="' +
-                    //     tarea.id +
-                    //     '">' +
-                    //     tarea.nombre_tarea +
-                    //     "</option>";
-
-                    // listaTareas +=
-                    //     "<div class='col-sm-4>'" +
-                    //     "<div class='form-check'>" +
-                    //     "<input class='form-check-input' type='checkbox' value='" +
-                    //     tarea.id +
-                    //     "' id='" +
-                    //     tarea.id +
-                    //     "'>" +
-                    //     "<label class='form-check-label' for='" +
-                    //     tarea.id +
-                    //     "'>" +
-                    //     tarea.nombre_tarea +
-                    //     "</label>" +
-                    //     "</div>" +
-                    //     "</div>";
-
                     listaTareas +=
                         "<li class='list-group-item'> <input style='margin-left:2px;' class='form-check-input ' type='checkbox' value='" +
                         tarea.id +
@@ -67,47 +44,84 @@ function cargarTareasSinDispositivo(servicioId) {
             type: "GET",
             url: "/tareas/" + servicioId,
             success: function (data) {
-                // var listaTareas =
-                //     "<option value='0'>Seleccione una tarea</option>";
-                // $.each(data, function (index, tarea) {
-                //     listaTareas +=
-                //         '<option value="' +
-                //         tarea.id +
-                //         '">' +
-                //         tarea.nombre_tarea +
-                //         "</option>";
-                // });
 
                 var listaTareas = "";
-                $.each(data, function (index, tarea) {
-                    listaTareas +=
-                        "<li class='list-group-item'> <input style='margin-left:2px;' class='form-check-input ' type='checkbox' value='" +
-                        tarea.id +
-                        "' id='" +
-                        tarea.id +
-                        "'>" +
-                        "<label style='margin-left:20px' class='form-check-label stretched-link' for='" +
-                        tarea.id +
-                        "'>" +
-                        tarea.nombre_tarea +
-                        "</label>" +
-                        "</li>";
+                var pageSize = 10; // number of items per page
+                var currentPage = 1;
+                var totalPages = Math.ceil(data.length / pageSize);
+
+                function paginateList(data,currentPage){
+                    var startIndex = (currentPage - 1) * pageSize;
+                    var endIndex = startIndex + pageSize;
+                    var paginatedData = data.slice(startIndex, endIndex);
+
+                    listaTareas = "";
+                    $.each(paginatedData, function (index, tarea) {
+                        var isChecked = selectedTareasSinDispo[tarea.id] && selectedTareasSinDispo[tarea.id].includes(currentPage);
+                        listaTareas +=
+                            "<li class='list-group-item'> <input style='margin-left:2px;' class='form-check-input ' type='checkbox' value='" +
+                            tarea.id +
+                            "' id='" +
+                            tarea.id +
+                            "'" + (isChecked ? " checked" : "") + ">" +
+                            "<label style='margin-left:20px' class='form-check-label stretched-link' for='" +
+                            tarea.id +
+                            "'>" +
+                            tarea.nombre_tarea +
+                            "</label>" +
+                            "</li>";
+                    });
                     $("#tareasSinDispositivo").html(listaTareas);
+                    updatePaginationTareasSinDispo(currentPage, totalPages);
+                }
+                paginateList(data,currentPage);
+                $("#tareasSinDispositivo").on("change", "input[type='checkbox']", function () {
+                    var tareaSinDisId = $(this).val();
+                    var currentPageNumber = currentPage;
+                    if ($(this).is(":checked")) {
+                        if (!selectedTareasSinDispo[tareaSinDisId]) {
+                            selectedTareasSinDispo[tareaSinDisId] = [];
+                        }
+                        selectedTareasSinDispo[tareaSinDisId].push(currentPageNumber);
+                    } else {
+                        if (selectedTareasSinDispo[tareaSinDisId]) {
+                            selectedTareasSinDispo[tareaSinDisId] = selectedTareasSinDispo[tareaSinDisId].filter(function (page) {
+                                return page !== currentPageNumber;
+                            });
+                            if (selectedTareasSinDispo[tareaSinDisId].length === 0) {
+                                delete selectedTareasSinDispo[tareaSinDisId];
+                            }
+                        }
+                    }
+                });
+
+                $("#prevTareaSinDispo").on("click", function () {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        paginateList(data, currentPage);
+                    }
+                });
+
+                $("#nextTareaSinDispo").on("click", function () {
+                    if (currentPage < totalPages) {
+                        currentPage++;
+                        paginateList(data, currentPage);
+                    }
                 });
             },
         });
     }
 }
 
-function cargarDispositivos(sucursalId) {
+function cargarDispositivos(sucursalId,servicioId) {
     if (sucursalId == 0) {
-        $("#dispositivo").html(
+        $("#dispositivo-0").html(
             "<option value='0'>Seleccione un dispositivo</option>"
         );
     } else {
         $.ajax({
             type: "GET",
-            url: "/dispositivo/" + sucursalId,
+            url: "/dispositivo/" + sucursalId+"/"+servicioId,
             success: function (data) {
                 var listaDispositivos =
                     "<option value='0'>Seleccione un dispositivo</option>";
@@ -121,9 +135,15 @@ function cargarDispositivos(sucursalId) {
                         " - Nombre modelo: " +
                         dispositivo.modelo.nombre_modelo +
                         "</option>";
+                        console.log(dispositivo.modelo.sublinea.cod_linea);
+                    if(dispositivo.modelo.sublinea.cod_linea != 2)
+                    {
+                        $("#DrumToner").css("display", "none");
+                    }else{
+                        $("#DrumToner").css("display", "block");
+                    }
                 });
-
-                $("#dispositivo").html(listaDispositivos);
+                $("#dispositivo-0").html(listaDispositivos);
             },
         });
     }
@@ -170,23 +190,118 @@ function cargarContactos(sucursalId) {
         type: "GET",
         url: "/contacto/" + sucursalId,
         success: function (data) {
-            var listaContactos =
-                "<option value='0'>Seleccione un contacto</option>";
-            $.each(data, function (index, contacto) {
-                listaContactos +=
-                    '<option value="' +
+            var listContactos = "";
+            var pageSize = 5; // number of items per page
+            var currentPage = 1;
+            var totalPages = Math.ceil(data.length / pageSize);
+
+            function paginateList(data, currentPage) {
+                var startIndex = (currentPage - 1) * pageSize;
+                var endIndex = startIndex + pageSize;
+                var paginatedData = data.slice(startIndex, endIndex);
+
+                listContactos = "";
+                $.each(paginatedData, function (index, contacto) {
+                    var isChecked = selectedContacts[contacto.id] && selectedContacts[contacto.id].includes(currentPage);
+                    listContactos +=
+                    "<li class='list-group-item'> <input style='margin-left:2px;' class='form-check-input ' type='checkbox' value='" +
                     contacto.id +
-                    '">' +
+                    "' id='" +
+                    contacto.id +
+                    "'" + (isChecked ? " checked" : "") + ">" +
+                    "<label style='margin-left:20px' class='form-check-label stretched-link' for='" +
+                    contacto.id +
+                    "'>" +
                     contacto.nombre_contacto +
-                    "</option>";
+                    "</label>" +
+                    "</li>";
+                });
+
+                $("#contacto").html(listContactos);
+                updatePagination(currentPage, totalPages);
+            }
+
+            paginateList(data, currentPage);
+
+            $("#contacto").on("change", "input[type='checkbox']", function () {
+                var contactoId = $(this).val();
+                var currentPageNumber = currentPage;
+                if ($(this).is(":checked")) {
+                    if (!selectedContacts[contactoId]) {
+                        selectedContacts[contactoId] = [];
+                    }
+                    selectedContacts[contactoId].push(currentPageNumber);
+                } else {
+                    if (selectedContacts[contactoId]) {
+                        selectedContacts[contactoId] = selectedContacts[contactoId].filter(function (page) {
+                            return page !== currentPageNumber;
+                        });
+                        if (selectedContacts[contactoId].length === 0) {
+                            delete selectedContacts[contactoId];
+                        }
+                    }
+                }
             });
 
-            $("#contacto").html(listaContactos);
+            $("#prev").on("click", function () {
+                if (currentPage > 1) {
+                    currentPage--;
+                    paginateList(data, currentPage);
+                }
+            });
+
+            $("#next").on("click", function () {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    paginateList(data, currentPage);
+                }
+            });
         },
     });
     $("#contacto").prop("disabled", false);
 }
 
+function updatePagination(currentPage, totalPages) {
+    $("#page-info").text("Página " + currentPage + " de " + totalPages);
+    if (currentPage === 1) {
+        $("#prev").prop("disabled", true);
+    } else {
+        $("#prev").prop("disabled", false);
+    }
+    if (currentPage === totalPages) {
+        $("#next").prop("disabled", true);
+    } else {
+        $("#next").prop("disabled", false);
+    }
+}
+
+function updatePaginationTecnicos(currentPage, totalPages) {
+    $("#page-info-tecnicos").text("Página " + currentPage + " de " + totalPages);
+    if (currentPage === 1) {
+        $("#prevTecnicos").prop("disabled", true);
+    } else {
+        $("#prevTecnicos").prop("disabled", false);
+    }
+    if (currentPage === totalPages) {
+        $("#nextTecnicos").prop("disabled", true);
+    } else {
+        $("#nextTecnicos").prop("disabled", false);
+    }
+}
+
+function updatePaginationTareasSinDispo(currentPage, totalPages) {
+    $("#page-info-tareas-sin-dispo").text("Página " + currentPage + " de " + totalPages);
+    if (currentPage === 1) {
+        $("#prevTareaSinDispo").prop("disabled", true);
+    } else {
+        $("#prevTareaSinDispo").prop("disabled", false);
+    }
+    if (currentPage === totalPages) {
+        $("#nextTareaSinDispo").prop("disabled", true);
+    } else {
+        $("#nextTareaSinDispo").prop("disabled", false);
+    }
+}
 function cargarTecnicosEncargados(servicioId) {
     if (servicioId == 0) {
         $("#tecnicoEncargado").html(
@@ -199,6 +314,11 @@ function cargarTecnicosEncargados(servicioId) {
         success: function (data) {
             var listaTecnicosEncargados =
                 "<option value='0'>Seleccione un técnico</option>";
+
+            var pageSize = 5; // number of items per page
+            var currentPage = 1;
+            var totalPages = Math.ceil(data.length / pageSize);
+
             var listsEquipoTecnico = "";
             $.each(data, function (index, tecnico) {
                 listaTecnicosEncargados +=
@@ -207,23 +327,72 @@ function cargarTecnicosEncargados(servicioId) {
                     '">' +
                     tecnico.nombre_tecnico +
                     "</option>";
-
-                listsEquipoTecnico +=
-                "<li class='list-group-item'> <input style='margin-left:2px;' class='form-check-input ' type='checkbox' value='" +
-                tecnico.id +
-                "' id='" +
-                tecnico.id +
-                "'>" +
-                "<label style='margin-left:20px' class='form-check-label stretched-link' for='" +
-                tecnico.id +
-                "'>" +
-                tecnico.nombre_tecnico +
-                "</label>" +
-                "</li>";
             });
 
+            function paginateList(data, currentPage) {
+                var startIndex = (currentPage - 1) * pageSize;
+                var endIndex = startIndex + pageSize;
+                var paginatedData = data.slice(startIndex, endIndex);
+
+                listsEquipoTecnico = "";
+                $.each(paginatedData, function (index, tecnico) {
+                    var isChecked = selectedTecnicos[tecnico.id] && selectedTecnicos[tecnico.id].includes(currentPage);
+                    listsEquipoTecnico +=
+                    "<li class='list-group-item'> <input style='margin-left:2px;' class='form-check-input ' type='checkbox' value='" +
+                    tecnico.id +
+                    "' id='Tec" +
+                    tecnico.id +
+                    "'" + (isChecked ? " checked" : "") + ">" +
+                    "<label style='margin-left:20px' class='form-check-label stretched-link' for='Tec" +
+                    tecnico.id +
+                    "'>" +
+                    tecnico.nombre_tecnico +
+                    "</label>" +
+                    "</li>";
+                });
+
+                $("#equipoTecnico").html(listsEquipoTecnico);
+                updatePaginationTecnicos(currentPage, totalPages);
+
+            }
+
             $("#tecnicoEncargado").html(listaTecnicosEncargados);
-            $("#equipoTecnico").html(listsEquipoTecnico);
+            paginateList(data, currentPage);
+
+            $("#equipoTecnico").on("change", "input[type='checkbox']", function () {
+                var tecnicoId = $(this).val();
+                var currentPageNumber = currentPage;
+                if ($(this).is(":checked")) {
+                    if (!selectedTecnicos[tecnicoId]) {
+                        selectedTecnicos[tecnicoId] = [];
+                    }
+                    selectedTecnicos[tecnicoId].push(currentPageNumber);
+                } else {
+                    if (selectedTecnicos[tecnicoId]) {
+                        selectedTecnicos[tecnicoId] = selectedTecnicos[tecnicoId].filter(function (page) {
+                            return page !== currentPageNumber;
+                        });
+                        if (selectedTecnicos[tecnicoId].length === 0) {
+                            delete selectedTecnicos[tecnicoId];
+                        }
+                    }
+                }
+            });
+
+            $("#prevTecnicos").on("click", function () {
+                if (currentPage > 1) {
+                    currentPage--;
+                    paginateList(data, currentPage);
+                }
+            });
+
+            $("#nextTecnicos").on("click", function () {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    paginateList(data, currentPage);
+                }
+            });
+
         },
     });
     $("#tecnicoEncargado").prop("disabled", false);
@@ -257,8 +426,14 @@ function cargarTipoServicio(idServicio) {
 }
 
 $("#servicio").on("change", function () {
+
+    for (var key in selectedTareasSinDispo) {
+        delete selectedTareasSinDispo[key];
+    }
+
     var servicioId = $(this).val();
     var sucursal = $("#sucursal").val();
+    cargarDispositivos(sucursal, servicioId);
     cargarTipoServicio(servicioId);
     // cargarTareas(servicioId);
     cargarTecnicosEncargados(servicioId);
@@ -273,11 +448,18 @@ $("#servicio").on("change", function () {
 });
 
 $("#cliente").on("change", function () {
+    for (var key in selectedContacts) {
+        delete selectedContacts[key];
+    }
+
+    for (var key in selectedTareasSinDispo) {
+        delete selectedTareasSinDispo[key];
+    }
     var clienteId = $(this).val();
     cargarSucursales(clienteId);
     $("#sucursal").prop("disabled", false);
 
-    if (clienteId == 0) {
+    // if (clienteId == 0) {
         $("#servicio").prop("disabled", true);
         $("#servicio").prop("value", 0);
         var servicioId = $("#servicio").val();
@@ -285,15 +467,30 @@ $("#cliente").on("change", function () {
         cargarTecnicosEncargados(servicioId);
         $("#bloqueEncargado").css("display", "none");
         $("#bloqueEquipoTecnico").css("display", "none");
-    }
+        $("#bloqueContactos").css("display", "none");
+    // }
 });
 
 $("#sucursal").on("change", function () {
+
+    for (var key in selectedContacts) {
+        delete selectedContacts[key];
+    }
+
+    for (var key in selectedTareasSinDispo) {
+        delete selectedTareasSinDispo[key];
+    }
+
     var sucursalId = $(this).val();
-    cargarContactos(sucursalId);
-    cargarDispositivos(sucursalId);
+    if(sucursalId != 0)
+    {
+        cargarContactos(sucursalId);
+    }
+
+    // cargarDispositivos(sucursalId);
     if (sucursalId > 0) {
         $("#servicio").prop("disabled", false);
+        $("#bloqueContactos").css("display", "block");
     }else{
         $("#servicio").prop("disabled", true);
         $("#servicio").prop("value", 0);
@@ -302,6 +499,7 @@ $("#sucursal").on("change", function () {
         cargarTecnicosEncargados(servicioId);
         $("#bloqueEncargado").css("display", "none");
         $("#bloqueEquipoTecnico").css("display", "none");
+        $("#bloqueContactos").css("display", "none");
     }
 
 });
@@ -316,17 +514,7 @@ $("#tipoServicio").on("change", function () {
     }
 });
 
-// $(".btn-add").on("click", function () {
-//     var block = $(this).closest(".block-relieve");
-//     var clone = block.clone();
-//     // clone.find("select").val(""); // resetear valores de los selects
-//     clone
-//         .find(".btn-add")
-//         .removeClass("btn-add")
-//         .addClass("btn-remove")
-//         .text("-"); // reemplazar clases y texto
-//     block.after(clone);
-// });
+
 
 // Establecer eventos de clic para los botones originales
 $("#bloqueDispositivos")
@@ -342,7 +530,7 @@ $("#bloqueDispositivos")
     .find("#botonCancelarAccesorio")
     .on("click", cancelarAccesorios);
 
-var blockCounter = 0;
+var blockCounter = 1;
 
 $(".btn-add").on("click", function () {
     var block = $(this).closest(".block-relieve");
@@ -360,16 +548,8 @@ $(".btn-add").on("click", function () {
         $(element).find("input.detalleSiNo").attr("id", "detalleSiNo-" + blockCounter);
     });
     clone.find("input.detalleSiNo").attr("id", "detalleSiNo-" + blockCounter);
-    // clone.find("button.botonCancelarDetalle").attr("id", "botonCancelarDetalle-" + blockCounter);
-    // Asignar nombres únicos a los inputs dentro del bloque clonado
-    // clone.find("input").each(function () {
-    //     var input = $(this);
-    //     input.attr(
-    //         "name",
-    //         "dispositivo-" + blockCounter + "_" + input.attr("id")
-    //     );
-    // });
-
+    clone.find("select#dispositivo-0").attr("id","dispositivo-" + blockCounter);
+    clone.find("span#errorDispositivo-0").attr("id","errorDispositivo-" + blockCounter);
 
     clone.find("input[type='radio']").each(function () {
         var radio = $(this);
@@ -393,7 +573,8 @@ $(".btn-add").on("click", function () {
     blockCounter++; // Incrementar el contador global
 
     // Resto del código para clonar el bloque...
-    clone.find("select").val(""); // resetear valores de los selects
+    clone.find("select").val("0"); // resetear valores de los selects
+    clone.find("input[type='checkbox']").prop("checked", false);
     clone
         .find(".btn-add")
         .removeClass("btn-add")
@@ -416,29 +597,6 @@ $(document).on("click", ".btn-remove", function () {
     block.remove();
 });
 
-// function mostrarDetalles() {
-//     $("#detallesDispositivo").css("display", "block");
-//     $("#botonAgregarDetalle").css("display", "none");
-//     $("#botonCancelarDetalle").css("display", "block");
-// }
-
-// function cancelarDetalles() {
-//     $("#detallesDispositivo").css("display", "none");
-//     $("#botonAgregarDetalle").css("display", "block");
-//     $("#botonCancelarDetalle").css("display", "none");
-// }
-
-// function mostrarAccesorios() {
-//     $("#accesoriosDispositivo").css("display", "block");
-//     $("#botonAgregarAccesorio").css("display", "none");
-//     $("#botonCancelarAccesorio").css("display", "block");
-// }
-
-// function cancelarAccesorios() {
-//     $("#accesoriosDispositivo").css("display", "none");
-//     $("#botonAgregarAccesorio").css("display", "block");
-//     $("#botonCancelarAccesorio").css("display", "none");
-// }
 function mostrarDetalles() {
     var block = $(this).closest(".block-relieve");
     block.find("#detallesDispositivo").css("display", "block");
@@ -450,32 +608,13 @@ function mostrarDetalles() {
 function cancelarDetalles(event) {
     var block = $(this).closest(".block-relieve");
     var bloqueNumero = $(this).siblings("input[type='hidden']").val();    // var block = $(this).closest(".block-relieve");
-    // var boton = $(event.target);
-    // var bloqueNumero = boton.closest("#bloqueNumero").val();
-    // var botonId = boton.id;
-    console.log("boton:"+bloqueNumero);
-    // console.log(block);
-    // var detalleSiNo = block.find('input[name="detalleSiNo"]');
-    // var valorDetalleSiNo = detalleSiNo.val(); // Almacenar el valor actual del input hidden
-    // if(blockCounter > 0)
-    // {
-    //     // console.log(blockCounter);
-    //     var num = blockCounter -1;
-    //     var input = document.getElementById("detalleSiNo-"+num);
-    //     // input.value = "0";
-    // }else{
-    //     block.find("input[class='detalleSiNo']").attr("value", "0");
-    // }
+
+    // console.log("boton:"+bloqueNumero);
+
     block.find("#detallesDispositivo").css("display", "none");
     block.find("#botonAgregarDetalle").css("display", "block");
     block.find("#botonCancelarDetalle").css("display", "none");
-    // Vaciar los campos del div que se esconde
-    // block
-    //     .find(
-    //         "#detallesDispositivo input, #detallesDispositivo select, #detallesDispositivo textarea"
-    //     )
-    //     .val("");
-    // detalleSiNo.val(valorDetalleSiNo); // Asignar el valor temporal al input hidden
+
     // Desmarcar los radio buttons
     $(this)
         .closest("#detallesDispositivo")
@@ -498,101 +637,9 @@ function cancelarAccesorios() {
     block.find("#botonCancelarAccesorio").css("display", "none");
     block.find("#accesorioSiNo").attr("value", "0");
 
-    // Vaciar los campos del div que se esconde
-    // block
-    //     .find(
-    //         "#accesoriosDispositivo input, #accesoriosDispositivo select, #accesoriosDispositivo textarea"
-    //     )
-    //     .val("");
     // Desmarcar los radio buttons
     $(this).find("#accesoriosDispositivo").prop("checked", false);
 }
-
-
-// $('input[type="radio"][value="Mostrar"]').on('change', function() {
-
-//     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').show();
-//   });
-
-//   $('input[type="radio"][value="NoMostrar"]').on('change', function() {
-//     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').hide();
-//   });
-
-//   //Accesorios - Cargador y bateria
-//   $('input[type="radio"][value="MostrarCB"]').on('change', function() {
-
-//     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').show();
-//     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').attr('placeholder','Escriba N° de serie del accesorio');
-//   });
-
-//   $('input[type="radio"][value="NoMostrarCB"]').on('change', function() {
-//     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').show();
-
-//     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').attr('placeholder','Escriba Cotizar y el N° de serie del accesorio');
-//   });
-
-//   //Accesorios - Cable poder + adaptador de poder
-
-//   $('input[type="radio"][value="MostrarCA"]').on('change', function() {
-
-//     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').show();
-//   });
-
-//   $('input[type="radio"][value="NoMostrarCA"]').on('change', function() {
-//     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').hide();
-//   });
-
-//   //Accesorios - Teclado + Pantalla
-
-//   $('input[type="radio"][value="MostrarPT"]').on('change', function() {
-
-//     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').show();
-//   });
-
-//   $('input[type="radio"][value="NoMostrarPT"]').on('change', function() {
-//     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').hide();
-//   });
-
-//   //Accesorios - Drum + Toner
-// //   $('input[type="radio"][value="MostrarTD"]').on('change', function() {
-
-// //     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').show();
-// //   });
-
-// //   $('input[type="radio"][value="NoMostrarTD"]').on('change', function() {
-// //     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').hide();
-// //   });
-
-// // $(document).on("change", 'input[type="radio"][value="MostrarTD"]', function() {
-// //     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').show();
-// //   });
-
-// //   $(document).on("change", 'input[type="radio"][value="NoMostrarTD"]', function() {
-// //     $('#' + $(this).attr('name') + 'Texto').find('input[type="text"]').hide();
-// //   });
-
-
-
-// //intento 1
-// //   $(document).on("change", 'input[type="radio"][value="MostrarTD"]', function() {
-// //     $(this).closest('.block-relieve').find('input[type="text"]').show();
-// //   });
-
-// //   $(document).on("change", 'input[type="radio"][value="NoMostrarTD"]', function() {
-// //     $(this).closest('.block-relieve').find('input["text"]').hide();
-// //   });
-// $(document).on("change", 'input[type="radio"][value="MostrarTD"]', function() {
-//     console.log($(this).closest('.block-relieve').find('#' + $(this).attr('name') + 'Texto'));
-//     $(this).closest('.block-relieve')
-//       .find('#' + $(this).attr('name') + 'Texto')
-//       .find('input[type="text"]').show();
-//   });
-
-//   $(document).on("change", 'input[type="radio"][value="NoMostrarTD"]', function() {
-//     $(this).closest('.block-relieve')
-//       .find('#' + $(this).attr('name') + 'Texto')
-//       .find('input[type="text"]').hide();
-//   });
 
 
   $('#bloqueDispositivos').on("change", 'input[type="radio"]', function(event) {
@@ -628,3 +675,286 @@ function cancelarAccesorios() {
             .find('input[type="text"]').hide();
     }
 });
+
+
+function validar(){
+    var flagValidacion =  true; //Bandera que dira si los elementos estan validados o no
+
+    //Validación del campo de descripción
+
+    var descripcion = document.getElementById("descripcion");
+    var errorDescripcion = document.getElementById("errorDescripcion");
+
+
+    if(descripcion.value == ""){
+        errorDescripcion.innerHTML="Debe ingresar una descripción";
+        errorDescripcion.style.display="block";
+        flagValidacion = false;
+    }else{
+        errorDescripcion.innerHTML="";
+        errorDescripcion.style.display="none";
+    }
+
+    //Validación de Cliente
+
+    var cliente = document.getElementById("cliente");
+    var errorCliente = document.getElementById("errorCliente");
+
+    if (cliente.value == 0) {
+        errorCliente.innerHTML = "Debe seleccionar un cliente";
+        errorCliente.style.display = "block";
+        flagValidacion = false;
+    } else {
+        errorCliente.innerHTML = "";
+        errorCliente.style.display = "none";
+    }
+
+    //Validación Sucursal
+
+    var sucursal = document.getElementById("sucursal");
+    var errorSucursal = document.getElementById("errorSucursal");
+
+    if (sucursal.value == 0) {
+        errorSucursal.innerHTML = "Debe seleccionar una sucursal";
+        errorSucursal.style.display = "block";
+        flagValidacion = false;
+    } else {
+        errorSucursal.innerHTML = "";
+        errorSucursal.style.display = "none";
+    }
+
+    //Validación Contactos
+
+    var errorContacto = document.getElementById("errorContacto");
+    if(Object.keys(selectedContacts).length == 0){
+        errorContacto.innerHTML = "Debe seleccionar al menos un contacto";
+        errorContacto.style.display = "block";
+        flagValidacion = false;
+    }else{
+        errorContacto.innerHTML = "";
+        errorContacto.style.display = "none";
+    }
+
+    //Validación Servicio
+
+    var servicio = document.getElementById("servicio");
+    var errorServicio = document.getElementById("errorServicio");
+
+    if (servicio.value == 0) {
+        errorServicio.innerHTML = "Debe seleccionar un servicio";
+        errorServicio.style.display = "block";
+        flagValidacion = false;
+    } else {
+        errorServicio.innerHTML = "";
+        errorServicio.style.display = "none";
+    }
+
+    //Validación de las tareas
+
+    tipoServicio = document.getElementById("tipoServicio").value;
+
+
+    if(tipoServicio == 1){
+        //Validación para tareas que no requieren dispositivo
+
+        var errorTareas = document.getElementById("errorTareasSinDispositivo");
+        if(Object.keys(selectedTareasSinDispo).length == 0){
+            errorTareas.innerHTML = "Debe seleccionar al menos una tarea";
+            errorTareas.style.display = "block";
+            flagValidacion = false;
+        }else{
+            errorTareas.innerHTML = "";
+            errorTareas.style.display = "none";
+        }
+    }else if(tipoServicio == 2){
+        //Validación para tareas que si requieren dispositivos
+
+        for (let index = 0; index < (blockCounter); index++) {
+
+            if(document.getElementById("bloque-"+index))
+            {
+
+                console.log("Id del dispositivo del bloque "+index+": "+document.getElementById("dispositivo-"+index).value);
+
+                var errorDispositivo = document.getElementById("errorDispositivo-"+index);
+                if(document.getElementById("dispositivo-"+index).value == 0){
+                    errorDispositivo.innerHTML = "Debe seleccionar un dispositivo";
+                    errorDispositivo.style.display = "block";
+                    flagValidacion = false;
+                }else{
+                    errorDispositivo.innerHTML = "";
+                    errorDispositivo.style.display = "none";
+                }
+            }
+            else{
+                console.log("No existe el bloque "+index);
+            }
+
+        }
+
+    }
+
+    //Validación del técnico encargado
+
+    var tecnicoEncargado = document.getElementById("tecnicoEncargado");
+    var errorTecnicoEncargado = document.getElementById("errorTecnicoEncargado");
+
+    if (tecnicoEncargado.value == 0) {
+        errorTecnicoEncargado.innerHTML = "Debe seleccionar un técnico encargado";
+        errorTecnicoEncargado.style.display = "block";
+        flagValidacion = false;
+    }
+    else {
+        errorTecnicoEncargado.innerHTML = "";
+        errorTecnicoEncargado.style.display = "none";
+    }
+
+    //Validación del equipo técnico
+
+    var errorEquipoTecnico = document.getElementById("errorEquipoTecnico");
+    if(Object.keys(selectedTecnicos).length == 0){
+        errorEquipoTecnico.innerHTML = "Debe seleccionar al menos un técnico";
+        errorEquipoTecnico.style.display = "block";
+        flagValidacion = false;
+    }
+    else{
+        errorEquipoTecnico.innerHTML = "";
+        errorEquipoTecnico.style.display = "none";
+    }
+
+    //Validación del estado de la OT
+
+    var estado = document.getElementById("estadoOt");
+    var errorEstadoOT = document.getElementById("errorEstado");
+
+    if (estado.value == 0) {
+        errorEstadoOT.innerHTML = "Debe seleccionar un estado";
+        errorEstadoOT.style.display = "block";
+        flagValidacion = false;
+    }
+    else {
+        errorEstadoOT.innerHTML = "";
+        errorEstadoOT.style.display = "none";
+    }
+
+    //Validación de prioridad
+
+    var prioridad = document.getElementById("prioridad");
+    var errorPrioridad = document.getElementById("errorPrioridad");
+
+    if (prioridad.value == 0) {
+        errorPrioridad.innerHTML = "Debe seleccionar una prioridad";
+        errorPrioridad.style.display = "block";
+        flagValidacion = false;
+    }
+    else {
+        errorPrioridad.innerHTML = "";
+        errorPrioridad.style.display = "none";
+    }
+
+    //Validación de tipo de orden de trabajo
+
+    var tipo = document.getElementById("tipo");
+    var errorTipo = document.getElementById("errorTipo");
+
+    if (tipo.value == 0) {
+        errorTipo.innerHTML = "Debe seleccionar un tipo";
+        errorTipo.style.display = "block";
+        flagValidacion = false;
+    }
+    else {
+        errorTipo.innerHTML = "";
+        errorTipo.style.display = "none";
+    }
+
+    //Validación de tipo de visita
+
+    var tipoVisita = document.getElementById("tipoVisita");
+    var errorTipoVisita = document.getElementById("errorTipoVisita");
+
+    if (tipoVisita.value == 0) {
+        errorTipoVisita.innerHTML = "Debe seleccionar un tipo de visita";
+        errorTipoVisita.style.display = "block";
+        flagValidacion = false;
+    }
+    else {
+        errorTipoVisita.innerHTML = "";
+        errorTipoVisita.style.display = "none";
+    }
+
+    //Validación de fecha de inicio
+
+    var fechaInicio = document.getElementById("fecha");
+    var errorFechaInicio = document.getElementById("errorFecha");
+
+    if (fechaInicio.value == "") {
+        errorFechaInicio.innerHTML = "Debe seleccionar una fecha de inicio";
+        errorFechaInicio.style.display = "block";
+        flagValidacion = false;
+    }
+    else {
+        errorFechaInicio.innerHTML = "";
+        errorFechaInicio.style.display = "none";
+    }
+
+    //Validación de cotizacion
+
+    var cotizacion = document.getElementById("cotizacion");
+    var errorCotizacion = document.getElementById("errorCotizacion");
+    if (cotizacion.value == "") {
+        errorCotizacion.innerHTML = "Debe ingresar una cotización";
+        errorCotizacion.style.display = "block";
+        flagValidacion = false;
+    }
+    else {
+        errorCotizacion.innerHTML = "";
+        errorCotizacion.style.display = "none";
+    }
+
+    if(flagValidacion == false){
+        $('html, body').animate({ scrollTop: 0 }, 'slow');
+    }else{
+        enviarDatos();
+    }
+}
+
+
+function enviarDatos(){
+    console.log("Enviando datos");
+    var datosJson = {};
+
+    var tipoServicio = document.getElementById("tipoServicio").value;
+
+    datosJson['_token']= document.getElementsByName("_token")[0].value;
+    datosJson['descripcion'] = document.getElementById("descripcion").value;
+    datosJson['cliente'] = document.getElementById("cliente").value;
+    datosJson['sucursal'] = document.getElementById("sucursal").value;
+    datosJson['contactos'] = Object.keys(selectedContacts);
+    datosJson['servicio'] = document.getElementById("servicio").value;
+    datosJson['tipoServicio'] = tipoServicio;
+
+    if(tipoServicio == 1){
+        datosJson['tareasSinD'] = Object.keys(selectedTareasSinDispo);
+    }else if(tipoServicio == 2){
+        datosJson['tareasDispo'] = document.getElementById("dispositivo").value;
+    }
+
+    datosJson['tecnicoEncargado'] = document.getElementById("tecnicoEncargado").value;
+    datosJson['tecnicos'] = Object.keys(selectedTecnicos);
+    datosJson['estado'] = document.getElementById("estadoOt").value;
+    datosJson['prioridad'] = document.getElementById("prioridad").value;
+    datosJson['tipo'] = document.getElementById("tipo").value;
+    datosJson['tipoVisita'] = document.getElementById("tipoVisita").value;
+    datosJson['fecha'] = document.getElementById("fecha").value;
+    datosJson['cotizacion'] = document.getElementById("cotizacion").value;
+
+
+    $.ajax({
+        type: "POST",
+        url: "/ordenes/agregar",
+        data: datosJson,
+        success: function (data) {
+            console.log(data);
+        },
+    });
+}

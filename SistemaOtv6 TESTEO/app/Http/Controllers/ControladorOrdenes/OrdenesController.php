@@ -49,6 +49,10 @@ class OrdenesController extends Controller
         return view('ordenes.agregar', compact('tipos', 'prioridades', 'estados', 'tiposVisitas', 'tecnicos', 'clientes', 'servicios'));
     }
 
+    public function store(Request $request)
+    {
+        dd($request);
+    }
     public function buscar(Request $request)
     {
         $search = $request->input('search');
@@ -156,10 +160,21 @@ class OrdenesController extends Controller
         return response()->json($contactos);
     }
 
-    public function dispositivos($id)
+    public function dispositivos($idSucursal, $idServicio)
     {
-        $sucursal = Sucursal::findOrFail($id);
-        $dispositivos = $sucursal->dispositivo()->with('modelo')->get();
+        $servicio = Servicio::findOrFail($idServicio);
+        if ($servicio->cod_tipo_servicio != 2) {
+            return response()->json([]);
+        }
+        $sublinea = Servicio::findOrFail($idServicio)->sublinea->cod_linea;
+        $sucursal = Sucursal::findOrFail($idSucursal);
+        $dispositivos = $sucursal
+            ->dispositivo()
+            ->with('modelo', 'modelo.sublinea')
+            ->whereHas('modelo.sublinea', function ($query) use ($sublinea) {
+                $query->where('cod_linea', $sublinea);
+            })
+            ->get();
 
         return response()->json($dispositivos);
     }

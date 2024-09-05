@@ -37,12 +37,13 @@ Route::middleware(['auth'])->group(function () {
     // RUTAS DE ORDENES
     Route::get('/ordenes', [OrdenesController::class, 'index'])->middleware('can:ordenes.index')->name('ordenes.index'); // Rutas para la carpeta 'ordenes'
     Route::get('/ordenes/agregar', [OrdenesController::class, 'create'])->middleware('can:ordenes.create')->name('ordenes.create'); // Ruta para crear una nueva orden
+    Route::post('/ordenes/agregar', [OrdenesController::class, 'store'])->middleware('can:ordenes.create')->name('ordenes.store'); // Ruta para almacenar la nueva orden
     Route::get('/ordenes/buscar', [OrdenesController::class, 'buscar'])->name('ordenes.buscar'); // Ruta para buscar órdenes
     Route::get('/ordenes/{orden}', [OrdenesController::class, 'show'])->name('ordenes.show'); // Ruta para mostrar el detalle de una orden
     Route::get('/tareas/{servicioId}', [OrdenesController::class, 'tareas']);
     Route::get('/sucursal/{clienteId}', [OrdenesController::class, 'sucursales']);
     Route::get('/contacto/{sucursalId}', [OrdenesController::class, 'contactos']);
-    Route::get('/dispositivo/{sucursalId}', [OrdenesController::class, 'dispositivos']);
+    Route::get('/dispositivo/{sucursalId}/{servicioId}', [OrdenesController::class, 'dispositivos']);
     Route::get('/servicio/{servicioId}', [OrdenesController::class, 'servicioTipo']);
 <<<<<<< HEAD
 

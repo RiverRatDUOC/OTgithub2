@@ -21,6 +21,7 @@
                         <div class="mb-3">
                             <label for="descripcion" class="form-label">Descripción</label>
                             <textarea class="form-control" id="descripcion" name="descripcion" rows="3"></textarea>
+                            <span id="errorDescripcion" class="errMessage"></span>
                         </div>
                         <div class="mb-3">
                             <label for="cliente" class="form-label">Cliente</label>
@@ -30,6 +31,7 @@
                                     <option value="{{ $cliente->id }}">{{ $cliente->nombre_cliente }}</option>
                                 @endforeach
                             </select>
+                            <span id="errorCliente" class="errMessage"></span>
                         </div>
                         <div class="mb-3">
                             <label for="sucursal" class="form-label">Sucursal</label>
@@ -37,12 +39,31 @@
                             <select class="form-select form-control" id="sucursal" name="sucursal">
                                 <option value="0">Seleccione una sucursal</option>
                             </select>
+                            <span id="errorSucursal" class="errMessage"></span>
                         </div>
+
                         <div class="mb-3">
-                            <label for="contacto" class="form-label">Contacto</label>
+                            <div id="bloqueContactos" class="card" style="display:none">
+                                <div class="form-group p-4">
+                                    <label for="contacto" class="form-label">Contacto(s)
+                                        <ul class="list-group" id="contacto">
+                                        </ul>
+                                        <div id="pagination" class="pagination p-2">
+                                            <button id="prev" type="button" class="btn btn-secondary m-2"
+                                                disabled>Anterior</button>
+                                            <button id="next" type="button" class="m-2" btn btn-secondary"
+                                                style="border-radius: 3px">Siguiente</button>
+                                            <span id="page-info">Página 1 de <span id="total-pages">1</span></span>
+                                        </div>
+                                    </label>
+                                    <span id="errorContacto" class="errMessage"></span>
+                                </div>
+
+                            </div>
+                            {{-- <label for="contacto" class="form-label">Contacto</label>
                             <select class="form-select form-control" id="contacto" name="contacto">
                                 <option value="0">Seleccione un contacto</option>
-                            </select>
+                            </select> --}}
                         </div>
                         <div class="mb-3">
                             <label for="servicio" class="form-label">Servicio</label>
@@ -52,6 +73,7 @@
                                     <option value="{{ $servicio->id }}">{{ $servicio->nombre_servicio }}</option>
                                 @endforeach
                             </select>
+                            <span id="errorServicio" class="errMessage"></span>
                         </div>
                         <input type="text" name="tipoServicio" id="tipoServicio" value="" hidden>
                         {{-- <div class="mb-3">
@@ -62,20 +84,20 @@
                         </div> --}}
                         {{-- Bloque para los dispositivos de la OT  --}}
                         <div style="padding:5px;">
-
-
                             <div class="row" id="bloqueDispositivos" style="display:none;">
-                                <div class="col-md-12 block-relieve m-2" id="bloque">
+                                <div class="col-md-12 block-relieve m-2" id="bloque-0">
                                     <div class="block-content">
                                         <div class="form-group col-12">
-                                            <label for="dispositivo">Dispositivo:</label>
-                                            <select id="dispositivo" class="form-control">
-                                                <option value="">Seleccione un dispositivo</option>
+                                            <label for="dispositivo-0">Dispositivo:</label>
+                                            <select id="dispositivo-0" class="form-control">
+                                                <option value="0">Seleccione un dispositivo</option>
                                                 <!-- opciones de dispositivo -->
                                             </select>
+                                            <span id="errorDispositivo-0" class="errMessage"></span>
                                         </div>
-                                        <div class="form-group col-12">
-                                            <label for="tareas">Tareas:</label>
+                                        Tareas
+                                        <div class="form-group col-12" style=" overflow: scroll; max-height:300px">
+
                                             <ul class="list-group" id="tareas">
                                             </ul>
                                             {{-- <select id="tareas" class="form-control" multiple>
@@ -87,7 +109,8 @@
                                             <div class="row col-12">
                                                 <div class="col-md-6">
                                                     <div id="detallesDispositivo" style="display: none;">
-                                                        <input type="text" class="detalleSiNo" id="detalleSiNo" hidden>
+                                                        <input type="text" class="detalleSiNo" id="detalleSiNo"
+                                                            hidden>
                                                         <div class="m-2">
                                                             <label for="rayones">¿El Equipo Posee Rayones?</label>
                                                             <div class="form-check">
@@ -362,54 +385,60 @@
                                                                     style="display:none;">
                                                             </div>
                                                         </div>
-                                                        <hr>
-                                                        <div class="m-2">
-                                                            <label for="drum">¿El Equipo Posee Toner?</label>
-                                                            <div class="form-check">
-                                                                <label>
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="drum" id="drumSi"
-                                                                        value="NoMostrarTD">
-                                                                    Si</label>
-                                                            </div>
-                                                            <div class="form-check">
-                                                                <label>
 
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="drum" id="drumNo" value="MostrarTD">
-                                                                    No</label>
+                                                        <div id="DrumToner">
+                                                            <hr>
+                                                            <div class="m-2">
+                                                                <label for="drum">¿El Equipo Posee Toner?</label>
+                                                                <div class="form-check">
+                                                                    <label>
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="drum" id="drumSi"
+                                                                            value="NoMostrarTD">
+                                                                        Si</label>
+                                                                </div>
+                                                                <div class="form-check">
+                                                                    <label>
+
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="drum" id="drumNo"
+                                                                            value="MostrarTD">
+                                                                        No</label>
+                                                                </div>
+                                                                <div class="form-check textoInf" id="drum-Texto">
+                                                                    <input class="form-control" type="text"
+                                                                        name="accesoriosDrum" id="accesoriosDrum"
+                                                                        placeholder="El equipo presenta..."
+                                                                        style="display:none;">
+                                                                </div>
                                                             </div>
-                                                            <div class="form-check textoInf" id="drum-Texto">
-                                                                <input class="form-control" type="text"
-                                                                    name="accesoriosDrum" id="accesoriosDrum"
-                                                                    placeholder="El equipo presenta..."
-                                                                    style="display:none;">
+                                                            <hr>
+                                                            <div class="m-2">
+                                                                <label for="toner">¿El Equipo Posee Drum?</label>
+                                                                <div class="form-check">
+                                                                    <label>
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="toner" id="tonerSi"
+                                                                            value="NoMostrarTD">
+                                                                        Si</label>
+                                                                </div>
+                                                                <div class="form-check">
+                                                                    <label>
+
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="toner" id="tonerNo"
+                                                                            value="MostrarTD">
+                                                                        No</label>
+                                                                </div>
+                                                                <div class="form-check textoInf" id="toner-Texto">
+                                                                    <input class="form-control" type="text"
+                                                                        name="accesoriosToner" id="accesoriosToner"
+                                                                        placeholder="El equipo presenta..."
+                                                                        style="display:none;">
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <hr>
-                                                        <div class="m-2">
-                                                            <label for="toner">¿El Equipo Posee Drum?</label>
-                                                            <div class="form-check">
-                                                                <label>
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="toner" id="tonerSi"
-                                                                        value="NoMostrarTD">
-                                                                    Si</label>
-                                                            </div>
-                                                            <div class="form-check">
-                                                                <label>
 
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="toner" id="tonerNo" value="MostrarTD">
-                                                                    No</label>
-                                                            </div>
-                                                            <div class="form-check textoInf" id="toner-Texto">
-                                                                <input class="form-control" type="text"
-                                                                    name="accesoriosToner" id="accesoriosToner"
-                                                                    placeholder="El equipo presenta..."
-                                                                    style="display:none;">
-                                                            </div>
-                                                        </div>
                                                     </div>
                                                     <button class="btn btn-primary" id="botonAgregarAccesorio"
                                                         style="font-size:14px" type="button"
@@ -437,12 +466,17 @@
                                     <label for="tareasSinDispositivo">Tareas:</label>
                                     <ul class="list-group" id="tareasSinDispositivo">
                                     </ul>
-                                    {{-- <div id="tareasSinDispositivo"></div>
-                                <select id="tareasSinDispositivo" class="form-control" multiple>
-                                    <option value="">Seleccione una tarea</option>
-                                    <!-- Agrega opciones de tareas aquí -->
-                                </select> --}}
+                                    <div id="pagination" class="pagination p-2">
+                                        <button id="prevTareaSinDispo" type="button" class="btn btn-secondary m-2"
+                                            disabled>Anterior</button>
+                                        <button id="nextTareaSinDispo" type="button" class="m-2" btn btn-secondary"
+                                            style="border-radius: 3px">Siguiente</button>
+                                        <span id="page-info-tareas-sin-dispo">Página 1 de <span
+                                                id="total-pages-tareas-sin-dispo">1</span></span>
+                                    </div>
+                                    <span id="errorTareasSinDispositivo" class="errMessage"></span>
                                 </div>
+
                             </div>
                             {{-- <div class="mb-3">
                             <label for="tareas" class="form-label">Tareas</label>
@@ -454,10 +488,8 @@
                                 <label for="tecnicoEncargado" class="form-label">Técnico encargado</label>
                                 <select class="form-select form-control" id="tecnicoEncargado" name="tecnicoEncargado">
                                     <option value="0">Seleccione un técnico</option>
-                                    {{-- @foreach ($tecnicos as $tecnico)
-                                    <option value="{{ $tecnico->id }}">{{ $tecnico->nombre_tecnico }}</option>
-                                @endforeach --}}
                                 </select>
+                                <span id="errorTecnicoEncargado" class="errMessage"></span>
                             </div>
 
                             <div id="bloqueEquipoTecnico" class="card" style="display:none">
@@ -466,17 +498,27 @@
                                         <ul class="list-group" id="equipoTecnico">
                                         </ul>
                                     </label>
+                                    <div id="pagination" class="pagination p-2">
+                                        <button id="prevTecnicos" type="button" class="btn btn-secondary m-2"
+                                            disabled>Anterior</button>
+                                        <button id="nextTecnicos" type="button" class="m-2" btn btn-secondary"
+                                            style="border-radius: 3px">Siguiente</button>
+                                        <span id="page-info-tecnicos">Página 1 de <span
+                                                id="total-pages-tecnicos">1</span></span>
+                                    </div>
+                                    <span id="errorEquipoTecnico" class="errMessage"></span>
                                 </div>
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="estado" class="form-label">Estado</label>
-                            <select class="form-select form-control" id="estado" name="estado">
+                            <label for="estadoOt" class="form-label">Estado</label>
+                            <select class="form-select form-control" id="estadoOt" name="estadoOt">
                                 <option value="0">Seleccione un estado</option>
                                 @foreach ($estados as $estado)
                                     <option value="{{ $estado->id }}">{{ $estado->descripcion_estado_ot }}</option>
                                 @endforeach
                             </select>
+                            <span id="errorEstado" class="errMessage"></span>
                         </div>
                         <div class="mb-3">
                             <label for="prioridad" class="form-label">Prioridad</label>
@@ -487,6 +529,7 @@
                                     </option>
                                 @endforeach
                             </select>
+                            <span id="errorPrioridad" class="errMessage"></span>
                         </div>
                         <div class="mb-3">
                             <label for="tipo" class="form-label">Tipo de orden de trabajo</label>
@@ -496,6 +539,7 @@
                                     <option value="{{ $tipo->id }}">{{ $tipo->descripcion_tipo_ot }}</option>
                                 @endforeach
                             </select>
+                            <span id="errorTipo" class="errMessage"></span>
                         </div>
                         <div class="mb-3">
                             <label for="tipoVisita" class="form-label">Tipo de visita</label>
@@ -505,18 +549,21 @@
                                     <option value="{{ $tipo->id }}">{{ $tipo->descripcion_tipo_visita }}</option>
                                 @endforeach
                             </select>
+                            <span id="errorTipoVisita" class="errMessage"></span>
                         </div>
 
                         <div class="mb-3">
                             <label for="fecha" class="form-label">Fecha</label>
                             <input type="date" class="form-control" id="fecha" name="fecha">
+                            <span id="errorFecha" class="errMessage"></span>
                         </div>
                         <div class="mb-3">
                             <label for="cotizacion" class="form-label">Cotización</label>
                             <input type="text" class="form-control" id="cotizacion" name="cotizacion">
+                            <span id="errorCotizacion" class="errMessage"></span>
                         </div>
 
-                        <button type="button" class="btn btn-primary" onclick="evento()">Guardar</button>
+                        <button type="button" class="btn btn-primary" onclick="validar()">Guardar</button>
                     </form>
                 </div>
             </div>

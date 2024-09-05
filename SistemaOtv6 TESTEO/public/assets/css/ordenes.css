@@ -56,3 +56,8 @@
     bottom: 20;
     right: 20;
 }
+
+.errMessage{
+    display: none;
+    color:#cc0000;
+}
