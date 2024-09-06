@@ -98,14 +98,18 @@
                                         Tareas
                                         <div class="form-group col-12" style=" overflow: scroll; max-height:300px">
 
-                                            <ul class="list-group" id="tareas">
+                                            <ul class="list-group" id="tareas-0">
                                             </ul>
+
                                             {{-- <select id="tareas" class="form-control" multiple>
                                             <option value="">Seleccione una tarea</option>
                                             <!-- opciones de tareas -->
                                         </select> --}}
                                         </div>
-                                        <div class="d-flex justify-content-between col-11 mt-3">
+                                        <span id="errorTareas-0" class="errMessage"></span>
+                                        <div
+                                            class="d-flex
+                                                justify-content-between col-11 mt-3">
                                             <div class="row col-12">
                                                 <div class="col-md-6">
                                                     <div id="detallesDispositivo" style="display: none;">
@@ -132,6 +136,7 @@
                                                                     placeholder="El equipo presenta..."
                                                                     style="display:none;">
                                                             </div>
+                                                            <span id="errorRayones-0" class="errMessage"></span>
                                                         </div>
                                                         <hr>
                                                         <div class="m-2">
@@ -156,10 +161,12 @@
                                                                     placeholder="El equipo presenta..."
                                                                     style="display:none">
                                                             </div>
+                                                            <span id="errorRupturas-0" class="errMessage"></span>
                                                         </div>
                                                         <hr>
                                                         <div class="m-2">
-                                                            <label for="tornillos">¿El Equipo Posee Todos Los Tornillos De
+                                                            <label for="tornillos">¿El Equipo Posee Todos Los Tornillos
+                                                                De
                                                                 Su
                                                                 Carcasa?</label>
                                                             <div class="form-check">
@@ -183,10 +190,12 @@
                                                                     placeholder="El equipo presenta..."
                                                                     style="display: none">
                                                             </div>
+                                                            <span id="errorTornillos-0" class="errMessage"></span>
                                                         </div>
                                                         <hr>
                                                         <div class="m-2">
-                                                            <label for="gomas">¿El Equipo Posee Las Gomas De La Base En
+                                                            <label for="gomas">¿El Equipo Posee Las Gomas De La Base
+                                                                En
                                                                 Buen
                                                                 Estado?</label>
                                                             <div class="form-check">
@@ -208,16 +217,20 @@
                                                                     placeholder="El equipo presenta..."
                                                                     style="display: none">
                                                             </div>
+                                                            <span id="errorGomas-0" class="errMessage"></span>
                                                         </div>
                                                         <hr>
                                                         <div class="m-2">
                                                             <label for="estado">Estado del equipo</label>
                                                             <input type="text" class="form-control" id="estado"
                                                                 name="estado">
+                                                            <span id="errorEstadoDis-0" class="errMessage"></span>
                                                         </div>
+
                                                         <hr>
                                                         <div class="m-2">
-                                                            <label for="observacion">Observaciones adicionales</label>
+                                                            <label for="observacion">Observaciones adicionales
+                                                                (opcional)</label>
                                                             <input type="text" class="form-control" id="observacion"
                                                                 name="observacion">
                                                         </div>
@@ -262,7 +275,8 @@
                                                         </div>
                                                         <hr>
                                                         <div class="m-2">
-                                                            <label for="cable">¿El Equipo Posee Cable de Poder?</label>
+                                                            <label for="cable">¿El Equipo Posee Cable de
+                                                                Poder?</label>
                                                             <div class="form-check">
                                                                 <label>
                                                                     <input class="form-check-input" type="radio"

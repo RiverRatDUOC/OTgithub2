@@ -6,7 +6,7 @@ var selectedTareasSinDispo = {};
 
 function cargarTareas(servicioId) {
     if (servicioId == 0) {
-        $("#tareas").html("<option value='0'>Seleccione una tarea</option>");
+        $("#tareas-0").html("<option value='0'>Seleccione una tarea</option>");
     } else {
         $.ajax({
             type: "GET",
@@ -28,7 +28,7 @@ function cargarTareas(servicioId) {
                         "</li>";
                 });
 
-                $("#tareas").html(listaTareas);
+                $("#tareas-0").html(listaTareas);
             },
         });
     }
@@ -500,6 +500,7 @@ $("#sucursal").on("change", function () {
         $("#bloqueEncargado").css("display", "none");
         $("#bloqueEquipoTecnico").css("display", "none");
         $("#bloqueContactos").css("display", "none");
+
     }
 
 });
@@ -550,7 +551,13 @@ $(".btn-add").on("click", function () {
     clone.find("input.detalleSiNo").attr("id", "detalleSiNo-" + blockCounter);
     clone.find("select#dispositivo-0").attr("id","dispositivo-" + blockCounter);
     clone.find("span#errorDispositivo-0").attr("id","errorDispositivo-" + blockCounter);
-
+    clone.find("ul#tareas-0").attr("id","tareas-" + blockCounter);
+    clone.find("span#errorTareas-0").attr("id","errorTareas-" + blockCounter);
+    clone.find("span#errorRayones-0").attr("id","errorRayones-" + blockCounter);
+    clone.find("span#errorRupturas-0").attr("id","errorRupturas-" + blockCounter);
+    clone.find("span#errorTornillos-0").attr("id","errorTornillos-" + blockCounter);
+    clone.find("span#errorGomas-0").attr("id","errorGomas-" + blockCounter);
+    clone.find("span#errorEstadoDis-0").attr("id","errorEstadoDis-"+blockCounter);
     clone.find("input[type='radio']").each(function () {
         var radio = $(this);
         var groupName = radio.attr("name");
@@ -769,25 +776,221 @@ function validar(){
     }else if(tipoServicio == 2){
         //Validación para tareas que si requieren dispositivos
 
+
+        //Validar que se seleccione un dispositivo Y además, el mismo dispositivo no se seleccione dos veces.
+        var dispositivosSeleccionados = [];
+
         for (let index = 0; index < (blockCounter); index++) {
 
             if(document.getElementById("bloque-"+index))
             {
-
-                console.log("Id del dispositivo del bloque "+index+": "+document.getElementById("dispositivo-"+index).value);
-
                 var errorDispositivo = document.getElementById("errorDispositivo-"+index);
+                var valorDispositivo = document.getElementById("dispositivo-" + index).value;
+
+
                 if(document.getElementById("dispositivo-"+index).value == 0){
                     errorDispositivo.innerHTML = "Debe seleccionar un dispositivo";
                     errorDispositivo.style.display = "block";
                     flagValidacion = false;
                 }else{
-                    errorDispositivo.innerHTML = "";
-                    errorDispositivo.style.display = "none";
+                    if(dispositivosSeleccionados.includes(valorDispositivo)){
+                        errorDispositivo.innerHTML = "Este dispositivo ya ha sido seleccionado";
+                        errorDispositivo.style.display = "block";
+                        flagValidacion = false;
+                    }
+                    else{
+                        dispositivosSeleccionados.push(valorDispositivo);
+                        errorDispositivo.innerHTML = "";
+                        errorDispositivo.style.display = "none";
+                    }
+
                 }
             }
-            else{
-                console.log("No existe el bloque "+index);
+
+        }
+
+        //Validar que se seleccione al menos una tarea para cada dispositivo
+        for (let index = 0; index < (blockCounter); index++) {
+
+            if(document.getElementById("bloque-"+index))
+            {
+
+                var errorTareas = document.getElementById("errorTareas-"+index);
+
+                if(document.querySelectorAll('#tareas-'+index+' li input[type="checkbox"]:checked').length == 0)
+                {
+                    errorTareas.innerHTML = "Debe seleccionar al menos una tarea";
+                    errorTareas.style.display = "block";
+                    flagValidacion = false;
+                }
+                else{
+                    errorTareas.innerHTML = "";
+                    errorTareas.style.display = "none";
+                }
+            }
+
+        }
+
+        //Validar los detalles del dispositivo
+        for (let index = 0; index < (blockCounter); index++) {
+
+            if(document.getElementById("bloque-"+index))
+            {
+                var bloque = document.getElementById("bloque-"+index);
+                var bloqueDetalles = bloque.querySelector("#detallesDispositivo");
+
+                if(bloqueDetalles.style.display == "block")
+                {
+                    //RAYONES
+                    var errorRayones = document.getElementById("errorRayones-"+index);
+                    if(index >= 1){
+                        var radioRayones = bloqueDetalles.querySelectorAll('input[name="rayones-'+index+'"]:checked');
+                    }else{
+                        var radioRayones = bloqueDetalles.querySelectorAll('input[name="rayones"]:checked');
+
+                    }
+
+                    if(radioRayones.length == 0){
+
+                        errorRayones.innerHTML = "Debe seleccionar una opción";
+                        errorRayones.style.display = "block";
+                        flagValidacion = false;
+                    }else{
+
+                        if(radioRayones[0].value == "Mostrar"){
+                            var textoRayones = bloqueDetalles.querySelector("#detallesRayones");
+                            if(textoRayones.value == ""){
+                                errorRayones.innerHTML = "Debe ingresar una descripción";
+                                errorRayones.style.display = "block";
+                                flagValidacion = false;
+                            }
+                            else{
+                                errorRayones.innerHTML = "";
+                                errorRayones.style.display = "none";
+                            }
+                        }else{
+                            errorRayones.innerHTML = "";
+                            errorRayones.style.display = "none";
+                        }
+
+                    }
+
+                    //RUPTURAS
+
+                    var errorRupturas = document.getElementById("errorRupturas-"+index);
+                    if(index >= 1){
+                        var radioRupturas = bloqueDetalles.querySelectorAll('input[name="rupturas-'+index+'"]:checked');
+                    }else{
+                        var radioRupturas = bloqueDetalles.querySelectorAll('input[name="rupturas"]:checked');
+                    }
+
+                    if(radioRupturas.length == 0){
+                        errorRupturas.innerHTML = "Debe seleccionar una opción";
+                        errorRupturas.style.display = "block";
+                        flagValidacion = false;
+                    }
+                    else{
+                        if(radioRupturas[0].value == "Mostrar"){
+                            var textoRupturas = bloqueDetalles.querySelector("#detallesRupturas");
+                            if(textoRupturas.value == ""){
+                                errorRupturas.innerHTML = "Debe ingresar una descripción";
+                                errorRupturas.style.display = "block";
+                                flagValidacion = false;
+                            }
+                            else{
+                                errorRupturas.innerHTML = "";
+                                errorRupturas.style.display = "none";
+                            }
+                        }else{
+                            errorRupturas.innerHTML = "";
+                            errorRupturas.style.display = "none";
+                        }
+                    }
+
+                    //TORNILLOS
+
+                    var errorTornillos = document.getElementById("errorTornillos-"+index);
+                    if(index >= 1){
+                        var radioTornillos = bloqueDetalles.querySelectorAll('input[name="tornillos-'+index+'"]:checked');
+                    }else{
+                        var radioTornillos = bloqueDetalles.querySelectorAll('input[name="tornillos"]:checked');
+                    }
+
+                    if(radioTornillos.length == 0){
+                        errorTornillos.innerHTML = "Debe seleccionar una opción";
+                        errorTornillos.style.display = "block";
+                        flagValidacion = false;
+                    }
+                    else{
+                        if(radioTornillos[0].value == "Mostrar"){
+                            var textoTornillos = bloqueDetalles.querySelector("#detallesTornillos");
+                            if(textoTornillos.value == ""){
+                                errorTornillos.innerHTML = "Debe ingresar una descripción";
+                                errorTornillos.style.display = "block";
+                                flagValidacion = false;
+                            }
+                            else{
+                                errorTornillos.innerHTML = "";
+                                errorTornillos.style.display = "none";
+                            }
+                        }else{
+                            errorTornillos.innerHTML = "";
+                            errorTornillos.style.display = "none";
+                        }
+                    }
+
+                    //GOMAS
+
+                    var errorGomas = document.getElementById("errorGomas-"+index);
+                    if(index >= 1){
+                        var radioGomas = bloqueDetalles.querySelectorAll('input[name="gomas-'+index+'"]:checked');
+                    }else{
+                        var radioGomas = bloqueDetalles.querySelectorAll('input[name="gomas"]:checked');
+                    }
+
+                    if(radioGomas.length == 0){
+                        errorGomas.innerHTML = "Debe seleccionar una opción";
+                        errorGomas.style.display = "block";
+                        flagValidacion = false;
+                    }
+                    else{
+                        if(radioGomas[0].value == "Mostrar"){
+                            var textoGomas = bloqueDetalles.querySelector("#detallesGomas");
+                            if(textoGomas.value == ""){
+                                errorGomas.innerHTML = "Debe ingresar una descripción";
+                                errorGomas.style.display = "block";
+                                flagValidacion = false;
+                            }
+                            else{
+                                errorGomas.innerHTML = "";
+                                errorGomas.style.display = "none";
+                            }
+                        }else{
+                            errorGomas.innerHTML = "";
+                            errorGomas.style.display = "none";
+                        }
+                    }
+
+                    //ESTADO DISPOSITIVO
+
+                    var errorEstadoDips = document.getElementById("errorEstadoDis-"+index);
+
+                    var inputEstado = bloqueDetalles.querySelector("input[name='estado']").value;
+
+                    if(inputEstado == "")
+                    {
+                        errorEstadoDips.innerHTML = "Debe ingresar un texto con el estado del equipo.";
+                        errorEstadoDips.style.display = "block";
+                        flagValidacion = false;
+                    }else{
+                        errorEstadoDips.innerHTML = "";
+                        errorEstadoDips.style.display = "none";
+                    }
+
+
+                }else{
+                    console.log('no tiene bloque de detalles');
+                }
             }
 
         }
@@ -936,8 +1139,26 @@ function enviarDatos(){
     if(tipoServicio == 1){
         datosJson['tareasSinD'] = Object.keys(selectedTareasSinDispo);
     }else if(tipoServicio == 2){
-        datosJson['tareasDispo'] = document.getElementById("dispositivo").value;
+        var dispositivos = [];
+        var tareasDispositivos = [];
+
+        for (let index = 0; index < (blockCounter); index++) {
+
+            if(document.getElementById("bloque-"+index))
+            {
+                dispositivos.push(document.getElementById("dispositivo-"+index).value);
+
+                var tareasBloque =[];
+                document.querySelectorAll('#tareas-'+index+' li input[type="checkbox"]:checked').forEach(input => {
+                    tareasBloque.push(input.value);
+                });
+                tareasDispositivos.push(tareasBloque);
+            }
+        }
+        datosJson['dispositivos'] = dispositivos;
+        datosJson['tareasDispositivos'] = tareasDispositivos;
     }
+
 
     datosJson['tecnicoEncargado'] = document.getElementById("tecnicoEncargado").value;
     datosJson['tecnicos'] = Object.keys(selectedTecnicos);
