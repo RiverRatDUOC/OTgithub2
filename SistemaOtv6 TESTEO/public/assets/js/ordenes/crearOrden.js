@@ -558,6 +558,15 @@ $(".btn-add").on("click", function () {
     clone.find("span#errorTornillos-0").attr("id","errorTornillos-" + blockCounter);
     clone.find("span#errorGomas-0").attr("id","errorGomas-" + blockCounter);
     clone.find("span#errorEstadoDis-0").attr("id","errorEstadoDis-"+blockCounter);
+    clone.find("span#errorCargador-0").attr("id","errorCargador-"+blockCounter);
+    clone.find("span#errorCablePoder-0").attr("id","errorCablePoder-"+blockCounter);
+    clone.find("span#errorAdaptador-0").attr("id","errorAdaptador-"+blockCounter);
+    clone.find("span#errorBateria-0").attr("id","errorBateria-"+blockCounter);
+    clone.find("span#errorPantalla-0").attr("id","errorPantalla-"+blockCounter);
+    clone.find("span#errorTeclado-0").attr("id","errorTeclado-"+blockCounter);
+    clone.find("span#errorDrum-0").attr("id","errorDrum-"+blockCounter);
+    clone.find("span#errorToner-0").attr("id","errorToner-"+blockCounter);
+
     clone.find("input[type='radio']").each(function () {
         var radio = $(this);
         var groupName = radio.attr("name");
@@ -838,6 +847,7 @@ function validar(){
             {
                 var bloque = document.getElementById("bloque-"+index);
                 var bloqueDetalles = bloque.querySelector("#detallesDispositivo");
+                var bloqueAccesorios = bloque.querySelector("#accesoriosDispositivo");
 
                 if(bloqueDetalles.style.display == "block")
                 {
@@ -988,8 +998,269 @@ function validar(){
                     }
 
 
-                }else{
-                    console.log('no tiene bloque de detalles');
+                }
+
+                //ACCESORIOS
+                if(bloqueAccesorios.style.display == "block")
+                {
+                    //CARGADOR
+                    var errorCargador = document.getElementById("errorCargador-"+index);
+
+                    if(index >= 1){
+                        var radioCargador = bloqueAccesorios.querySelectorAll('input[name="cargador-'+index+'"]:checked');
+                    }else{
+                        var radioCargador = bloqueAccesorios.querySelectorAll('input[name="cargador"]:checked');
+                    }
+
+                    if(radioCargador.length == 0){
+                        errorCargador.innerHTML = "Debe seleccionar una opción";
+                        errorCargador.style.display = "block";
+                        flagValidacion = false;
+                    }else{
+
+                        var textoCargador = bloqueAccesorios.querySelector("#accesoriosCargador");
+                        if(textoCargador.value == ""){
+                            errorCargador.innerHTML = "Debe ingresar una descripción";
+                            errorCargador.style.display = "block";
+                            flagValidacion = false;
+                        }
+                        else{
+                            errorCargador.innerHTML = "";
+                            errorCargador.style.display = "none";
+                        }
+
+                    }
+
+                    //CABLE DE PODER
+
+                    var errorCablePoder = document.getElementById("errorCablePoder-"+index);
+
+                    if(index >= 1){
+                        var radioCablePoder = bloqueAccesorios.querySelectorAll('input[name="cable-'+index+'"]:checked');
+                    }else{
+                        var radioCablePoder = bloqueAccesorios.querySelectorAll('input[name="cable"]:checked');
+                    }
+
+                    if(radioCablePoder.length == 0){
+                        errorCablePoder.innerHTML = "Debe seleccionar una opción";
+                        errorCablePoder.style.display = "block";
+                        flagValidacion = false;
+                    }else{
+
+                        if(radioCablePoder[0].value == "MostrarCA"){
+
+                            var textoCablePoder = bloqueAccesorios.querySelector("#accesoriosCable");
+                            if(textoCablePoder.value == ""){
+                                errorCablePoder.innerHTML = "Debe ingresar una descripción";
+                                errorCablePoder.style.display = "block";
+                                flagValidacion = false;
+                            }
+                            else{
+                                errorCablePoder.innerHTML = "";
+                                errorCablePoder.style.display = "none";
+                            }
+                        }else{
+                            errorCablePoder.innerHTML = "";
+                            errorCablePoder.style.display = "none";
+                        }
+                    }
+
+                    //ADAPTADOR DE PODER
+
+                    var errorAdaptadorPoder = document.getElementById("errorAdaptador-"+index);
+
+                    if(index >= 1){
+                        var radioAdaptadorPoder = bloqueAccesorios.querySelectorAll('input[name="adaptador-'+index+'"]:checked');
+                    }else{
+                        var radioAdaptadorPoder = bloqueAccesorios.querySelectorAll('input[name="adaptador"]:checked');
+                    }
+
+                    if(radioAdaptadorPoder.length == 0){
+                        errorAdaptadorPoder.innerHTML = "Debe seleccionar una opción";
+                        errorAdaptadorPoder.style.display = "block";
+                        flagValidacion = false;
+                    }else{
+
+                            if(radioAdaptadorPoder[0].value == "MostrarCA"){
+
+                                var textoAdaptadorPoder = bloqueAccesorios.querySelector("#accesoriosAdaptador");
+                                if(textoAdaptadorPoder.value == ""){
+                                    errorAdaptadorPoder.innerHTML = "Debe ingresar una descripción";
+                                    errorAdaptadorPoder.style.display = "block";
+                                    flagValidacion = false;
+                                }
+                                else{
+                                    errorAdaptadorPoder.innerHTML = "";
+                                    errorAdaptadorPoder.style.display = "none";
+                                }
+                            }else{
+                                errorAdaptadorPoder.innerHTML = "";
+                                errorAdaptadorPoder.style.display = "none";
+                            }
+                    }
+
+                    //BATERIA
+                    var errorBateria = document.getElementById("errorBateria-"+index);
+
+                    if(index >= 1){
+                        var radioBateria = bloqueAccesorios.querySelectorAll('input[name="bateria-'+index+'"]:checked');
+                    }else{
+                        var radioBateria = bloqueAccesorios.querySelectorAll('input[name="bateria"]:checked');
+                    }
+
+                    if(radioBateria.length == 0){
+                        errorBateria.innerHTML = "Debe seleccionar una opción";
+                        errorBateria.style.display = "block";
+                        flagValidacion = false;
+                    }else{
+
+                        var textoBateria = bloqueAccesorios.querySelector("#accesoriosBateria");
+                        if(textoBateria.value == ""){
+                            errorBateria.innerHTML = "Debe ingresar una descripción";
+                            errorBateria.style.display = "block";
+                            flagValidacion = false;
+                        }
+                        else{
+                            errorBateria.innerHTML = "";
+                            errorBateria.style.display = "none";
+                        }
+                    }
+
+                    //PANTALLA EN MAL ESTADO
+                    var errorPantalla = document.getElementById("errorPantalla-"+index);
+
+                    if(index >= 1){
+                        var radioPantalla = bloqueAccesorios.querySelectorAll('input[name="pantalla-'+index+'"]:checked');
+                    }else{
+                        var radioPantalla = bloqueAccesorios.querySelectorAll('input[name="pantalla"]:checked');
+                    }
+
+                    if(radioPantalla.length == 0){
+                        errorPantalla.innerHTML = "Debe seleccionar una opción";
+                        errorPantalla.style.display = "block";
+                        flagValidacion = false;
+                    }else{
+                        if(radioPantalla[0].value == "MostrarPT"){
+
+                            var textoPantalla = bloqueAccesorios.querySelector("#accesoriosPantalla");
+                            if(textoPantalla.value == ""){
+                                errorPantalla.innerHTML = "Debe ingresar una descripción";
+                                errorPantalla.style.display = "block";
+                                flagValidacion = false;
+                            }
+                            else{
+                                errorPantalla.innerHTML = "";
+                                errorPantalla.style.display = "none";
+                            }
+                        }else{
+                            errorPantalla.innerHTML = "";
+                            errorPantalla.style.display = "none";
+                        }
+                    }
+
+                    //TECLADO EN MAL ESTADO
+
+                    var errorTeclado = document.getElementById("errorTeclado-"+index);
+
+                    if(index >= 1){
+                        var radioTeclado = bloqueAccesorios.querySelectorAll('input[name="teclado-'+index+'"]:checked');
+                    }else{
+                        var radioTeclado = bloqueAccesorios.querySelectorAll('input[name="teclado"]:checked');
+                    }
+
+                    if(radioTeclado.length == 0){
+                        errorTeclado.innerHTML = "Debe seleccionar una opción";
+                        errorTeclado.style.display = "block";
+                        flagValidacion = false;
+                    }else{
+                        if(radioTeclado[0].value == "MostrarPT"){
+
+                            var textoTeclado = bloqueAccesorios.querySelector("#accesoriosTeclado");
+                            if(textoTeclado.value == ""){
+                                errorTeclado.innerHTML = "Debe ingresar una descripción";
+                                errorTeclado.style.display = "block";
+                                flagValidacion = false;
+                            }
+                            else{
+                                errorTeclado.innerHTML = "";
+                                errorTeclado.style.display = "none";
+                            }
+                        }else{
+                            errorTeclado.innerHTML = "";
+                            errorTeclado.style.display = "none";
+                        }
+                    }
+
+                    //DRUM Y TONER
+                    //Primero se verifica que el bloque de drum y toner esten visibles.
+                    var bloqueDrumToner = bloqueAccesorios.querySelector("div#DrumToner");
+                    if(bloqueDrumToner.style.display == "block"){
+
+                        //DRUM
+                        var errorDrum = document.getElementById("errorDrum-"+index);
+
+                        if(index >= 1){
+                            var radioDrum = bloqueDrumToner.querySelectorAll('input[name="drum-'+index+'"]:checked');
+                        }else{
+                            var radioDrum = bloqueDrumToner.querySelectorAll('input[name="drum"]:checked');
+                        }
+
+                        if(radioDrum.length == 0){
+                            errorDrum.innerHTML = "Debe seleccionar una opción";
+                            errorDrum.style.display = "block";
+                            flagValidacion = false;
+                        }else{
+                            if(radioDrum[0].value == "MostrarTD"){
+
+                                var textoDrum = bloqueDrumToner.querySelector("#accesoriosDrum");
+                                if(textoDrum.value == ""){
+                                    errorDrum.innerHTML = "Debe ingresar una descripción";
+                                    errorDrum.style.display = "block";
+                                    flagValidacion = false;
+                                }
+                                else{
+                                    errorDrum.innerHTML = "";
+                                    errorDrum.style.display = "none";
+                                }
+                            }else{
+                                errorDrum.innerHTML = "";
+                                errorDrum.style.display = "none";
+                            }
+                        }
+
+                        //TONER
+                        var errorToner = document.getElementById("errorToner-"+index);
+
+                        if(index >= 1){
+                            var radioToner = bloqueDrumToner.querySelectorAll('input[name="toner-'+index+'"]:checked');
+                        }else{
+                            var radioToner = bloqueDrumToner.querySelectorAll('input[name="toner"]:checked');
+                        }
+
+                        if(radioToner.length == 0){
+                            errorToner.innerHTML = "Debe seleccionar una opción";
+                            errorToner.style.display = "block";
+                            flagValidacion = false;
+                        }else{
+                            if(radioToner[0].value == "MostrarTD"){
+
+                                var textoToner = bloqueDrumToner.querySelector("#accesoriosToner");
+                                if(textoToner.value == ""){
+                                    errorToner.innerHTML = "Debe ingresar una descripción";
+                                    errorToner.style.display = "block";
+                                    flagValidacion = false;
+                                }
+                                else{
+                                    errorToner.innerHTML = "";
+                                    errorToner.style.display = "none";
+                                }
+                            }else{
+                                errorToner.innerHTML = "";
+                                errorToner.style.display = "none";
+                            }
+                        }
+
+                    }
                 }
             }
 
@@ -1102,17 +1373,17 @@ function validar(){
 
     //Validación de cotizacion
 
-    var cotizacion = document.getElementById("cotizacion");
-    var errorCotizacion = document.getElementById("errorCotizacion");
-    if (cotizacion.value == "") {
-        errorCotizacion.innerHTML = "Debe ingresar una cotización";
-        errorCotizacion.style.display = "block";
-        flagValidacion = false;
-    }
-    else {
-        errorCotizacion.innerHTML = "";
-        errorCotizacion.style.display = "none";
-    }
+    // var cotizacion = document.getElementById("cotizacion");
+    // var errorCotizacion = document.getElementById("errorCotizacion");
+    // if (cotizacion.value == "") {
+    //     errorCotizacion.innerHTML = "Debe ingresar una cotización";
+    //     errorCotizacion.style.display = "block";
+    //     flagValidacion = false;
+    // }
+    // else {
+    //     errorCotizacion.innerHTML = "";
+    //     errorCotizacion.style.display = "none";
+    // }
 
     if(flagValidacion == false){
         $('html, body').animate({ scrollTop: 0 }, 'slow');
@@ -1143,8 +1414,8 @@ function enviarDatos(){
         var tareasDispositivos = [];
 
         for (let index = 0; index < (blockCounter); index++) {
-
-            if(document.getElementById("bloque-"+index))
+            var bloque = document.getElementById("bloque-"+index);
+            if(bloque)
             {
                 dispositivos.push(document.getElementById("dispositivo-"+index).value);
 
@@ -1153,10 +1424,159 @@ function enviarDatos(){
                     tareasBloque.push(input.value);
                 });
                 tareasDispositivos.push(tareasBloque);
+
+                var bloqueDetalles = bloque.querySelector("#detallesDispositivo");
+                var bloqueAccesorios = bloque.querySelector("#accesoriosDispositivo");
+
+                //DETALLES
+                if(bloqueDetalles.style.display == "block")
+                {
+                    var detallesDispositivo = {};
+                    if(index >= 1){
+                        var radioRayones = bloqueDetalles.querySelectorAll('input[name="rayones-'+index+'"]:checked');
+                        var radioRupturas = bloqueDetalles.querySelectorAll('input[name="rupturas-'+index+'"]:checked');
+                        var radioTornillos = bloqueDetalles.querySelectorAll('input[name="tornillos-'+index+'"]:checked');
+                        var radioGomas = bloqueDetalles.querySelectorAll('input[name="gomas-'+index+'"]:checked');
+                    }else{
+                        var radioRayones = bloqueDetalles.querySelectorAll('input[name="rayones"]:checked');
+                        var radioRupturas = bloqueDetalles.querySelectorAll('input[name="rupturas"]:checked');
+                        var radioTornillos = bloqueDetalles.querySelectorAll('input[name="tornillos"]:checked');
+                        var radioGomas = bloqueDetalles.querySelectorAll('input[name="gomas"]:checked');
+                    }
+                    var estado = bloqueDetalles.querySelector("input[name='estado']").value;
+                    var observaciones = bloqueDetalles.querySelector("input[name='observacion']").value;
+
+                    detallesDispositivo['existe'] = 1;
+
+                    if(radioRayones[0].value == "Mostrar"){
+                        detallesDispositivo['rayones'] = bloqueDetalles.querySelector("#detallesRayones").value;
+                    }else{
+                        detallesDispositivo['rayones'] = "El equipo no posee rayones.";
+                    }
+
+                    if(radioRupturas[0].value == "Mostrar"){
+                        detallesDispositivo['rupturas'] = bloqueDetalles.querySelector("#detallesRupturas").value;
+                    }
+                    else{
+                        detallesDispositivo['rupturas'] = "El equipo no posee rupturas.";
+                    }
+
+                    if(radioTornillos[0].value == "Mostrar"){
+                        detallesDispositivo['tornillos'] = bloqueDetalles.querySelector("#detallesTornillos").value;
+                    }
+                    else{
+                        detallesDispositivo['tornillos'] = "El equipo posee todos los tornillos de su carcasa.";
+                    }
+
+                    if(radioGomas[0].value == "Mostrar"){
+                        detallesDispositivo['gomas'] = bloqueDetalles.querySelector("#detallesGomas").value;
+                    }
+                    else{
+                        detallesDispositivo['gomas'] = "El equipo posee todas las gomas de la base en buen estado.";
+                    }
+
+                    detallesDispositivo['estado'] = estado;
+
+                    if(!observaciones)
+                    {
+                        detallesDispositivo['observaciones'] = "No se ingresaron observaciones.";
+                    }else{
+                        detallesDispositivo['observaciones'] = observaciones;
+                    }
+
+                    datosJson['detallesDispositivo-'+index] = detallesDispositivo;
+                }else{
+                    datosJson['detallesDispositivo-'+index] = {'existe':0};
+                }
+
+                //ACCESORIOS
+
+                if(bloqueAccesorios.style.display == "block")
+                {
+                    var accesoriosDispositivo = {};
+                    if(index >= 1){
+                        var radioCargador = bloqueAccesorios.querySelectorAll('input[name="cargador-'+index+'"]:checked');
+                        var radioCablePoder = bloqueAccesorios.querySelectorAll('input[name="cable-'+index+'"]:checked');
+                        var radioAdaptadorPoder = bloqueAccesorios.querySelectorAll('input[name="adaptador-'+index+'"]:checked');
+                        var radioBateria = bloqueAccesorios.querySelectorAll('input[name="bateria-'+index+'"]:checked');
+                        var radioPantalla = bloqueAccesorios.querySelectorAll('input[name="pantalla-'+index+'"]:checked');
+                        var radioTeclado = bloqueAccesorios.querySelectorAll('input[name="teclado-'+index+'"]:checked');
+                        var radioDrum = bloqueAccesorios.querySelectorAll('input[name="drum-'+index+'"]:checked');
+                        var radioToner = bloqueAccesorios.querySelectorAll('input[name="toner-'+index+'"]:checked');
+                    }else{
+                        var radioCargador = bloqueAccesorios.querySelectorAll('input[name="cargador"]:checked');
+                        var radioCablePoder = bloqueAccesorios.querySelectorAll('input[name="cable"]:checked');
+                        var radioAdaptadorPoder = bloqueAccesorios.querySelectorAll('input[name="adaptador"]:checked');
+                        var radioBateria = bloqueAccesorios.querySelectorAll('input[name="bateria"]:checked');
+                        var radioPantalla = bloqueAccesorios.querySelectorAll('input[name="pantalla"]:checked');
+                        var radioTeclado = bloqueAccesorios.querySelectorAll('input[name="teclado"]:checked');
+                        var radioDrum = bloqueAccesorios.querySelectorAll('input[name="drum"]:checked');
+                        var radioToner = bloqueAccesorios.querySelectorAll('input[name="toner"]:checked');
+                    }
+
+                    accesoriosDispositivo['existe'] = 1;
+
+
+                    accesoriosDispositivo['cargador'] = bloqueAccesorios.querySelector("#accesoriosCargador").value;
+
+
+                    if(radioCablePoder[0].value == "MostrarCA"){
+                        accesoriosDispositivo['cablePoder'] = bloqueAccesorios.querySelector("#accesoriosCable").value;
+                    }else{
+                        accesoriosDispositivo['cablePoder'] = "El equipo no posee cable de poder.";
+                    }
+
+                    if(radioAdaptadorPoder[0].value == "MostrarCA"){
+                        accesoriosDispositivo['adaptadorPoder'] = bloqueAccesorios.querySelector("#accesoriosAdaptador").value;
+                    }else{
+                        accesoriosDispositivo['adaptadorPoder'] = "El equipo no posee adaptador de poder.";
+                    }
+
+                    accesoriosDispositivo['bateria'] = bloqueAccesorios.querySelector("#accesoriosBateria").value;
+
+                    if(radioPantalla[0].value == "MostrarPT"){
+                        accesoriosDispositivo['pantalla'] = bloqueAccesorios.querySelector("#accesoriosPantalla").value;
+                    }else{
+                        accesoriosDispositivo['pantalla'] = "El equipo no posee problemas con la pantalla.";
+                    }
+
+                    if(radioTeclado[0].value == "MostrarPT"){
+                        accesoriosDispositivo['teclado'] = bloqueAccesorios.querySelector("#accesoriosTeclado").value;
+                    }else{
+                        accesoriosDispositivo['teclado'] = "El equipo no posee problemas con el teclado.";
+                    }
+
+                    var bloqueDrumToner = bloqueAccesorios.querySelector("div#DrumToner");
+                    if(bloqueDrumToner.style.display == "block"){
+                        if(radioDrum[0].value == "MostrarTD"){
+                            accesoriosDispositivo['drum'] = bloqueDrumToner.querySelector("#accesoriosDrum").value;
+                        }else{
+                            accesoriosDispositivo['drum'] = "El equipo tiene su drum.";
+                        }
+
+                        if(radioToner[0].value == "MostrarTD"){
+                            accesoriosDispositivo['toner'] = bloqueDrumToner.querySelector("#accesoriosToner").value;
+                        }else{
+                            accesoriosDispositivo['toner'] = "El equipo tiene su toner.";
+                        }
+                    }else{
+                        accesoriosDispositivo['drum'] = "No aplica.";
+                        accesoriosDispositivo['toner'] = "No aplica.";
+                    }
+
+
+                    datosJson['accesoriosDispositivo-'+index] = accesoriosDispositivo;
+                }else{
+                    datosJson['accesoriosDispositivo-'+index] = {'existe':0};
+                }
+
             }
+            datosJson['tareasDispositivos-'+index] = tareasDispositivos[index];
         }
         datosJson['dispositivos'] = dispositivos;
-        datosJson['tareasDispositivos'] = tareasDispositivos;
+        // datosJson['tareasDispositivos'] = tareasDispositivos;
+
+
     }
 
 
@@ -1169,6 +1589,7 @@ function enviarDatos(){
     datosJson['fecha'] = document.getElementById("fecha").value;
     datosJson['cotizacion'] = document.getElementById("cotizacion").value;
 
+    datosJson['contadorBloques'] = blockCounter;
 
     $.ajax({
         type: "POST",

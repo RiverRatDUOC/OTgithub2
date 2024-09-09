@@ -4,16 +4,21 @@ namespace App\Http\Controllers\ControladorOrdenes;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cliente;
+use App\Models\Contacto;
+use App\Models\Dispositivo;
 use App\Models\EstadoOt;
 use Illuminate\Http\Request;
 use App\Models\Ot;
 use App\Models\PrioridadOt;
 use App\Models\Servicio;
 use App\Models\Sucursal;
+use App\Models\Tarea;
 use App\Models\Tecnico;
 use App\Models\TipoOt;
 use App\Models\TipoVisita;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+// use Illuminate\Support\Facades\Validator;
 
 class OrdenesController extends Controller
 {
@@ -51,7 +56,110 @@ class OrdenesController extends Controller
 
     public function store(Request $request)
     {
-        dd($request);
+        // dd($request);
+
+        $contador = $request->input('contadorBloques');
+
+        $validator = Validator::make($request->all(), [
+            'descripcion' => ['required', 'max:1000'],
+            'cliente' => ['required', 'exists:cliente,id', 'numeric'],
+            'sucursal' => ['required', 'exists:sucursal,id', 'numeric'],
+            'contactos' => ['required',  function ($attribute, $value, $fail) {
+                foreach ($value as $contacto) {
+                    if (!Contacto::find($contacto)) {
+                        $fail("El contacto con id $contacto no existe.");
+                    }
+                }
+            }],
+            'servicio' => ['required', 'exists:servicio,id', 'numeric'],
+            'contadorBloques' => ['required', 'numeric'],
+            'tipoServicio' => 'required',
+            'tecnicoEncargado' => ['required', 'exists:tecnico,id', 'numeric'],
+            'tecnicos' => ['required', function ($attribute, $value, $fail) {
+                foreach ($value as $tecnico) {
+                    if (!Tecnico::find($tecnico)) {
+                        $fail("El tecnico con id $tecnico no existe.");
+                    }
+                }
+            }],
+            'estado' => ['required', 'exists:estado_ot,id', 'numeric'],
+            'prioridad' => ['required', 'exists:prioridad_ot,id', 'numeric'],
+            'tipo' => ['required', 'exists:tipo_ot,id', 'numeric'],
+            'tipoVisita' => ['required', 'exists:tipo_visita,id', 'numeric'],
+            'fecha' => ['required', 'date'],
+            'cotizacion' => ['nullable', 'max:50'],
+            'tareasSinD' => ['nullable', 'array'],
+            'dispositivos' => ['nullable', function ($attribute, $value, $fail) {
+                foreach ($value as $dispositivo) {
+                    if (!Dispositivo::find($dispositivo)) {
+                        $fail("El dispositivo con id $dispositivo no existe.");
+                    }
+                }
+            }],
+
+        ]);
+
+        for ($i = 0; $i < $contador; $i++) {
+            $validator->sometimes('tareasDispositivos-' . $i, 'nullable', function ($input) use ($i) {
+
+                return $input->has('tareasDispositivos-' . $i);
+            });
+        }
+
+        for ($i = 0; $i < $contador; $i++) {
+            $validator->sometimes('detallesDispositivo-' . $i, 'nullable', function ($input) use ($i) {
+
+                return $input->has('detallesDispositivo-' . $i);
+            });
+        }
+        for ($i = 0; $i < $contador; $i++) {
+            $validator->sometimes('accesoriosDispositivo-' . $i, 'nullable', function ($input) use ($i) {
+
+                return $input->has('accesoriosDispositivo-' . $i);
+            });
+        }
+
+        $datosValidados = $validator->validated();
+        $tiempoEnMinutos = 0;
+        $tiempoEnHoras = 0;
+        if ($datosValidados['tipoServicio'] == 1) {
+            foreach ($datosValidados['tareasSinD'] as $tarea) {
+                $tiempoTarea = Tarea::find($tarea)->tiempo_tarea;
+                $tiempoEnMinutos += $tiempoTarea;
+            }
+            // dd($tiempoEnMinutos);
+        } elseif ($datosValidados['tipoServicio'] == 2) {
+            for ($i = 0; $i < $datosValidados['contadorBloques']; $i++) {
+                if (isset($datosValidados['tareasDispositivos-' . $i])) {
+                    foreach ($datosValidados['tareasDispositivos-' . $i] as $tarea) {
+                        $tiempoTarea = Tarea::find($tarea)->tiempo_tarea;
+                        $tiempoEnMinutos += $tiempoTarea;
+                    }
+                }
+            }
+            // dd($tiempoEnMinutos);
+        }
+
+        $tiempoEnHoras = ceil($tiempoEnMinutos / 60);
+
+
+        $ot = new Ot();
+        $ot->tiempo_ot = $tiempoEnMinutos;
+        $ot->horas_ot = $tiempoEnHoras;
+        $ot->descripcion_ot = $datosValidados['descripcion'];
+        $ot->cotizacion = $datosValidados['cotizacion'];
+        $ot->cod_tipo_ot = $datosValidados['tipo'];
+        $ot->cod_prioridad_ot = $datosValidados['prioridad'];
+        $ot->cod_estado_ot = $datosValidados['estado'];
+        $ot->cod_tipo_visita = $datosValidados['tipoVisita'];
+        $ot->cod_servicio = $datosValidados['servicio'];
+        $ot->cod_contacto = 114; // lmao
+        $ot->cod_tecnico_encargado = $datosValidados['tecnicoEncargado'];
+        $ot->fecha_inicio_planificada_ot = $datosValidados['fecha'];
+        $ot->fecha_fin_planificada_ot = $datosValidados['fecha'];
+        $ot->save();
+
+        dd($datosValidados);
     }
     public function buscar(Request $request)
     {

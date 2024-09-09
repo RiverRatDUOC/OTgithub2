@@ -272,6 +272,7 @@
                                                                     placeholder="El equipo presenta..."
                                                                     style="display:none;">
                                                             </div>
+                                                            <span id="errorCargador-0" class="errMessage"></span>
                                                         </div>
                                                         <hr>
                                                         <div class="m-2">
@@ -297,6 +298,7 @@
                                                                     placeholder="Ingrese observaciones"
                                                                     style="display:none;">
                                                             </div>
+                                                            <span id="errorCablePoder-0" class="errMessage"></span>
                                                         </div>
                                                         <hr>
                                                         <div class="m-2">
@@ -323,6 +325,7 @@
                                                                     placeholder="Ingrese observaciones"
                                                                     style="display:none;">
                                                             </div>
+                                                            <span id="errorAdaptador-0" class="errMessage"></span>
                                                         </div>
                                                         <hr>
                                                         <div class="m-2">
@@ -347,6 +350,7 @@
                                                                     placeholder="El equipo presenta..."
                                                                     style="display:none;">
                                                             </div>
+                                                            <span id="errorBateria-0" class="errMessage"></span>
                                                         </div>
                                                         <hr>
                                                         <div class="m-2">
@@ -373,6 +377,7 @@
                                                                     placeholder="El equipo presenta..."
                                                                     style="display:none;">
                                                             </div>
+                                                            <span id="errorPantalla-0" class="errMessage"></span>
                                                         </div>
                                                         <hr>
                                                         <div class="m-2">
@@ -398,12 +403,13 @@
                                                                     placeholder="El equipo presenta..."
                                                                     style="display:none;">
                                                             </div>
+                                                            <span id="errorTeclado-0" class="errMessage"></span>
                                                         </div>
 
                                                         <div id="DrumToner">
                                                             <hr>
                                                             <div class="m-2">
-                                                                <label for="drum">¿El Equipo Posee Toner?</label>
+                                                                <label for="drum">¿El Equipo Posee Drum?</label>
                                                                 <div class="form-check">
                                                                     <label>
                                                                         <input class="form-check-input" type="radio"
@@ -425,10 +431,11 @@
                                                                         placeholder="El equipo presenta..."
                                                                         style="display:none;">
                                                                 </div>
+                                                                <span id="errorDrum-0" class="errMessage"></span>
                                                             </div>
                                                             <hr>
                                                             <div class="m-2">
-                                                                <label for="toner">¿El Equipo Posee Drum?</label>
+                                                                <label for="toner">¿El Equipo Posee Toner?</label>
                                                                 <div class="form-check">
                                                                     <label>
                                                                         <input class="form-check-input" type="radio"
@@ -450,6 +457,7 @@
                                                                         placeholder="El equipo presenta..."
                                                                         style="display:none;">
                                                                 </div>
+                                                                <span id="errorToner-0" class="errMessage"></span>
                                                             </div>
                                                         </div>
 
