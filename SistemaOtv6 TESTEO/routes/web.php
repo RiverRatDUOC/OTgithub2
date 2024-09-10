@@ -12,6 +12,7 @@ use App\Http\Controllers\ControladorServicios\TareaServiciosController;
 use App\Http\Controllers\ControladorTecnicos\TecnicosController;
 use App\Http\Controllers\ControladorEquipos\ModeloController;
 use App\Http\Controllers\ControladorContactos\ContactosController;
+use App\Http\Controllers\ControladorParametros\ParametrosController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\UserController;
 
@@ -113,6 +114,11 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/usuarios/{user}', [UserController::class, 'destroy'])->middleware('can:usuarios.destroy')->name('usuarios.destroy');
     Route::get('/usuarios/buscar', [UserController::class, 'buscar'])->name('usuarios.buscar');
 
+    // Rutas para el controlador ParametrosController
+    // Rutas para el controlador ParametrosController
+    Route::get('/parametros', [ParametrosController::class, 'index'])->name('parametros.index'); // Ruta para listar parámetros
+    Route::get('/parametros/{id}', [ParametrosController::class, 'show'])->name('parametros.show'); // Ruta para mostrar un parámetro específico
+    Route::get('/lineas/{id}', [ParametrosController::class, 'showLinea'])->name('lineas.show');
 
     // RUTAS DE ROLES
 

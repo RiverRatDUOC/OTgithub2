@@ -60,8 +60,11 @@
 
 
                 <li class="nav-item">
-                    <a class="nav-link pl-0 text-white {{ Request::is('parametros*') ? 'active' : '' }}" href="#"><i class="fas fa-cogs"></i> <span>Parámetros</span></a>
+                    <a class="nav-link pl-0 text-white {{ Request::is('parametros*') ? 'active' : '' }}" href="{{ route('parametros.index') }}">
+                        <i class="fas fa-cogs"></i> <span>Parámetros</span>
+                    </a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link pl-0 text-white {{ Request::is('reclamos*') ? 'active' : '' }}" href="#"><i class="fas fa-exclamation-triangle"></i> <span>Reclamos</span></a>
                 </li>

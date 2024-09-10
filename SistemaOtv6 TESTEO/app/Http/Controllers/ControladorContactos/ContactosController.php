@@ -96,4 +96,21 @@ class ContactosController extends Controller
         $contacto = Contacto::findOrFail($id);
         return view('contactos.detalle', compact('contacto'));
     }
+    public function buscar(Request $request)
+    {
+        $search = $request->input('search');
+
+        $contactos = Contacto::where('nombre_contacto', 'like', "%$search%")
+            ->orWhere('telefono_contacto', 'like', "%$search%")
+            ->orWhere('departamento_contacto', 'like', "%$search%")
+            ->orWhere('cargo_contacto', 'like', "%$search%")
+            ->orWhere('email_contacto', 'like', "%$search%")
+            ->orWhereHas('sucursal', function ($query) use ($search) {
+                $query->where('nombre_sucursal', 'like', "%$search%");
+            })
+            ->orderBy('id', 'desc')
+            ->paginate(20);
+
+        return view('contactos.contactos', compact('contactos'));
+    }
 }

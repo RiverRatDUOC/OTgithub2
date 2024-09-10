@@ -15,7 +15,7 @@
                 </div>
                 <div>
                     <form action="{{ route('contactos.buscar') }}" method="get" class="input-group">
-                        <input type="text" name="search" id="search" class="form-control" placeholder="Buscar por nombre, teléfono, departamento, cargo o email" value="{{ request('search') }}">
+                        <input type="text" name="search" id="search" class="form-control" placeholder="Buscar por nombre, teléfono, departamento, cargo, email o sucursal" value="{{ request('search') }}">
                         <button type="submit" class="btn btn-primary" style="background-color: #cc6633; border-color: #cc6633;">Buscar</button>
                     </form>
                 </div>
@@ -37,6 +37,7 @@
                                 <th onclick="sortTable(2)">Departamento</th>
                                 <th onclick="sortTable(3)">Cargo</th>
                                 <th onclick="sortTable(4)">Email</th>
+                                <th onclick="sortTable(5)">Sucursal</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -48,6 +49,7 @@
                                 <td>{{ $contacto->departamento_contacto }}</td>
                                 <td>{{ $contacto->cargo_contacto }}</td>
                                 <td>{{ $contacto->email_contacto }}</td>
+                                <td>{{ $contacto->sucursal->nombre_sucursal ?? 'No disponible' }}</td>
                                 <td>
                                     <div class="d-flex">
                                         <a href="{{ route('contactos.show', $contacto->id) }}" class="btn btn-primary me-1" style="background-color: #cc0066; border-color: #cc0066;">
