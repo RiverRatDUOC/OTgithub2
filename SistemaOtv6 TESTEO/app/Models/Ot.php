@@ -93,4 +93,9 @@ class Ot extends Model
     {
         return $this->hasMany(DispositivoOt::class, 'cod_ot', 'numero_ot');
     }
+
+    public function TareasOt()
+    {
+        return $this->hasMany(TareaOt::class, 'cod_ot', 'numero_ot');
+    }
 }

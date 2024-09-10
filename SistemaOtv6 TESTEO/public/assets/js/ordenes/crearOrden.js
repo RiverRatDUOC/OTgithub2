@@ -1420,9 +1420,11 @@ function enviarDatos(){
                 dispositivos.push(document.getElementById("dispositivo-"+index).value);
 
                 var tareasBloque =[];
+                tareasBloque.push(document.getElementById("dispositivo-"+index).value);
                 document.querySelectorAll('#tareas-'+index+' li input[type="checkbox"]:checked').forEach(input => {
                     tareasBloque.push(input.value);
                 });
+
                 tareasDispositivos.push(tareasBloque);
 
                 var bloqueDetalles = bloque.querySelector("#detallesDispositivo");
@@ -1447,7 +1449,7 @@ function enviarDatos(){
                     var observaciones = bloqueDetalles.querySelector("input[name='observacion']").value;
 
                     detallesDispositivo['existe'] = 1;
-
+                    detallesDispositivo['dispositivo'] = document.getElementById("dispositivo-"+index).value;
                     if(radioRayones[0].value == "Mostrar"){
                         detallesDispositivo['rayones'] = bloqueDetalles.querySelector("#detallesRayones").value;
                     }else{
@@ -1516,7 +1518,7 @@ function enviarDatos(){
 
                     accesoriosDispositivo['existe'] = 1;
 
-
+                    accesoriosDispositivo['dispositivo'] = document.getElementById("dispositivo-"+index).value;
                     accesoriosDispositivo['cargador'] = bloqueAccesorios.querySelector("#accesoriosCargador").value;
 
 
@@ -1596,7 +1598,30 @@ function enviarDatos(){
         url: "/ordenes/agregar",
         data: datosJson,
         success: function (data) {
-            console.log(data);
+            let timerInterval;
+            Swal.fire({
+            title: "Éxito!",
+            text: data.message,
+            icon: "success",
+            timer: 1500,
+            timerProgressBar: true,
+            didOpen: () => {
+                Swal.showLoading();
+                const timer = Swal.getPopup().querySelector("b");
+                timerInterval = setInterval(() => {
+                timer.textContent = `${Swal.getTimerLeft()}`;
+                }, 100);
+            },
+            willClose: () => {
+                clearInterval(timerInterval);
+            }
+            }).then((result) => {
+
+            if (result.dismiss === Swal.DismissReason.timer) {
+                console.log("I was closed by the timer");
+            }
+            window.location.href = "/ordenes";
+            });
         },
     });
 }

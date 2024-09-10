@@ -16,7 +16,12 @@ use App\Models\Tarea;
 use App\Models\Tecnico;
 use App\Models\TipoOt;
 use App\Models\TipoVisita;
+use DateTime;
+use DateTimeZone;
+use Exception;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 // use Illuminate\Support\Facades\Validator;
 
@@ -57,7 +62,6 @@ class OrdenesController extends Controller
     public function store(Request $request)
     {
         // dd($request);
-
         $contador = $request->input('contadorBloques');
 
         $validator = Validator::make($request->all(), [
@@ -120,6 +124,7 @@ class OrdenesController extends Controller
         }
 
         $datosValidados = $validator->validated();
+
         $tiempoEnMinutos = 0;
         $tiempoEnHoras = 0;
         if ($datosValidados['tipoServicio'] == 1) {
@@ -127,40 +132,196 @@ class OrdenesController extends Controller
                 $tiempoTarea = Tarea::find($tarea)->tiempo_tarea;
                 $tiempoEnMinutos += $tiempoTarea;
             }
-            // dd($tiempoEnMinutos);
         } elseif ($datosValidados['tipoServicio'] == 2) {
             for ($i = 0; $i < $datosValidados['contadorBloques']; $i++) {
                 if (isset($datosValidados['tareasDispositivos-' . $i])) {
+                    $skipFirst = true;
                     foreach ($datosValidados['tareasDispositivos-' . $i] as $tarea) {
+                        if ($skipFirst) {
+                            $skipFirst = false;
+                            continue;
+                        }
                         $tiempoTarea = Tarea::find($tarea)->tiempo_tarea;
                         $tiempoEnMinutos += $tiempoTarea;
                     }
                 }
             }
-            // dd($tiempoEnMinutos);
         }
 
         $tiempoEnHoras = ceil($tiempoEnMinutos / 60);
 
+        //6 HORAS DIARIAS
+        $diasTrabajo = ceil($tiempoEnHoras / 6);
 
-        $ot = new Ot();
-        $ot->tiempo_ot = $tiempoEnMinutos;
-        $ot->horas_ot = $tiempoEnHoras;
-        $ot->descripcion_ot = $datosValidados['descripcion'];
-        $ot->cotizacion = $datosValidados['cotizacion'];
-        $ot->cod_tipo_ot = $datosValidados['tipo'];
-        $ot->cod_prioridad_ot = $datosValidados['prioridad'];
-        $ot->cod_estado_ot = $datosValidados['estado'];
-        $ot->cod_tipo_visita = $datosValidados['tipoVisita'];
-        $ot->cod_servicio = $datosValidados['servicio'];
-        $ot->cod_contacto = 114; // lmao
-        $ot->cod_tecnico_encargado = $datosValidados['tecnicoEncargado'];
-        $ot->fecha_inicio_planificada_ot = $datosValidados['fecha'];
-        $ot->fecha_fin_planificada_ot = $datosValidados['fecha'];
-        $ot->save();
+        $fecha_inicio = $datosValidados['fecha'];
 
-        dd($datosValidados);
+        try {
+            $selectedDate = new DateTime($fecha_inicio);
+        } catch (Exception $e) {
+            echo ('La fecha seleccionada no es válidas.');
+            return;
+        }
+
+        try {
+            // Obtener días feriados desde la API
+            $feriados = self::obtener_feriados_chile();
+
+            // Calcular la fecha estimada de fin de la OT
+            $fecha_fin_estimada = self::add_business_days($selectedDate, $diasTrabajo, $feriados);
+            $fecha_fin_estimada = $fecha_fin_estimada->format('Y-m-d');
+
+            $ot = new Ot();
+            $ot->tiempo_ot = $tiempoEnMinutos;
+            $ot->horas_ot = $tiempoEnHoras;
+            $ot->descripcion_ot = $datosValidados['descripcion'];
+            $ot->cotizacion = $datosValidados['cotizacion'];
+            $ot->cod_tipo_ot = $datosValidados['tipo'];
+            $ot->cod_prioridad_ot = $datosValidados['prioridad'];
+            $ot->cod_estado_ot = $datosValidados['estado'];
+            $ot->cod_tipo_visita = $datosValidados['tipoVisita'];
+            $ot->cod_servicio = $datosValidados['servicio'];
+            $ot->cod_contacto = 114; // lmao
+            $ot->cod_tecnico_encargado = $datosValidados['tecnicoEncargado'];
+            $ot->fecha_inicio_planificada_ot = $datosValidados['fecha'];
+            $ot->fecha_fin_planificada_ot = $fecha_fin_estimada;
+            $ot->save();
+
+            $idOt = $ot->id;
+            foreach ($datosValidados['contactos'] as $contacto) {
+                $ot->contactoOt()->create([
+                    'cod_ot' => $idOt,
+                    'cod_contacto' => $contacto,
+                ]);
+            }
+            foreach ($datosValidados['tecnicos'] as $tecnico) {
+                $ot->EquipoTecnico()->create([
+                    'cod_ot' => $idOt,
+                    'cod_tecnico' => $tecnico,
+                ]);
+            }
+
+            if ($datosValidados['tipoServicio'] == 1) {
+
+                foreach ($datosValidados['tareasSinD'] as $tarea) {
+                    $ot->TareasOt()->create([
+                        'cod_ot' => $idOt,
+                        'cod_tarea' => $tarea,
+                    ]);
+                }
+            } elseif ($datosValidados['tipoServicio'] == 2) {
+
+                foreach ($datosValidados['dispositivos'] as $dispositivo) {
+                    $dispositivoOt = $ot->DispositivoOT()->create([
+                        'cod_ot' => $idOt,
+                        'cod_dispositivo' => $dispositivo,
+                    ]);
+
+                    for ($i = 0; $i < $datosValidados['contadorBloques']; $i++) {
+                        if (isset($datosValidados['tareasDispositivos-' . $i])) {
+                            if ($datosValidados['tareasDispositivos-' . $i][0] == $dispositivo) {
+                                foreach ($datosValidados['tareasDispositivos-' . $i] as $tarea) {
+                                    if ($tarea != $dispositivo) {
+                                        $dispositivoOt->tareaDispositivo()->create([
+                                            'cod_dispositivo_ot' =>  $dispositivoOt->id,
+                                            'cod_tarea' => $tarea,
+                                        ]);
+                                    }
+                                }
+                            }
+                        }
+
+                        if (isset($datosValidados['detallesDispositivo-' . $i])) {
+                            if ($datosValidados['detallesDispositivo-' . $i]['existe'] == 1) {
+                                if ($datosValidados['detallesDispositivo-' . $i]['dispositivo'] == $dispositivo) {
+                                    $dispositivoOt->detalles()->create([
+                                        'rayones_det' => $datosValidados['detallesDispositivo-' . $i]['rayones'],
+                                        'rupturas_det' => $datosValidados['detallesDispositivo-' . $i]['rupturas'],
+                                        'tornillos_det' => $datosValidados['detallesDispositivo-' . $i]['tornillos'],
+                                        'gomas_det' => $datosValidados['detallesDispositivo-' . $i]['gomas'],
+                                        'estado_dispositivo_det' => $datosValidados['detallesDispositivo-' . $i]['estado'],
+                                        'observaciones_det' => $datosValidados['detallesDispositivo-' . $i]['observaciones'],
+                                        'cod_dispositivo_ot' =>  $dispositivoOt->id,
+                                    ]);
+                                }
+                            }
+                        }
+
+                        if (isset($datosValidados['accesoriosDispositivo-' . $i])) {
+                            if ($datosValidados['accesoriosDispositivo-' . $i]['existe'] == 1) {
+                                if ($datosValidados['accesoriosDispositivo-' . $i]['dispositivo'] == $dispositivo) {
+                                    $dispositivoOt->accesorios()->create([
+                                        'cargador_acc' => $datosValidados['accesoriosDispositivo-' . $i]['cargador'],
+                                        'cable_acc' => $datosValidados['accesoriosDispositivo-' . $i]['cablePoder'],
+                                        'adaptador_acc' => $datosValidados['accesoriosDispositivo-' . $i]['adaptadorPoder'],
+                                        'bateria_acc' => $datosValidados['accesoriosDispositivo-' . $i]['bateria'],
+                                        'pantalla_acc' => $datosValidados['accesoriosDispositivo-' . $i]['pantalla'],
+                                        'teclado_acc' => $datosValidados['accesoriosDispositivo-' . $i]['teclado'],
+                                        'drum_acc' => $datosValidados['accesoriosDispositivo-' . $i]['drum'],
+                                        'toner_acc' => $datosValidados['accesoriosDispositivo-' . $i]['toner'],
+                                        'cod_dispositivo_ot' =>  $dispositivoOt->id,
+                                    ]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return response()->json(['message' => 'Orden de trabajo creada correctamente!'], 201);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Error al crear la orden de trabajo ', 'errors' => $validator->errors()], 422);
+            // return redirect()->back()->withErrors($validator)->withInput();
+            // return redirect()->route('ordenes.index')->with('error', 'Error al crear la orden de trabajo.');
+        }
+        dd($ot);
     }
+
+    public static function obtener_feriados_chile()
+    {
+        $feriados = Cache::get('feriados_chilev2');
+
+        if (!$feriados) {
+            $response = Http::withOptions(['verify' => false])->get('https://apis.digital.gob.cl/fl/feriados/' . date("Y"));
+
+            if ($response->status() != 200) {
+                return []; // Si hay un error, retorna un array vacío
+            }
+
+            $feriados = $response->json(); // Decodifica la respuesta JSON
+
+            if (empty($feriados)) {
+                return [];
+            }
+
+            $feriado_fechas = array_map(function ($feriado) {
+                return $feriado['fecha'];
+            }, $feriados);
+
+            // Puedes guardar los datos en una opción transitoria para cachear los resultados
+            Cache::put('feriados_chilev2', $feriado_fechas, 86400); // 86400 is the number of seconds in a day
+            return $feriado_fechas;
+        }
+        return $feriados;
+    }
+
+
+    function add_business_days($date, $days, $holidays)
+    {
+        $count = 0;
+        $result = clone $date;
+
+        while ($count < $days) {
+            $result->modify('+1 day');
+            $weekday = $result->format('N'); // 1 para Lunes, 7 para Domingo
+
+            if ($weekday < 6 && !in_array($result->format('Y-m-d'), $holidays)) {
+                $count++;
+            }
+        }
+
+        return $result;
+    }
+
+
     public function buscar(Request $request)
     {
         $search = $request->input('search');

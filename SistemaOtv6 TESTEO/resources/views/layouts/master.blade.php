@@ -25,10 +25,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
-    <link rel="stylesheet" href="{{URL::to('assets/css/nav.css')}}">
+    <link rel="stylesheet" href="{{ URL::to('assets/css/nav.css') }}">
 
     {{-- Style CSS --}}
-    <link rel="stylesheet" href="{{URL::to('assets/css/style.css')}}">
+    <link rel="stylesheet" href="{{ URL::to('assets/css/style.css') }}">
 
 
 </head>
@@ -51,6 +51,7 @@
     <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.7/js/responsive.bootstrap4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         $(document).ready(function() {

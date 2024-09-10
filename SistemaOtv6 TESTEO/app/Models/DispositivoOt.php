@@ -46,4 +46,9 @@ class DispositivoOt extends Model
     {
         return $this->hasOne(AccesorioDispositivoOt::class, 'cod_dispositivo_ot', 'id');
     }
+
+    public function tareaDispositivo()
+    {
+        return $this->hasMany(TareaDispositivo::class, 'cod_dispositivo_ot', 'id');
+    }
 }
