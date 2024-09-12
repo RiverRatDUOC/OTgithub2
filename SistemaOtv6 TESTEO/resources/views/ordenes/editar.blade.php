@@ -7,12 +7,6 @@
 
     <main class="col py-3 flex-grow-1">
         <div class="container-fluid">
-            {{-- <h3 class="mb-4">Home / Ordenes / Agregar</h3>
-            <li class="nav-item {{ Request::is('ordenes/agregar') ? 'active' : '' }}">
-                <a class="nav-link pl-0" href="{{ route('ordenes.create') }}">
-                    <i class="fas fa-plus-circle"></i> <span>Agregar Orden</span>
-                </a>
-            </li> --}}
 
             <div class="card">
                 <div class="card-body">
@@ -28,8 +22,11 @@
                             <select class="form-select form-control" id="cliente" name="cliente">
                                 <option value="0">Seleccione un cliente</option>
                                 @foreach ($clientes as $cliente)
-                                    <option value="{{ $cliente->id }}">{{ html_entity_decode($cliente->nombre_cliente) }}
-                                    </option>
+                                    @if ($cliente->id == $orden->contactoOt[0]->sucursal->cliente->id)
+                                        <option value="{{ $cliente->id }}" selected>{{ $cliente->nombre_cliente }}</option>
+                                    @else
+                                        <option value="{{ $cliente->id }}">{{ $cliente->nombre_cliente }}</option>
+                                    @endif
                                 @endforeach
                             </select>
                             <span id="errorCliente" class="errMessage"></span>
@@ -71,8 +68,7 @@
                             <select class="form-select form-control" id="servicio" name="servicio" disabled>
                                 <option value="0">Seleccione un servicio</option>
                                 @foreach ($servicios as $servicio)
-                                    <option value="{{ $servicio->id }}">{{ html_entity_decode($servicio->nombre_servicio) }}
-                                    </option>
+                                    <option value="{{ $servicio->id }}">{{ $servicio->nombre_servicio }}</option>
                                 @endforeach
                             </select>
                             <span id="errorServicio" class="errMessage"></span>
@@ -538,8 +534,7 @@
                             <select class="form-select form-control" id="estadoOt" name="estadoOt">
                                 <option value="0">Seleccione un estado</option>
                                 @foreach ($estados as $estado)
-                                    <option value="{{ $estado->id }}">
-                                        {{ html_entity_decode($estado->descripcion_estado_ot) }}</option>
+                                    <option value="{{ $estado->id }}">{{ $estado->descripcion_estado_ot }}</option>
                                 @endforeach
                             </select>
                             <span id="errorEstado" class="errMessage"></span>
@@ -549,8 +544,7 @@
                             <select class="form-select form-control" id="prioridad" name="prioridad">
                                 <option value="0">Seleccione una prioridad</option>
                                 @foreach ($prioridades as $prioridad)
-                                    <option value="{{ $prioridad->id }}">
-                                        {{ html_entity_decode($prioridad->descripcion_prioridad_ot) }}
+                                    <option value="{{ $prioridad->id }}">{{ $prioridad->descripcion_prioridad_ot }}
                                     </option>
                                 @endforeach
                             </select>

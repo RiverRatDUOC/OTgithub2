@@ -41,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ordenes/agregar', [OrdenesController::class, 'store'])->middleware('can:ordenes.create')->name('ordenes.store'); // Ruta para almacenar la nueva orden
     Route::get('/ordenes/buscar', [OrdenesController::class, 'buscar'])->name('ordenes.buscar'); // Ruta para buscar órdenes
     Route::get('/ordenes/{orden}', [OrdenesController::class, 'show'])->name('ordenes.show'); // Ruta para mostrar el detalle de una orden
+    Route::get('/ordenes/{orden}/editar', [OrdenesController::class, 'edit'])->name('ordenes.edit'); // Ruta para editar una orden
     Route::get('/tareas/{servicioId}', [OrdenesController::class, 'tareas']);
     Route::get('/sucursal/{clienteId}', [OrdenesController::class, 'sucursales']);
     Route::get('/contacto/{sucursalId}', [OrdenesController::class, 'contactos']);

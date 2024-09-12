@@ -3,46 +3,104 @@
 
 @section('content')
     @include('layouts.sidebar.dashboard')
-
+    <link rel="stylesheet" href="{{ asset('assets/css/detalleOrden.css') }}">
     <main class="col bg-faded py-3 flex-grow-1">
         <div class="container-fluid">
             <h2 class="text-center mt-3">Detalle de la Orden</h2>
             <div class="card mt-3">
                 <div class="card-body">
-                    <h5 class="card-title">Orden #{{ $orden->numero_ot }}</h5>
-                    <p class="card-text"><strong>Nombre del Cliente:</strong>
-                        @if (count($orden->contactoOt) != 0)
-                            {{ $orden->contactoOt[0]->contacto->sucursal->cliente->nombre_cliente }}
-                        @else
-                            {{ $orden->contacto->sucursal->cliente->nombre_cliente }}
-                        @endif
-                    </p>
-                    <p class="card-text"><strong>Sucursal:</strong>
-                        @if (count($orden->contactoOt) != 0)
-                            {{ $orden->contactoOt[0]->contacto->sucursal->direccion_sucursal }}
-                        @else
-                            {{ $orden->contacto->sucursal->direccion_sucursal }}
-                        @endif
+                    <div class="infoExtra">
 
-                    </p>
-                    <!-- Mostrando el primer contacto -->
-                    <p class="card-text"><strong>Contacto:</strong>
-                        @if (count($orden->contactoOt) != 0)
-                            {{ $orden->contactoOt[0]->contacto->nombre_contacto }}
-                        @else
-                            {{ $orden->contacto->nombre_contacto }}
-                        @endif
-                    </p>
+                        @php
+                            $prioridadClass = '';
 
-                    <p class="card-text"><strong>Tipo:</strong> {{ $orden->tipo->descripcion_tipo_ot }}</p>
-                    <p class="card-text"><strong>Estado:</strong> {{ $orden->estado->descripcion_estado_ot }}</p>
-                    <p class="card-text"><strong>Encargado:</strong> {{ $orden->tecnicoEncargado->nombre_tecnico }}</p>
+                            switch ($orden->prioridad->id) {
+                                case 1:
+                                    $prioridadClass = 'prioridadBaja';
+                                    break;
+                                case 2:
+                                    $prioridadClass = 'prioridadMedia';
+                                    break;
+                                case 3:
+                                    $prioridadClass = 'prioridadAlta';
+                                    break;
+                                default:
+                                    $prioridadClass = 'prioridadBaja';
+                                    break;
+                            }
+
+                            $estadoClass = '';
+
+                            switch ($orden->estado->id) {
+                                case 1:
+                                    $estadoClass = 'estadoIniciada';
+                                    break;
+                                case 2:
+                                    $estadoClass = 'estadoPendiente';
+                                    break;
+                                case 3:
+                                    $estadoClass = 'estadoFinalizada';
+                                    break;
+                                default:
+                                    $estadoClass = 'estadoPendiente';
+                                    break;
+                            }
+                        @endphp
+                        <span class="infoEx {{ $prioridadClass }}" data-toggle="tooltip" data-placement="top"
+                            title="Prioridad de la orden">{{ $orden->prioridad->descripcion_prioridad_ot }}</span>
+                        <span class="infoEx {{ $estadoClass }}" data-toggle="tooltip" data-placement="top"
+                            title="Estado de la orden">{{ $orden->estado->descripcion_estado_ot }}</span>
+                        <span class="infoEx" data-toggle="tooltip" data-placement="top"
+                            title="Tipo de orden">{{ $orden->tipo->descripcion_tipo_ot }}</span>
+                        <span class="infoEx" data-toggle="tooltip" data-placement="top"
+                            title="Tipo de visita de la orden">{{ $orden->tipoVisita->descripcion_tipo_visita }}</span>
+                    </div>
+                    <h5 class="card-title"><strong>Número Ot #{{ $orden->numero_ot }}</strong></h5>
+                    <p class="card-text"><strong>Nombre del Cliente</strong></p>
+                    @if (count($orden->contactoOt) != 0)
+                        <input type="text" name="" id="" class="form-control inputsText"
+                            value="{{ html_entity_decode($orden->contactoOt[0]->contacto->sucursal->cliente->nombre_cliente) }}"
+                            disabled>
+                    @else
+                        <input type="text" name="" id="" class="form-control inputsText"
+                            value="{{ html_entity_decode($orden->contacto->sucursal->cliente->nombre_cliente) }}" disabled>
+                    @endif
+
+                    <p class="card-text"><strong>Sucursal</strong></p>
+                    @if (count($orden->contactoOt) != 0)
+                        <input type="text" name="" id="" class="form-control inputsText"
+                            value="{{ html_entity_decode($orden->contactoOt[0]->contacto->sucursal->nombre_sucursal) }} - {{ html_entity_decode($orden->contactoOt[0]->contacto->sucursal->direccion_sucursal) }}"
+                            disabled>
+                    @else
+                        <input type="text" name="" id="" class="form-control inputsText"
+                            value="{{ html_entity_decode($orden->contactoOt[0]->contacto->sucursal->nombre_sucursal) }} - {{ html_entity_decode($orden->contactoOt[0]->contacto->sucursal->direccion_sucursal) }}"
+                            disabled>
+                    @endif
+
+                    <p class="card-text"><strong>Contacto(s):</strong></p>
+                    <ul>
+                        @foreach ($orden->contactoOt as $contacto)
+                            <li>{{ html_entity_decode($contacto->contacto->nombre_contacto) }}</li>
+                        @endforeach
+                    </ul>
+                    {{-- @if (count($orden->contactoOt) != 0)
+                        {{ $orden->contactoOt[0]->contacto->nombre_contacto }}
+                    @else
+                        {{ $orden->contacto->nombre_contacto }}
+                    @endif --}}
+
+
+                    {{-- <p class="card-text"><strong>Tipo:</strong> {{ $orden->tipo->descripcion_tipo_ot }}</p> --}}
+                    {{-- <p class="card-text"><strong>Estado:</strong> {{ $orden->estado->descripcion_estado_ot }}</p> --}}
+                    <p class="card-text"><strong>Encargado</strong></p>
+                    <input type="text" name="" id="" class="form-control inputsText"
+                        value="{{ html_entity_decode($orden->tecnicoEncargado->nombre_tecnico) }}" disabled>
                     <!-- Mostrar técnicos participantes -->
                     @if ($orden->EquipoTecnico)
-                        <label for="participantes">Tecnicos:</label>
+                        <label for="participantes"><strong>Tecnico(s):</strong></label>
                         <ul>
                             @foreach ($orden->EquipoTecnico as $EquipoTecnico)
-                                <li>{{ $EquipoTecnico->tecnico->nombre_tecnico }}</li>
+                                <li>{{ html_entity_decode($EquipoTecnico->tecnico->nombre_tecnico) }}</li>
                             @endforeach
                         </ul>
                     @else
@@ -50,26 +108,46 @@
                     @endif
 
 
-                    <p class="card-text"><strong>Servicio:</strong> {{ $orden->servicio->nombre_servicio }}</p>
-                    <p class="card-text"><strong>Prioridad:</strong> {{ $orden->prioridad->descripcion_prioridad_ot }}
-                    </p>
-                    <p class="card-text"><strong>Fecha de creación de orden de trabajo:</strong>
-                        {{ date('d-m-Y', strtotime($orden->created_at)) }}</p>
-                    <p class="card-text"><strong>Fecha de inicio de orden de trabajo:</strong>
-                        {{ date('d-m-Y', strtotime($orden->fecha_inicio_planificada_ot)) }}</p>
-                    <p class="card-text"><strong>Fecha estimada de finalización:</strong>
-                        {{ date('d-m-Y', strtotime($orden->fecha_fin_planificada_ot)) }}</p>
-                    <p class="card-text"><strong>Cotización:</strong> {{ $orden->cotizacion }}</p>
-                    <p class="card-text"><strong>Horas:</strong> {{ $orden->horas_ot }}</p>
+                    <p class="card-text"><strong>Servicio</strong> </p>
+                    <input type="text" name="" id="" class="form-control inputsText"
+                        value="{{ html_entity_decode($orden->servicio->nombre_servicio) }}" disabled>
+                    {{-- <p class="card-text"><strong>Prioridad:</strong> {{ $orden->prioridad->descripcion_prioridad_ot }} --}}
+                    {{-- </p> --}}
+                    <p class="card-text"><strong>Fecha de creación de orden de trabajo</strong> </p>
 
-                    <p class="card-text"><strong>Descripción:</strong> {{ $orden->descripcion_ot }}</p>
-                    <p class="card-text"><strong>Tipo de Visitas:</strong>
-                        {{ $orden->tipoVisita->descripcion_tipo_visita }}</p>
+                    <input type="text" name="" id="" class="form-control inputsText"
+                        value="{{ date('d-m-Y', strtotime($orden->created_at)) }}" disabled>
+
+                    @if ($orden->fecha_inicio_planificada_ot)
+                        <p class="card-text"><strong>Fecha de inicio de orden de trabajo</strong></p>
+                        <input type="text" name="" id="" class="form-control inputsText"
+                            value="{{ date('d-m-Y', strtotime($orden->fecha_inicio_planificada_ot)) }}" disabled>
+                    @endif
+                    @if ($orden->fecha_fin_planificada_ot)
+                        <p class="card-text"><strong>Fecha estimada de finalización</strong></p>
+                        <input type="text" name="" id="" class="form-control inputsText"
+                            value="{{ date('d-m-Y', strtotime($orden->fecha_fin_planificada_ot)) }}" disabled>
+                    @endif
+                    <p class="card-text"><strong>Cotización</strong></p>
+                    <input type="text" name="" id="" class="form-control inputsText"
+                        value=@if ($orden->cotizacion) "{{ $orden->cotizacion }}"
+                                @else
+                                "No tiene cotización" @endif
+                        disabled>
+
+                    <p class="card-text"><strong>Horas</strong></p>
+                    <input type="text" name="" id="" class="form-control inputsText"
+                        value="{{ $orden->horas_ot }}" disabled>
+
+                    <p class="card-text"><strong>Descripción</strong></p>
+                    <textarea class="form-control" name="descripcion" id="descripcion" cols="30" rows="5" disabled>{{ html_entity_decode($orden->descripcion_ot) }}</textarea>
+                    {{-- <p class="card-text"><strong>Tipo de Visitas:</strong>
+                        {{ $orden->tipoVisita->descripcion_tipo_visita }}</p> --}}
                     <p class="card-text"><strong>Comentario:</strong>
                         @if ($orden->comentario_ot == null)
-                            Sin comentario.
+                            <textarea class="form-control" name="descripcion" id="descripcion" cols="30" rows="5" disabled>Sin comentarios.</textarea>
                         @else
-                            {{ $orden->comentario_ot }}
+                            <textarea class="form-control" name="descripcion" id="descripcion" cols="30" rows="5" disabled>{{ html_entity_decode($orden->comentario_ot) }}</textarea>
                         @endif
                     </p>
 
@@ -112,10 +190,9 @@
 
                         </div>
                     @else
-                        <div>
-                            @if (count($orden->DispositivoOT) != 0)
-                                @foreach ($orden->DispositivoOT as $dispositivo)
-                                    <hr>
+                        @if (count($orden->DispositivoOT) != 0)
+                            @foreach ($orden->DispositivoOT as $dispositivo)
+                                <div class="dispositivos">
                                     <p class="card-text"><strong>Dispositivo</strong></p>
                                     <p class="card-text"><strong>Número de serie:</strong>
                                         {{ $dispositivo->dispositivo->numero_serie_dispositivo }}
@@ -132,7 +209,8 @@
                                                 <h2 class="mb-0">
                                                     <button class="btn btn-link btn-block text-left" type="button"
                                                         data-toggle="collapse"
-                                                        data-target="#collapse{{ $loop->iteration }}" aria-expanded="false"
+                                                        data-target="#collapse{{ $loop->iteration }}"
+                                                        aria-expanded="false"
                                                         aria-controls="collapse{{ $loop->iteration }}">
                                                         Tareas
                                                     </button>
@@ -306,11 +384,10 @@
                                                 dispositivo</strong>
                                         </p>
                                     @endif
+                                </div>
+                            @endforeach
+                        @endif
 
-                                    <hr>
-                                @endforeach
-                            @endif
-                        </div>
                     @endif
 
                     <a href="{{ route('ordenes.index') }}" class="btn btn-primary">Volver</a>
@@ -318,4 +395,5 @@
             </div>
         </div>
     </main>
+    <script src="{{ asset('assets/js/ordenes/detalleOrden.js') }}"></script>
 @endsection

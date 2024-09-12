@@ -59,6 +59,33 @@ class OrdenesController extends Controller
         return view('ordenes.agregar', compact('tipos', 'prioridades', 'estados', 'tiposVisitas', 'tecnicos', 'clientes', 'servicios'));
     }
 
+    public function edit($id)
+    {
+        $tipos = TipoOt::all();
+        $prioridades = PrioridadOt::all();
+        $estados = EstadoOt::all();
+        $tiposVisitas = TipoVisita::all();
+        $tecnicos = Tecnico::all();
+        $clientes = Cliente::all();
+        $servicios = Servicio::all();
+
+        $orden = Ot::with([
+            'contacto',
+            'contacto.sucursal',
+            'contacto.sucursal.cliente',
+            'servicio',
+            'tecnicoEncargado',
+            'estado',
+            'prioridad',
+            'tipo',
+            'tipoVisita',
+            'contactoOt'
+        ])
+            ->findOrFail($id);
+
+        return view('ordenes.editar', compact('tipos', 'prioridades', 'estados', 'tiposVisitas', 'tecnicos', 'clientes', 'servicios', 'orden'));
+    }
+
     public function store(Request $request)
     {
         // dd($request);
