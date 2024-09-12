@@ -10,17 +10,20 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
+                <!-- Encabezado -->
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     <h2>Clientes</h2>
-
-
                 </div>
+
+                <!-- Formulario de Búsqueda -->
                 <div>
                     <form action="{{ route('clientes.buscar') }}" method="get" class="input-group">
                         <input type="text" name="search" id="search" class="form-control" placeholder="Buscar por ID, nombre, RUT, correo, teléfono o web" value="{{ request('search') }}">
                         <button type="submit" class="btn btn-primary" style="background-color: #cc6633; border-color: #cc6633;">Buscar</button>
                     </form>
                 </div>
+
+                <!-- Botones de Agregar y Eliminar Filtro -->
                 <div class="d-flex align-items-center justify-content-end mt-3" style="gap: 1rem;">
                     <a href="{{ route('clientes.create') }}" class="btn btn-secondary btn-sm" style="background-color: #cc6633; border-color: #cc6633;">
                         <i class="bi bi-plus"></i> Agregar
@@ -30,6 +33,7 @@
                     </a>
                 </div>
 
+                <!-- Tabla de Clientes -->
                 <div class="table-responsive mt-3">
                     <table class="table table-striped" id="clientes_tabledata">
                         <thead>
@@ -54,23 +58,31 @@
                                 <td>{{ $cliente->web_cliente }}</td>
                                 <td>
                                     <div class="d-flex">
-                                        <a href="{{ route('clientes.show', $cliente->id) }}" class="btn btn-primary me-1" style="background-color: #cc0066; border-color: #cc0066;">
+                                        <a href="{{ route('clientes.show', $cliente->id) }}" class="btn btn-primary me-1" style="background-color: #cc0066; border-color: #cc0066;  height: 38px; display: flex; align-items: center; justify-content: center;">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="{{ route('clientes.edit', $cliente->id) }}" class="btn btn-primary me-1" style="background-color: #cc6633; border-color: #cc6633;">
+                                        <a href="{{ route('clientes.edit', $cliente->id) }}" class="btn btn-primary me-1" style="background-color: #cc6633; border-color: #cc6633; height: 38px; display: flex; align-items: center; justify-content: center;">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a href="#" class="btn btn-danger" style="background-color: #d9534f; border-color: #d43f3a;">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </a>
+                                        <form action="{{ route('clientes.destroy', $cliente->id) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger" style="background-color: #d9534f; border-color: #d43f3a;  height: 38px; display: flex; align-items: center; justify-content: center;">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
+
+
+
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
 
+                <!-- Paginación -->
                 <div class="d-flex justify-content-center mt-4">
                     @if ($clientes->hasPages())
                     <nav>
@@ -135,6 +147,8 @@
         </div>
     </div>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('assets/js/mensajes/mensajes.js') }}"></script>
 <script src="{{ asset('assets/js/ordenar/OrdenarCliente.js') }}"></script>
 
 @endsection

@@ -57,7 +57,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/clientes/{id}', [ClientesController::class, 'show'])->name('clientes.show'); // Ruta para ver el detalle del cliente
     Route::put('/clientes/{id}', [ClientesController::class, 'update'])->name('clientes.update');
     Route::get('/clientes/{id}/editar', [ClientesController::class, 'edit'])->name('clientes.edit');
-
+    Route::delete('/clientes/{id}', [ClientesController::class, 'destroy'])->name('clientes.destroy');
 
 
     // RUTAS DE TÉCNICOS

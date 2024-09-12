@@ -41,8 +41,8 @@ class ClientesController extends Controller
             'web_cliente' => $request->input('web_cliente'),
         ]);
 
-        // Redirigir con un mensaje de éxito
-        return redirect()->route('clientes.index')->with('success', 'Cliente agregado exitosamente.');
+        // Mostrar el mensaje en la misma página y redirigir con JavaScript desde la vista
+        return back()->with('success', 'Cliente agregado exitosamente. Serás redirigido en unos segundos.');
     }
 
     public function buscar(Request $request)
@@ -55,7 +55,7 @@ class ClientesController extends Controller
             ->orWhere('email_cliente', 'like', "%$search%")
             ->orWhere('telefono_cliente', 'like', "%$search%")
             ->orWhere('web_cliente', 'like', "%$search%")
-            ->orderBy('id', 'desc') // Ordenar los resultados de manera descendente por el campo 'id' o cualquier otro campo relevante
+            ->orderBy('id', 'desc') // Ordenar los resultados de manera descendente por el campo 'id'
             ->paginate(20); // Ajusta el número de resultados por página según tus necesidades
 
         return view('clientes.clientes', compact('clientes'));
@@ -102,7 +102,19 @@ class ClientesController extends Controller
             'web_cliente' => $request->input('web_cliente'),
         ]);
 
-        // Redirigir con un mensaje de éxito
-        return redirect()->route('clientes.index')->with('success', 'Cliente actualizado exitosamente.');
+        // Mostrar el mensaje en la misma página y redirigir con JavaScript desde la vista
+        return back()->with('success', 'Cliente actualizado exitosamente. Serás redirigido en unos segundos.');
+    }
+
+    public function destroy($id)
+    {
+        // Obtener el cliente por el ID
+        $cliente = Cliente::findOrFail($id);
+
+        // Eliminar el cliente
+        $cliente->delete();
+
+        // Mostrar el mensaje en la misma página y redirigir con JavaScript desde la vista
+        return back()->with('success', 'Cliente eliminado exitosamente. Serás redirigido en unos segundos.');
     }
 }

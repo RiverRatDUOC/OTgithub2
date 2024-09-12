@@ -20,12 +20,19 @@ use App\Models\Cliente;
 use App\Models\Sucursal;
 use App\Models\Contacto;
 use App\Models\Servicio;
-use App\Models\TecnicoServicio; // Importa el modelo TecnicoServicio
+use App\Models\TecnicoServicio;
+use App\Models\Tarea;
+use App\Models\Dispositivo;
+use App\Models\DispositivoOt;
+use App\Models\TareaOt;
+use App\Models\ContactoOt;
+use App\Models\EquipoTecnico;
+use App\Models\Avance; // Importa el modelo Avance
 use Illuminate\Http\Request;
 
 class ParametrosController extends Controller
 {
-    // Muestra la lista de categorías, subcategorías, líneas, sublíneas, marcas, tipos de OT, prioridades de OT, estados de OT, tipos de visita, tipos de servicio, modelos, usuarios, técnicos, clientes, sucursales, contactos, servicios y técnico-servicios
+    // Muestra la lista de todas las entidades y busca según los criterios
     public function index(Request $request)
     {
         $search = $request->input('search', '');
@@ -69,15 +76,32 @@ class ParametrosController extends Controller
             ->where('nombre_servicio', 'like', "%{$search}%")
             ->get();
         $tecnico_servicios = TecnicoServicio::with('tecnico', 'servicio')
-            ->get(); // Consulta de técnico-servicios
+            ->get();
+        $tareas = Tarea::with('servicio')
+            ->where('nombre_tarea', 'like', "%{$search}%")
+            ->get();
+        $dispositivos = Dispositivo::with('modelo', 'sucursal')
+            ->where('numero_serie_dispositivo', 'like', "%{$search}%")
+            ->get();
+        $dispositivos_ot = DispositivoOt::with('dispositivo', 'ot', 'detalles', 'accesorios')
+            ->get();
+        $tareas_ot = TareaOt::with('tarea', 'ot')
+            ->get();
+        $contactos_ot = ContactoOt::with('contacto', 'ot')
+            ->get();
+        $equipos_tecnicos = EquipoTecnico::with('tecnico', 'ot')
+            ->get();
+        $avances = Avance::with('ot')
+            ->where('comentario_avance', 'like', "%{$search}%")
+            ->get(); // Consulta de Avance
 
-        return view('parametros.parametros', compact('categorias', 'subcategorias', 'lineas', 'sublineas', 'marcas', 'tipos_ot', 'prioridades_ot', 'estados_ot', 'tipos_visita', 'tipos_servicio', 'modelos', 'usuarios', 'tecnicos', 'clientes', 'sucursales', 'contactos', 'servicios', 'tecnico_servicios', 'search'));
+        return view('parametros.parametros', compact('categorias', 'subcategorias', 'lineas', 'sublineas', 'marcas', 'tipos_ot', 'prioridades_ot', 'estados_ot', 'tipos_visita', 'tipos_servicio', 'modelos', 'usuarios', 'tecnicos', 'clientes', 'sucursales', 'contactos', 'servicios', 'tecnico_servicios', 'tareas', 'dispositivos', 'dispositivos_ot', 'tareas_ot', 'contactos_ot', 'equipos_tecnicos', 'avances', 'search'));
     }
 
     // Muestra el detalle de una entidad específica
     public function show($id)
     {
-        $sublinea = Sublinea::with('linea')->findOrFail($id);
-        return view('parametros.detalle', compact('sublinea'));
+        $avance = Avance::with('ot')->findOrFail($id);
+        return view('parametros.detalle', compact('avance'));
     }
 }

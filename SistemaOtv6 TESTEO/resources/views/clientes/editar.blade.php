@@ -14,9 +14,6 @@
                 <!-- Editar Cliente -->
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     <h2>Editar Cliente</h2>
-                    <a href="{{ route('clientes.index') }}" class="btn btn-secondary" style="background-color: #cc6633; border-color: #cc6633;">
-                        <i class="bi bi-arrow-left"></i> Regresar
-                    </a>
                 </div>
 
                 <!-- Formulario de Edición -->
@@ -25,6 +22,28 @@
                         Editar Información del Cliente
                     </div>
                     <div class="card-body">
+
+                        <!-- Mensaje de éxito -->
+                        @if(session('success'))
+                        <div id="success-message" class="alert alert-success mt-4" role="alert">
+                            {{ session('success') }} Serás redirigido en <span id="counter">3</span> segundos.
+                            <br>
+                            <button id="cancel-redirect" class="btn btn-link p-0">Cancelar redirección y volver al listado</button>
+                            <span id="redirect-url" style="display: none;">{{ route('clientes.index') }}</span>
+                        </div>
+                        @endif
+
+                        <!-- Mensaje de error -->
+                        @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        @endif
+
                         <form action="{{ route('clientes.update', $cliente->id) }}" method="POST">
                             @csrf
                             @method('PUT')
@@ -84,4 +103,7 @@
         </div>
     </div>
 </main>
+
+<!-- Incluye el archivo JavaScript -->
+<script src="{{ asset('assets/js/mensajes/mensajes.js') }}"></script>
 @endsection

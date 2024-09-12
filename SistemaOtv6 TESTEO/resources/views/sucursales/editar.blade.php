@@ -14,9 +14,7 @@
                 <!-- Editar Sucursal -->
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     <h2>Editar Sucursal</h2>
-                    <a href="{{ route('sucursales.index') }}" class="btn btn-secondary" style="background-color: #cc6633; border-color: #cc6633;">
-                        <i class="bi bi-arrow-left"></i> Regresar
-                    </a>
+
                 </div>
 
                 <!-- Formulario de Edición -->
