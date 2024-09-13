@@ -5,16 +5,18 @@
 
     <link rel="stylesheet" href="{{ asset('assets/css/ordenes.css') }}">
 
+
     <main class="col py-3 flex-grow-1">
         <div class="container-fluid">
 
             <div class="card">
                 <div class="card-body">
+                    <input type="hidden" id="orden" value="{{ json_encode($orden) }}">
                     <form action="" method="POST">
                         @csrf
                         <div class="mb-3">
                             <label for="descripcion" class="form-label">Descripción</label>
-                            <textarea class="form-control" id="descripcion" name="descripcion" rows="3"></textarea>
+                            <textarea class="form-control" id="descripcion" name="descripcion" rows="3">{{ $orden->descripcion_ot }}</textarea>
                             <span id="errorDescripcion" class="errMessage"></span>
                         </div>
                         <div class="mb-3">
@@ -22,7 +24,7 @@
                             <select class="form-select form-control" id="cliente" name="cliente">
                                 <option value="0">Seleccione un cliente</option>
                                 @foreach ($clientes as $cliente)
-                                    @if ($cliente->id == $orden->contactoOt[0]->sucursal->cliente->id)
+                                    @if ($cliente->id == $orden->contactoOt[0]->contacto->sucursal->cliente->id)
                                         <option value="{{ $cliente->id }}" selected>{{ $cliente->nombre_cliente }}</option>
                                     @else
                                         <option value="{{ $cliente->id }}">{{ $cliente->nombre_cliente }}</option>
@@ -68,7 +70,12 @@
                             <select class="form-select form-control" id="servicio" name="servicio" disabled>
                                 <option value="0">Seleccione un servicio</option>
                                 @foreach ($servicios as $servicio)
-                                    <option value="{{ $servicio->id }}">{{ $servicio->nombre_servicio }}</option>
+                                    @if ($servicio->id == $orden->cod_servicio)
+                                        <option value="{{ $servicio->id }}" selected>{{ $servicio->nombre_servicio }}
+                                        </option>
+                                    @else
+                                        <option value="{{ $servicio->id }}">{{ $servicio->nombre_servicio }}</option>
+                                    @endif
                                 @endforeach
                             </select>
                             <span id="errorServicio" class="errMessage"></span>
@@ -111,7 +118,8 @@
                                             <div class="row col-12">
                                                 <div class="col-md-6">
                                                     <div id="detallesDispositivo" style="display: none;">
-                                                        <input type="text" class="detalleSiNo" id="detalleSiNo" hidden>
+                                                        <input type="text" class="detalleSiNo" id="detalleSiNo"
+                                                            hidden>
                                                         <div class="m-2">
                                                             <label for="rayones">¿El Equipo Posee Rayones?</label>
                                                             <div class="form-check">
@@ -495,14 +503,7 @@
                                     </div>
                                     <span id="errorTareasSinDispositivo" class="errMessage"></span>
                                 </div>
-
                             </div>
-                            {{-- <div class="mb-3">
-                            <label for="tareas" class="form-label">Tareas</label>
-                            <select class="form-select form-control" id="tareas" name="tareas">
-                                <option value="0">Seleccione una tarea</option>
-                            </select>
-                        </div> --}}
                             <div class="mb-3" id ="bloqueEncargado" style="display:none">
                                 <label for="tecnicoEncargado" class="form-label">Técnico encargado</label>
                                 <select class="form-select form-control" id="tecnicoEncargado" name="tecnicoEncargado">
@@ -534,7 +535,12 @@
                             <select class="form-select form-control" id="estadoOt" name="estadoOt">
                                 <option value="0">Seleccione un estado</option>
                                 @foreach ($estados as $estado)
-                                    <option value="{{ $estado->id }}">{{ $estado->descripcion_estado_ot }}</option>
+                                    @if ($estado->id == $orden->cod_estado_ot)
+                                        <option value="{{ $estado->id }}" selected>{{ $estado->descripcion_estado_ot }}
+                                        </option>
+                                    @else
+                                        <option value="{{ $estado->id }}">{{ $estado->descripcion_estado_ot }}</option>
+                                    @endif
                                 @endforeach
                             </select>
                             <span id="errorEstado" class="errMessage"></span>
@@ -544,8 +550,14 @@
                             <select class="form-select form-control" id="prioridad" name="prioridad">
                                 <option value="0">Seleccione una prioridad</option>
                                 @foreach ($prioridades as $prioridad)
-                                    <option value="{{ $prioridad->id }}">{{ $prioridad->descripcion_prioridad_ot }}
-                                    </option>
+                                    @if ($prioridad->id == $orden->cod_prioridad_ot)
+                                        <option value="{{ $prioridad->id }}" selected>
+                                            {{ $prioridad->descripcion_prioridad_ot }}
+                                        </option>
+                                    @else
+                                        <option value="{{ $prioridad->id }}">{{ $prioridad->descripcion_prioridad_ot }}
+                                        </option>
+                                    @endif
                                 @endforeach
                             </select>
                             <span id="errorPrioridad" class="errMessage"></span>
@@ -555,7 +567,12 @@
                             <select class="form-select form-control" id="tipo" name="tipo">
                                 <option value="0">Seleccione un tipo de orden de trabajo</option>
                                 @foreach ($tipos as $tipo)
-                                    <option value="{{ $tipo->id }}">{{ $tipo->descripcion_tipo_ot }}</option>
+                                    @if ($tipo->id == $orden->cod_tipo_ot)
+                                        <option value="{{ $tipo->id }}" selected>{{ $tipo->descripcion_tipo_ot }}
+                                        </option>
+                                    @else
+                                        <option value="{{ $tipo->id }}">{{ $tipo->descripcion_tipo_ot }}</option>
+                                    @endif
                                 @endforeach
                             </select>
                             <span id="errorTipo" class="errMessage"></span>
@@ -565,7 +582,12 @@
                             <select class="form-select form-control" id="tipoVisita" name="tipoVisita">
                                 <option value="0">Seleccione un tipo de visita</option>
                                 @foreach ($tiposVisitas as $tipo)
-                                    <option value="{{ $tipo->id }}">{{ $tipo->descripcion_tipo_visita }}</option>
+                                    @if ($tipo->id == $orden->cod_tipo_visita)
+                                        <option value="{{ $tipo->id }}" selected>{{ $tipo->descripcion_tipo_visita }}
+                                        </option>
+                                    @else
+                                        <option value="{{ $tipo->id }}">{{ $tipo->descripcion_tipo_visita }}</option>
+                                    @endif
                                 @endforeach
                             </select>
                             <span id="errorTipoVisita" class="errMessage"></span>
@@ -573,12 +595,14 @@
 
                         <div class="mb-3">
                             <label for="fecha" class="form-label">Fecha</label>
-                            <input type="date" class="form-control" id="fecha" name="fecha">
+                            <input type="date" class="form-control" id="fecha" name="fecha"
+                                value="{{ $orden->fecha_inicio_planificada_ot }}">
                             <span id="errorFecha" class="errMessage"></span>
                         </div>
                         <div class="mb-3">
                             <label for="cotizacion" class="form-label">Cotización</label>
-                            <input type="text" class="form-control" id="cotizacion" name="cotizacion">
+                            <input type="text" class="form-control" id="cotizacion" name="cotizacion"
+                                value="{{ $orden->cotizacion }}">
                             <span id="errorCotizacion" class="errMessage"></span>
                         </div>
 
@@ -588,5 +612,5 @@
             </div>
         </div>
     </main>
-    <script src="{{ asset('assets/js/ordenes/crearOrden.js') }}"></script>
+    <script src="{{ asset('assets/js/ordenes/editarOrden.js') }}"></script>
 @endsection

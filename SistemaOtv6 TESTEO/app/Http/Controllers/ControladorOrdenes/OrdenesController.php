@@ -79,9 +79,13 @@ class OrdenesController extends Controller
             'prioridad',
             'tipo',
             'tipoVisita',
-            'contactoOt'
+            'contactoOt',
+            'contactoOt.contacto',
+            'contactoOt.contacto.sucursal',
+            'contactoOt.contacto.sucursal.cliente',
         ])
             ->findOrFail($id);
+
 
         return view('ordenes.editar', compact('tipos', 'prioridades', 'estados', 'tiposVisitas', 'tecnicos', 'clientes', 'servicios', 'orden'));
     }
