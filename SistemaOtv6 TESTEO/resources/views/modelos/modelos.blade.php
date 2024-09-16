@@ -80,33 +80,39 @@
                         </form>
                     </div>
                 </div>
-                <div class="d-flex justify-content-between align-items-center mt-3">
-                    <form action="{{ route('modelos.buscar') }}" method="get" class="input-group">
+
+                <!-- Formulario de Búsqueda -->
+                <div>
+                    <form action="{{ route('modelos.buscar') }}" method="get" class="input-group mt-3">
                         <input type="text" name="search" id="search" class="form-control" placeholder="Buscar por ID, nombre, número de parte o descripción" value="{{ request('search') }}">
                         <button type="submit" class="btn btn-primary" style="background-color: #cc6633; border-color: #cc6633;">Buscar</button>
                     </form>
                 </div>
-                <div class="d-flex align-items-center justify-content-end" style="gap: 1rem;">
+
+                <!-- Botones de Agregar y Eliminar Filtro -->
+                <div class="d-flex align-items-center justify-content-end mt-3" style="gap: 1rem;">
                     <a href="{{ route('modelos.create') }}" class="btn btn-secondary btn-sm" style="background-color: #cc6633; border-color: #cc6633;">
-                        <i class="bi bi-filter-slash"></i> Agregar
+                        <i class="bi bi-plus"></i> Agregar
                     </a>
                     <a href="{{ route('modelos.index') }}" class="btn btn-secondary btn-sm" style="background-color: #cc6633; border-color: #cc6633;">
-                        <i class="bi bi-filter-slash"></i> Eliminar Filtro
+                        <i class="bi bi-x-circle"></i> Eliminar Filtro
                     </a>
                 </div>
+
+                <!-- Tabla de Modelos -->
                 <div class="table-responsive mt-3">
                     <table class="table table-striped" id="modelos_tabledata">
                         <thead>
                             <tr>
-                                <th onclick="sortTable(0)">Categoría</th> <!-- Columna para Categoría -->
-                                <th onclick="sortTable(1)">Subcategoría</th> <!-- Columna para Subcategoría -->
-                                <th onclick="sortTable(2)">Línea</th> <!-- Columna para Línea -->
-                                <th onclick="sortTable(3)">Sublinea</th> <!-- Columna para Sublinea -->
-                                <th onclick="sortTable(4)">Marca</th> <!-- Columna para Marca -->
-                                <th onclick="sortTable(5)">Id</th> <!-- Columna para Id -->
-                                <th onclick="sortTable(6)">Nombre Modelo</th> <!-- Columna para Nombre Modelo -->
-                                <th onclick="sortTable(7)">Part Number</th> <!-- Columna para Part Number -->
-                                <th onclick="sortTable(8)">Descripción Corta</th> <!-- Columna para Descripción Corta -->
+                                <th onclick="sortTable(0)">Categoría</th>
+                                <th onclick="sortTable(1)">Subcategoría</th>
+                                <th onclick="sortTable(2)">Línea</th>
+                                <th onclick="sortTable(3)">Sublinea</th>
+                                <th onclick="sortTable(4)">Marca</th>
+                                <th onclick="sortTable(5)">Id</th>
+                                <th onclick="sortTable(6)">Nombre Modelo</th>
+                                <th onclick="sortTable(7)">Part Number</th>
+                                <th onclick="sortTable(8)">Descripción Corta</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -124,12 +130,19 @@
                                 <td>{{ $modelo->desc_corta_modelo }}</td>
                                 <td>
                                     <div class="d-flex">
-                                        <a href="{{ route('modelos.show', $modelo->id) }}" class="btn btn-primary me-1" style="background-color: #cc0066; border-color: #cc0066;">
+                                        <a href="{{ route('modelos.show', $modelo->id) }}" class="btn btn-primary me-1" style="background-color: #cc0066; border-color: #cc0066; height: 38px; display: flex; align-items: center; justify-content: center;">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="#" class="btn btn-danger" style="background-color: #d9534f; border-color: #d43f3a;">
-                                            <i class="fas fa-trash-alt"></i>
+                                        <a href="{{ route('modelos.edit', $modelo->id) }}" class="btn btn-primary me-1" style="background-color: #cc6633; border-color: #cc6633; height: 38px; display: flex; align-items: center; justify-content: center;">
+                                            <i class="fas fa-edit"></i>
                                         </a>
+                                        <form action="{{ route('modelos.destroy', $modelo->id) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger" style="background-color: #d9534f; border-color: #d43f3a; height: 38px; display: flex; align-items: center; justify-content: center;">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
@@ -137,6 +150,8 @@
                         </tbody>
                     </table>
                 </div>
+
+                <!-- Paginación -->
                 <div class="d-flex justify-content-center mt-4">
                     @if ($modelos->hasPages())
                     <nav>
@@ -151,6 +166,7 @@
                                 <a class="page-link" href="{{ $modelos->url(1) }}" rel="prev" style="color: #cc6633;">&laquo;</a>
                             </li>
                             @endif
+
                             {{-- Previous Page Link --}}
                             @if ($modelos->onFirstPage())
                             <li class="page-item disabled" aria-disabled="true">
@@ -200,21 +216,9 @@
         </div>
     </div>
 </main>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('assets/js/mensajes/mensajes.js') }}"></script>
 <script src="{{ asset('assets/js/ordenar/OrdenarModelo.js') }}"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('search');
-
-        if (searchInput) {
-            searchInput.addEventListener('input', function() {
-                clearTimeout(window.searchTimeout);
-
-                window.searchTimeout = setTimeout(function() {
-                    document.getElementById('filter-form').submit();
-                }, 300); // Retraso de 300ms para evitar múltiples envíos mientras el usuario escribe
-            });
-        }
-    });
-</script>
 
 @endsection

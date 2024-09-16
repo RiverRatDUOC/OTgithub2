@@ -36,13 +36,12 @@
                     </div>
                     <div class="card-body">
 
-                        <!-- Mensaje de éxito -->
+                        <!-- Mensaje de éxito con SweetAlert2 -->
                         @if(session('success'))
-                        <div id="success-message" class="alert alert-success mt-4" role="alert">
-                            {{ session('success') }} Serás redirigido en <span id="counter">3</span> segundos.
-                            <br>
-                            <button id="cancel-redirect" class="btn btn-link p-0">Cancelar redirección y agregar otro</button>
-                            <span id="redirect-url" style="display: none;">{{ route('clientes.index') }}</span>
+                        <div id="success-message" class="d-none">
+                            <span id="success-type">{{ session('success_type', 'agregar') }}</span>
+                            <span id="module-name">Cliente</span>
+                            <span id="redirect-url">{{ route('clientes.index') }}</span>
                         </div>
                         @endif
 
@@ -95,12 +94,11 @@
 
                             <div class="form-group">
                                 <label for="web_cliente">Sitio Web</label>
-                                <input type="text" name="web_cliente" id="web_cliente" class="form-control" value="{{ old('web_cliente') }}">
+                                <input type="text" name="web_cliente" id="web_cliente" class="form-control" value="{{ old('web_cliente') }}" required>
                                 @error('web_cliente')
                                 <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
-
                             <div class="d-flex justify-content-between align-items-center mt-4">
                                 <!-- Botón Guardar -->
                                 <button type="submit" class="btn btn-primary" style="background-color: #cc0066; border-color: #cc0066;">

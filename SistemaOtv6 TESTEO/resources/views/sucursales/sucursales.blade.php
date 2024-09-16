@@ -50,21 +50,25 @@
                             @foreach ($sucursales as $sucursal)
                             <tr>
                                 <td>{{ $sucursal->id }}</td>
-                                <td>{{ $sucursal->nombre_sucursal }}</td>
-                                <td>{{ $sucursal->telefono_sucursal }}</td>
-                                <td>{{ $sucursal->direccion_sucursal }}</td>
-                                <td>{{ $sucursal->cliente->nombre_cliente }}</td>
+                                <td>{{ $sucursal->nombre_sucursal ?? 'No disponible' }}</td>
+                                <td>{{ $sucursal->telefono_sucursal ?? 'No disponible' }}</td>
+                                <td>{{ $sucursal->direccion_sucursal ?? 'No disponible' }}</td>
+                                <td>{{ $sucursal->cliente->nombre_cliente ?? 'No disponible' }}</td>
                                 <td>
                                     <div class="d-flex">
-                                        <a href="{{ route('sucursales.show', $sucursal->id) }}" class="btn btn-primary me-1" style="background-color: #cc0066; border-color: #cc0066;">
+                                        <a href="{{ route('sucursales.show', $sucursal->id) }}" class="btn btn-primary me-1" style="background-color: #cc0066; border-color: #cc0066; height: 38px; display: flex; align-items: center; justify-content: center;">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="{{ route('sucursales.edit', $sucursal->id) }}" class="btn btn-primary me-1" style="background-color: #cc6633; border-color: #cc6633;">
+                                        <a href="{{ route('sucursales.edit', $sucursal->id) }}" class="btn btn-primary me-1" style="background-color: #cc6633; border-color: #cc6633; height: 38px; display: flex; align-items: center; justify-content: center;">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a href="#" class="btn btn-danger" style="background-color: #d9534f; border-color: #d43f3a;">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </a>
+                                        <form action="{{ route('sucursales.destroy', $sucursal->id) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger" style="background-color: #d9534f; border-color: #d43f3a; height: 38px; display: flex; align-items: center; justify-content: center;">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
@@ -138,6 +142,8 @@
         </div>
     </div>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('assets/js/mensajes/mensajes.js') }}"></script>
 <script src="{{ asset('assets/js/ordenar/OrdenarSucursal.js') }}"></script>
 
 @endsection

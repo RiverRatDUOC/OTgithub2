@@ -14,7 +14,6 @@
                 <!-- Editar Sucursal -->
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     <h2>Editar Sucursal</h2>
-
                 </div>
 
                 <!-- Formulario de Edición -->
@@ -23,6 +22,27 @@
                         Editar Información de la Sucursal
                     </div>
                     <div class="card-body">
+
+                        <!-- Mensaje de éxito con SweetAlert2 -->
+                        @if(session('success'))
+                        <div id="success-message-edit" class="d-none">
+                            <span id="success-type">{{ session('success_type', 'editar') }}</span>
+                            <span id="module-name">Sucursal</span>
+                            <span id="redirect-url">{{ route('sucursales.index') }}</span>
+                        </div>
+                        @endif
+
+                        <!-- Mensaje de error -->
+                        @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        @endif
+
                         <form action="{{ route('sucursales.update', $sucursal->id) }}" method="POST">
                             @csrf
                             @method('PUT')
@@ -56,7 +76,7 @@
                                 <select name="cliente_id" id="cliente_id" class="form-control" required>
                                     <option value="" disabled>Seleccione un cliente</option>
                                     @foreach($clientes as $cliente)
-                                    <option value="{{ $cliente->id }}" {{ $sucursal->cod_cliente == $cliente->id ? 'selected' : '' }}>
+                                    <option value="{{ $cliente->id }}" {{ $sucursal->cliente_id == $cliente->id ? 'selected' : '' }}>
                                         {{ $cliente->nombre_cliente }}
                                     </option>
                                     @endforeach
@@ -81,4 +101,7 @@
         </div>
     </div>
 </main>
+
+<!-- Incluye el archivo JavaScript -->
+<script src="{{ asset('assets/js/mensajes/mensajes.js') }}"></script>
 @endsection

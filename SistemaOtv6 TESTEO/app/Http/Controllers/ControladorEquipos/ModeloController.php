@@ -13,13 +13,13 @@ use App\Models\Marca;
 
 class ModeloController extends Controller
 {
-    //MUESTRA LA LISTA DE MODELOS CON FILTROS Y PAGINACION
+    // Muestra la lista de modelos con filtros y paginación
     public function index(Request $request)
     {
         return $this->handleRequest($request);
     }
 
-    //REALIZA BUSQUEDA DE LOS MODELOS SEGUN UN TERMINO DADO
+    // Realiza búsqueda de los modelos según un término dado
     public function buscar(Request $request)
     {
         // Actualizar el parámetro de búsqueda con un valor por defecto si está vacío
@@ -27,7 +27,7 @@ class ModeloController extends Controller
         return $this->handleRequest($request);
     }
 
-    //MUESTRA EL DETALLE DE UN MODELO ESPECIFICO
+    // Muestra el detalle de un modelo específico
     public function show($id)
     {
         $modelo = Modelo::with(['sublinea.linea.subcategoria.categoria', 'marca', 'dispositivos.sucursal'])
@@ -35,13 +35,83 @@ class ModeloController extends Controller
         $modelosRelacionados = Modelo::where('id', '!=', $id)->get();
         return view('modelos.detalle', compact('modelo', 'modelosRelacionados'));
     }
-    public function update(Request $request, $id)
+
+    // Muestra el formulario para crear un nuevo modelo
+    public function create()
+    {
+        $categorias = Categoria::all();
+        $subcategorias = Subcategoria::all();
+        $lineas = Linea::all();
+        $sublineas = Sublinea::all();
+        $marcas = Marca::all();
+
+        return view('modelos.agregar', compact('categorias', 'subcategorias', 'lineas', 'sublineas', 'marcas'));
+    }
+
+    // Almacena un nuevo modelo en la base de datos
+    public function store(Request $request)
+    {
+        $request->validate([
+            'nombre_modelo' => 'required|string|max:255',
+            'part_number_modelo' => 'nullable|string|max:255',
+            'desc_corta_modelo' => 'nullable|string',
+            'desc_larga_modelo' => 'nullable|string',
+            'cod_categoria' => 'required|integer',
+            'cod_subcategoria' => 'required|integer',
+            'cod_linea' => 'required|integer',
+            'cod_sublinea' => 'required|integer',
+            'cod_marca' => 'required|integer',
+        ]);
+
+        Modelo::create($request->all());
+
+        return redirect()->route('modelos.index')->with('success', 'Modelo agregado con éxito.');
+    }
+
+    // Muestra el formulario para editar un modelo existente
+    public function edit($id)
     {
         $modelo = Modelo::findOrFail($id);
+        $categorias = Categoria::all();
+        $subcategorias = Subcategoria::all();
+        $lineas = Linea::all();
+        $sublineas = Sublinea::all();
+        $marcas = Marca::all();
+
+        return view('modelos.editar', compact('modelo', 'categorias', 'subcategorias', 'lineas', 'sublineas', 'marcas'));
+    }
+
+    // Actualiza un modelo existente en la base de datos
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nombre_modelo' => 'required|string|max:255',
+            'part_number_modelo' => 'nullable|string|max:255',
+            'desc_corta_modelo' => 'nullable|string',
+            'desc_larga_modelo' => 'nullable|string',
+            'cod_categoria' => 'required|integer',
+            'cod_subcategoria' => 'required|integer',
+            'cod_linea' => 'required|integer',
+            'cod_sublinea' => 'required|integer',
+            'cod_marca' => 'required|integer',
+        ]);
+
+        $modelo = Modelo::findOrFail($id);
         $modelo->update($request->all());
+
         return redirect()->route('modelos.index')->with('success', 'Modelo actualizado con éxito.');
     }
-    //OBTENER LOS FILTROS DE LA SOLICITUD
+
+    // Elimina un modelo existente de la base de datos
+    public function destroy($id)
+    {
+        $modelo = Modelo::findOrFail($id);
+        $modelo->delete();
+
+        return redirect()->route('modelos.index')->with('success', 'Modelo eliminado con éxito.');
+    }
+
+    // Obtiene los filtros de la solicitud
     private function handleRequest(Request $request)
     {
         $categoriaId = $request->input('categoria');
@@ -51,7 +121,9 @@ class ModeloController extends Controller
         $marcaId = $request->input('marca');
         $modeloId = $request->input('modelo');
         $search = $request->input('search');
+
         $query = Modelo::query();
+
         if ($categoriaId) {
             $query->whereHas('sublinea.linea.subcategoria.categoria', function ($q) use ($categoriaId) {
                 $q->where('id', $categoriaId);
@@ -81,11 +153,14 @@ class ModeloController extends Controller
                 $q->where('id', $search)
                     ->orWhere('nombre_modelo', 'like', "%{$search}%")
                     ->orWhere('part_number_modelo', 'like', "%{$search}%")
-                    ->orWhere('desc_corta_modelo', 'like', "%{$search}%");
+                    ->orWhere('desc_corta_modelo', 'like', "%{$search}%")
+                    ->orWhere('desc_larga_modelo', 'like', "%{$search}%");
             });
         }
-        //OBTENER Y PAGINAR LOS RESULTADOS
+
+        // Obtener y paginar los resultados
         $modelos = $query->orderBy('id', 'desc')->paginate(50);
+
         $categorias = Categoria::all();
         $subcategorias = $categoriaId ? Subcategoria::where('cod_categoria', $categoriaId)->get() : Subcategoria::all();
         $lineas = $subcategoriaId ? Linea::where('cod_subcategoria', $subcategoriaId)->get() : Linea::all();
@@ -95,7 +170,8 @@ class ModeloController extends Controller
                 ->from('modelo')
                 ->where('cod_sublinea', $sublineaId);
         })->get() : Marca::all();
-        //CONTAR LOS RESULTADOS DE LAS TABLAS
+
+        // Contar los resultados de las tablas
         $subcategoriaCounts = Subcategoria::select('id')
             ->get()
             ->mapWithKeys(function ($subcategoria) {
@@ -121,6 +197,7 @@ class ModeloController extends Controller
             ->mapWithKeys(function ($marca) {
                 return [$marca->id => Modelo::where('cod_marca', $marca->id)->count()];
             });
+
         return view('modelos.modelos', compact('modelos', 'categorias', 'subcategorias', 'lineas', 'sublineas', 'marcas', 'subcategoriaCounts', 'lineaCounts', 'sublineaCounts', 'marcaCounts'));
     }
 }

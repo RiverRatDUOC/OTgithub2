@@ -27,13 +27,11 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             Swal.fire({
-                title: "Éxito",
-                text: successMessage,
+                position: "top-end",
                 icon: "success",
-                timer: 1500, // Tiempo en milisegundos
+                title: successMessage,
                 showConfirmButton: false,
-                confirmButtonColor: "#cc6633", // Mismo color de confirmación
-                position: "center", // Posición centrada
+                timer: 1500, // Tiempo en milisegundos
             }).then(() => {
                 // Redirigir después de mostrar el mensaje de éxito
                 window.location.href = redirectUrl;
@@ -66,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         ).then(() => {
                             // Si quieres redirigir después de mostrar el mensaje de éxito, puedes hacer esto:
                             window.location.href =
-                                "{{ route('clientes.index') }}";
+                                "{{ route('sucursales.index') }}";
                         });
                         // Enviar el formulario si se confirma
                         this.closest("form").submit();

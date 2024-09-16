@@ -70,10 +70,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/sucursales', [SucursalesController::class, 'index'])->name('sucursales.index'); // Ruta para listar sucursales
     Route::get('/sucursales/agregar', [SucursalesController::class, 'create'])->name('sucursales.create'); // Ruta para crear una nueva sucursal
     Route::get('/sucursales/buscar', [SucursalesController::class, 'buscar'])->name('sucursales.buscar'); // Ruta para buscar sucursales
+    Route::post('/sucursales', [SucursalesController::class, 'store'])->name('sucursales.store'); // Ruta para almacenar la nueva sucursal
     Route::get('/sucursales/{id}', [SucursalesController::class, 'show'])->name('sucursales.show'); // Ruta para ver el detalle de una sucursal
-    Route::post('/sucursales/agregar', [SucursalesController::class, 'store'])->name('sucursales.store'); // Ruta para almacenar la nueva sucursal
     Route::get('/sucursales/{id}/editar', [SucursalesController::class, 'edit'])->name('sucursales.edit'); // Ruta para editar una sucursal
     Route::put('/sucursales/{id}', [SucursalesController::class, 'update'])->name('sucursales.update'); // Ruta para actualizar una sucursal
+    Route::delete('/sucursales/{id}', [SucursalesController::class, 'destroy'])->name('sucursales.destroy'); // Ruta para eliminar una sucursal
 
 
     // Rutas de Servicios
@@ -99,12 +100,13 @@ Route::middleware(['auth'])->group(function () {
 
     // Rutas para el controlador ModeloController
     Route::get('/modelos', [ModeloController::class, 'index'])->name('modelos.index'); // Ruta para listar modelos
-    Route::get('/modelos/agregar', [ModeloController::class, 'create'])->name('modelos.create'); // Ruta para crear un nuevo modelo
-    Route::get('/modelos/buscar', [ModeloController::class, 'buscar'])->name('modelos.buscar'); // Ruta para buscar modelos
-    Route::get('modelos/{id}', [ModeloController::class, 'show'])->name('modelos.show');
+    Route::get('/modelos/create', [ModeloController::class, 'create'])->name('modelos.create'); // Ruta para mostrar el formulario para crear un nuevo modelo
+    Route::post('/modelos', [ModeloController::class, 'store'])->name('modelos.store'); // Ruta para almacenar un nuevo modelo
+    Route::get('/modelos/{id}/edit', [ModeloController::class, 'edit'])->name('modelos.edit'); // Ruta para mostrar el formulario para editar un modelo existente
+    Route::put('/modelos/{id}', [ModeloController::class, 'update'])->name('modelos.update'); // Ruta para actualizar un modelo existente
+    Route::get('/modelos/{id}', [ModeloController::class, 'show'])->name('modelos.show'); // Ruta para mostrar los detalles de un modelo
     Route::delete('/modelos/{id}', [ModeloController::class, 'destroy'])->name('modelos.destroy'); // Ruta para eliminar un modelo
-
-
+    Route::get('/modelos/buscar', [ModeloController::class, 'buscar'])->name('modelos.buscar'); // Ruta para buscar modelos
 
     // Ruta para usuarios utilizando el controlador
     Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios.index');

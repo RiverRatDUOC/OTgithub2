@@ -27,7 +27,7 @@ class SucursalesController extends Controller
             'nombre_sucursal' => 'required|string|max:255',
             'telefono_sucursal' => 'required|string|max:255',
             'direccion_sucursal' => 'required|string|max:255',
-            'cliente_id' => 'required|exists:cliente,id',
+            'cliente_id' => 'required|exists:cliente,id', // Cambiado a 'cliente' en lugar de 'clientes'
         ]);
 
         // Crear la sucursal con el cliente_id
@@ -35,7 +35,7 @@ class SucursalesController extends Controller
             'nombre_sucursal' => $request->nombre_sucursal,
             'telefono_sucursal' => $request->telefono_sucursal,
             'direccion_sucursal' => $request->direccion_sucursal,
-            'cod_cliente' => $request->cliente_id,
+            'cod_cliente' => $request->cliente_id, // Asegúrate de que el nombre del campo en la tabla Sucursal sea 'cod_cliente'
         ]);
 
         return redirect()->route('sucursales.index')->with('success', 'Sucursal creada exitosamente.');
@@ -73,7 +73,7 @@ class SucursalesController extends Controller
             'nombre_sucursal' => 'required|string|max:255',
             'telefono_sucursal' => 'required|string|max:255',
             'direccion_sucursal' => 'required|string|max:255',
-            'cliente_id' => 'required|exists:cliente,id',
+            'cliente_id' => 'required|exists:cliente,id', // Cambiado a 'cliente' en lugar de 'clientes'
         ]);
 
         // Encontrar la sucursal y actualizarla
@@ -82,9 +82,21 @@ class SucursalesController extends Controller
             'nombre_sucursal' => $request->nombre_sucursal,
             'telefono_sucursal' => $request->telefono_sucursal,
             'direccion_sucursal' => $request->direccion_sucursal,
-            'cod_cliente' => $request->cliente_id,
+            'cod_cliente' => $request->cliente_id, // Asegúrate de que el nombre del campo en la tabla Sucursal sea 'cod_cliente'
         ]);
 
         return redirect()->route('sucursales.index')->with('success', 'Sucursal actualizada exitosamente.');
+    }
+
+    public function destroy($id)
+    {
+        // Obtener la sucursal por el ID
+        $sucursal = Sucursal::findOrFail($id);
+
+        // Eliminar la sucursal
+        $sucursal->delete();
+
+        // Mostrar el mensaje en la misma página y redirigir con JavaScript desde la vista
+        return back()->with('success', 'Sucursal eliminada exitosamente. Serás redirigido en unos segundos.');
     }
 }
