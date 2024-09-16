@@ -606,7 +606,8 @@
                             <span id="errorCotizacion" class="errMessage"></span>
                         </div>
 
-                        <button type="button" class="btn btn-primary" onclick="validar()">Guardar</button>
+                        <button type="button" class="btn btn-primary"
+                            onclick="validar({{ $orden->numero_ot }})">Guardar</button>
                     </form>
                 </div>
             </div>

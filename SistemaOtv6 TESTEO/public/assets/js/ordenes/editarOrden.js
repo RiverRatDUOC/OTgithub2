@@ -15,15 +15,6 @@ $(document).ready(function () {
     var sucursal = $("#sucursal").val();
     manejarCambioServicio(servicioId, sucursal);
 
-    orden.equipo_tecnico.forEach(element => {
-
-        console.log(element.cod_tecnico);
-        if (!selectedTecnicos[element.cod_tecnico]) {
-            selectedTecnicos[element.cod_tecnico] = [];
-        }
-        var currentPageNumber = 1;
-        selectedTecnicos[element.cod_tecnico].push(currentPageNumber);
-    });
 
 
 
@@ -784,7 +775,7 @@ function cancelarAccesorios() {
 });
 
 
-function validar(){
+function validar($numOt){
     var flagValidacion =  true; //Bandera que dira si los elementos estan validados o no
 
     //Validación del campo de descripción
@@ -1479,12 +1470,12 @@ function validar(){
     if(flagValidacion == false){
         $('html, body').animate({ scrollTop: 0 }, 'slow');
     }else{
-        enviarDatos();
+        enviarDatos($numOt);
     }
 }
 
 
-function enviarDatos(){
+function enviarDatos($numOt){
     console.log("Enviando datos");
     var datosJson = {};
 
@@ -1686,7 +1677,7 @@ function enviarDatos(){
 
     $.ajax({
         type: "POST",
-        url: "/ordenes/agregar",
+        url: "/ordenes/"+$numOt+"/editar",
         data: datosJson,
         success: function (data) {
             let timerInterval;
