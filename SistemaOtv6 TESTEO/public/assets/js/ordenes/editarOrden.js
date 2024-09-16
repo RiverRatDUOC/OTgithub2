@@ -15,6 +15,17 @@ $(document).ready(function () {
     var sucursal = $("#sucursal").val();
     manejarCambioServicio(servicioId, sucursal);
 
+    orden.equipo_tecnico.forEach(element => {
+
+        console.log(element.cod_tecnico);
+        if (!selectedTecnicos[element.cod_tecnico]) {
+            selectedTecnicos[element.cod_tecnico] = [];
+        }
+        var currentPageNumber = 1;
+        selectedTecnicos[element.cod_tecnico].push(currentPageNumber);
+    });
+
+
 
 });
 function cargarTareas(servicioId) {
@@ -67,6 +78,20 @@ function cargarTareasSinDispositivo(servicioId) {
                     var startIndex = (currentPage - 1) * pageSize;
                     var endIndex = startIndex + pageSize;
                     var paginatedData = data.slice(startIndex, endIndex);
+
+
+                    orden.tareas_ot.forEach(element => {
+                        var index = data.findIndex(tarea => tarea.id === element.cod_tarea);
+                        if (index !== -1) {
+                            var pageNumber = Math.ceil((index + 1) / pageSize);
+
+                            if (!selectedTareasSinDispo[element.cod_tarea]) {
+                                selectedTareasSinDispo[element.cod_tarea] = [];
+                            }
+                            selectedTareasSinDispo[element.cod_tarea].push(pageNumber);
+                        }
+
+                    });
 
                     listaTareas = "";
                     $.each(paginatedData, function (index, tarea) {
@@ -218,26 +243,41 @@ function cargarContactos(sucursalId) {
             var currentPage = 1;
             var totalPages = Math.ceil(data.length / pageSize);
 
+            orden.contacto_ot.forEach(element => {
+                console.log(element.cod_contacto);
+                var index = data.findIndex(contacto => contacto.id === element.cod_contacto);
+                if (index !== -1) {
+                    var pageNumber = Math.ceil((index + 1) / pageSize);
+                    if (!selectedContacts[element.cod_contacto]) {
+                        selectedContacts[element.cod_contacto] = [];
+                    }
+                    selectedContacts[element.cod_contacto].push(pageNumber);
+                }
+            });
             function paginateList(data, currentPage) {
                 var startIndex = (currentPage - 1) * pageSize;
                 var endIndex = startIndex + pageSize;
                 var paginatedData = data.slice(startIndex, endIndex);
 
                 listContactos = "";
+                var found = 0;
+                console.log("contador found: "+found);
                 $.each(paginatedData, function (index, contacto) {
                     var isChecked = selectedContacts[contacto.id] && selectedContacts[contacto.id].includes(currentPage);
-                    listContactos +=
-                    "<li class='list-group-item'> <input style='margin-left:2px;' class='form-check-input ' type='checkbox' value='" +
-                    contacto.id +
-                    "' id='" +
-                    contacto.id +
-                    "'" + (isChecked ? " checked" : "") + ">" +
-                    "<label style='margin-left:20px' class='form-check-label stretched-link' for='" +
-                    contacto.id +
-                    "'>" +
-                    contacto.nombre_contacto +
-                    "</label>" +
-                    "</li>";
+
+                        listContactos +=
+                        "<li class='list-group-item'> <input style='margin-left:2px;' class='form-check-input ' type='checkbox' value='" +
+                        contacto.id +
+                        "' id='" +
+                        contacto.id +
+                        "'" + (isChecked ? " checked" : "") + ">" +
+                        "<label style='margin-left:20px' class='form-check-label stretched-link' for='" +
+                        contacto.id +
+                        "'>" +
+                        contacto.nombre_contacto +
+                        "</label>" +
+                        "</li>";
+
                 });
 
                 $("#contacto").html(listContactos);
@@ -341,6 +381,20 @@ function cargarTecnicosEncargados(servicioId) {
             var pageSize = 5; // number of items per page
             var currentPage = 1;
             var totalPages = Math.ceil(data.length / pageSize);
+
+            orden.equipo_tecnico.forEach(element => {
+
+                console.log(element.cod_tecnico);
+                var index = data.findIndex(tecnico => tecnico.id === element.cod_tecnico);
+                if (index !== -1) {
+                    var pageNumber = Math.ceil((index + 1) / pageSize);
+                    if (!selectedTecnicos[element.cod_tecnico]) {
+                        selectedTecnicos[element.cod_tecnico] = [];
+                    }
+
+                    selectedTecnicos[element.cod_tecnico].push(pageNumber);
+                }
+            });
 
             var listsEquipoTecnico = "";
             $.each(data, function (index, tecnico) {

@@ -83,6 +83,12 @@ class OrdenesController extends Controller
             'contactoOt.contacto',
             'contactoOt.contacto.sucursal',
             'contactoOt.contacto.sucursal.cliente',
+            'tareasOt',
+            'dispositivoOt',
+            'dispositivoOt.detalles',
+            'dispositivoOt.accesorios',
+            'dispositivoOt.tareaDispositivo',
+            'equipoTecnico'
         ])
             ->findOrFail($id);
 
@@ -92,7 +98,6 @@ class OrdenesController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request);
         $contador = $request->input('contadorBloques');
 
         $validator = Validator::make($request->all(), [
@@ -303,8 +308,13 @@ class OrdenesController extends Controller
             // return redirect()->back()->withErrors($validator)->withInput();
             // return redirect()->route('ordenes.index')->with('error', 'Error al crear la orden de trabajo.');
         }
-        dd($ot);
     }
+
+    public function update(Request $request)
+    {
+        dd($request);
+    }
+
 
     public static function obtener_feriados_chile()
     {
