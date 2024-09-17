@@ -4,20 +4,27 @@ var selectedTecnicos = {};
 var selectedTareasSinDispo = {};
 
 var orden;
+
+var idOrden;
 $(document).ready(function () {
-    orden = JSON.parse(document.getElementById("orden").value);
-    console.log(orden.contacto_ot[0].contacto.sucursal.cod_cliente);
-    cargarSucursales(orden.contacto_ot[0].contacto.sucursal.cod_cliente);
-    cargarContactos(orden.contacto_ot[0].contacto.sucursal.id);
-    $("#servicio").prop("disabled", false);
-    $("#bloqueContactos").css("display", "block");
-    var servicioId = $("#servicio").val();
-    var sucursal = $("#sucursal").val();
-    manejarCambioServicio(servicioId, sucursal);
-
-
-
-
+    idOrden = document.getElementById("idOrden").value;
+    $.ajax({
+        type: 'GET',
+        url: '/orden/obtenerOrden/' + idOrden,
+        dataType: 'json',
+        success: function(data) {
+            orden = data;
+            console.log(orden);
+            console.log(orden.contacto_ot[0].contacto.sucursal.cod_cliente);
+            cargarSucursales(orden.contacto_ot[0].contacto.sucursal.cod_cliente);
+            cargarContactos(orden.contacto_ot[0].contacto.sucursal.id);
+            $("#servicio").prop("disabled", false);
+            $("#bloqueContactos").css("display", "block");
+            var servicioId = $("#servicio").val();
+            var sucursal = $("#sucursal").val();
+            manejarCambioServicio(servicioId, sucursal);
+        }
+    });
 });
 function cargarTareas(servicioId) {
     if (servicioId == 0) {
@@ -28,8 +35,34 @@ function cargarTareas(servicioId) {
             url: "/tareas/" + servicioId,
             success: function (data) {
                 var listaTareas = "";
+
+                // console.log(orden.dispositivo_ot[0].tarea_dispositivo[0].cod_tarea);
+                // var listaTareas = {};
+                // console.log(orden.dispositivo_ot[1].tarea_dispositivo);
+                // orden.dispositivo_ot.forEach(dispositivo => {
+                //     dispositivo.tarea_dispositivo.forEach(tarea => {
+                //         listaTareas.push(tarea.cod_tarea);
+                //     });
+                // });
+
+                // console.log(listaTareas);
+
                 $.each(data, function (index, tarea) {
-                    listaTareas +=
+                    if(orden.dispositivo_ot[0].tarea_dispositivo[0].cod_tarea == tarea.id){
+                        listaTareas +=
+                        "<li class='list-group-item'> <input style='margin-left:2px;' class='form-check-input ' type='checkbox' checked value='" +
+                        tarea.id +
+                        "' id='" +
+                        tarea.id +
+                        "'>" +
+                        "<label style='margin-left:20px' class='form-check-label stretched-link' for='" +
+                        tarea.id +
+                        "'>" +
+                        tarea.nombre_tarea +
+                        "</label>" +
+                        "</li>";
+                    }else{
+                        listaTareas +=
                         "<li class='list-group-item'> <input style='margin-left:2px;' class='form-check-input ' type='checkbox' value='" +
                         tarea.id +
                         "' id='" +
@@ -41,6 +74,8 @@ function cargarTareas(servicioId) {
                         tarea.nombre_tarea +
                         "</label>" +
                         "</li>";
+                    }
+
                 });
 
                 $("#tareas-0").html(listaTareas);
@@ -155,15 +190,27 @@ function cargarDispositivos(sucursalId,servicioId) {
                 var listaDispositivos =
                     "<option value='0'>Seleccione un dispositivo</option>";
                 $.each(data, function (index, dispositivo) {
-                    listaDispositivos +=
-                        '<option value="' +
-                        dispositivo.id +
-                        '">' +
-                        "Número de serie: " +
-                        dispositivo.numero_serie_dispositivo +
-                        " - Nombre modelo: " +
-                        dispositivo.modelo.nombre_modelo +
-                        "</option>";
+                    if(dispositivo.id == orden.dispositivo_ot[0].cod_dispositivo){
+                        listaDispositivos +=
+                            '<option value="' +
+                            dispositivo.id +
+                            '" selected>' +
+                            "Número de serie: " +
+                            dispositivo.numero_serie_dispositivo +
+                            " - Nombre modelo: " +
+                            dispositivo.modelo.nombre_modelo +
+                            "</option>";
+                    }else{
+                        listaDispositivos +=
+                            '<option value="' +
+                            dispositivo.id +
+                            '">' +
+                            "Número de serie: " +
+                            dispositivo.numero_serie_dispositivo +
+                            " - Nombre modelo: " +
+                            dispositivo.modelo.nombre_modelo +
+                            "</option>";
+                    }
                         console.log(dispositivo.modelo.sublinea.cod_linea);
                     if(dispositivo.modelo.sublinea.cod_linea != 2)
                     {
@@ -507,11 +554,118 @@ function manejarCambioServicio(servicioId, sucursal){
     for (var key in selectedTareasSinDispo) {
         delete selectedTareasSinDispo[key];
     }
-
-    cargarDispositivos(sucursal, servicioId);
+    cargarDispositivos(orden.contacto_ot[0].contacto.cod_sucursal, orden.servicio.id);
+    // cargarDispositivos(sucursal, servicioId);
     cargarTipoServicio(servicioId);
     // cargarTareas(servicioId);
     cargarTecnicosEncargados(servicioId);
+
+    var block = $(".block-relieve");
+    if(orden.dispositivo_ot[0].detalles)
+    {
+        block.find("#detallesDispositivo").css("display", "block");
+        block.find("#botonAgregarDetalle").css("display", "none");
+        block.find("#botonCancelarDetalle").css("display", "block");
+        block.find("#detalleSiNo").attr("value", "1");
+
+        if(orden.dispositivo_ot[0].detalles.rayones_det == 'El equipo no posee rayones.'){
+            block.find("#rayonesNo").prop("checked", true);
+        }else{
+            block.find("#rayonesSi").prop("checked", true);
+            block.find("#rayones-Texto").find('input[type="text"]').show();
+            block.find("#rayones-Texto").find('input[type="text"]').val(orden.dispositivo_ot[0].detalles.rayones_det);
+        }
+
+        if(orden.dispositivo_ot[0].detalles.rupturas_det == 'El equipo no posee rupturas.'){
+            block.find("#rupturasNo").prop("checked", true);
+        }else{
+            block.find("#rupturasSi").prop("checked", true);
+            block.find("#rupturas-Texto").find('input[type="text"]').show();
+            block.find("#rupturas-Texto").find('input[type="text"]').val(orden.dispositivo_ot[0].detalles.rupturas_det);
+        }
+
+        if(orden.dispositivo_ot[0].detalles.tornillos_det == 'El equipo posee todos los tornillos de su carcasa.'){
+            block.find("#tornillosSi").prop("checked", true);
+        }else{
+            block.find("#tornillosNo").prop("checked", true);
+            block.find("#tornillos-Texto").find('input[type="text"]').show();
+            block.find("#tornillos-Texto").find('input[type="text"]').val(orden.dispositivo_ot[0].detalles.tornillos_det);
+        }
+
+        if(orden.dispositivo_ot[0].detalles.gomas_det == 'El equipo posee todas las gomas de la base en buen estado.'){
+            block.find("#gomasSi").prop("checked", true);
+        }else{
+            block.find("#gomasNo").prop("checked", true);
+            block.find("#gomas-Texto").find('input[type="text"]').show();
+            block.find("#gomas-Texto").find('input[type="text"]').val(orden.dispositivo_ot[0].detalles.gomas_det);
+        }
+
+        block.find("#estado").val(orden.dispositivo_ot[0].detalles.estado_dispositivo_det);
+        block.find("#observacion").val(orden.dispositivo_ot[0].detalles.observaciones_det);
+
+    }
+
+    if(orden.dispositivo_ot[0].accesorios)
+    {
+        block.find("#accesoriosDispositivo").css("display", "block");
+        block.find("#botonAgregarAccesorio").css("display", "none");
+        block.find("#botonCancelarAccesorio").css("display", "block");
+        block.find("#accesorioSiNo").attr("value", "1");
+
+        //Se debe agregar un número o algún valor en la base de datos para saber si se marco la opción si o no.
+        if(orden.dispositivo_ot[0].accesorios.cargador_acc == 'El equipo posee su cargador.'){
+            block.find("#cargadorSi").prop("checked", true);
+            block.find("#cargador-Texto").find('input[type="text"]').show();
+            block.find("#cargador-Texto").find('input[type="text"]').val(orden.dispositivo_ot[0].accesorios.cargador_acc);
+        }else{
+            block.find("#cargadorNo").prop("checked", true);
+            block.find("#cargador-Texto").find('input[type="text"]').show();
+            block.find("#cargador-Texto").find('input[type="text"]').val(orden.dispositivo_ot[0].accesorios.cargador_acc);
+        }
+
+        if(orden.dispositivo_ot[0].accesorios.cable_acc == "El equipo no posee cable de poder."){
+            block.find("#cableNo").prop("checked", true);
+        }else{
+            block.find("#cableSi").prop("checked", true);
+            block.find("#cable-Texto").find('input[type="text"]').show();
+            block.find("#cable-Texto").find('input[type="text"]').val(orden.dispositivo_ot[0].accesorios.cable_acc);
+        }
+
+        if(orden.dispositivo_ot[0].accesorios.adaptador_acc == "El equipo no posee adaptador de poder."){
+            block.find("#adaptadorNo").prop("checked", true);
+        }else{
+            block.find("#adaptadorSi").prop("checked", true);
+            block.find("#adaptador-Texto").find('input[type="text"]').show();
+            block.find("#adaptador-Texto").find('input[type="text"]').val(orden.dispositivo_ot[0].accesorios.adaptador_acc);
+        }
+
+        //Tambien aqui ingresar un valor para saber cual de ambas opciones fue seleccionada.
+        if(orden.dispositivo_ot[0].accesorios.bateria_acc == "El equipo no posee batería."){
+            block.find("#bateriaNo").prop("checked", true);
+            block.find("#bateria-Texto").find('input[type="text"]').show();
+            block.find("#bateria-Texto").find('input[type="text"]').val(orden.dispositivo_ot[0].accesorios.bateria_acc);
+        }else{
+            block.find("#bateriaSi").prop("checked", true);
+            block.find("#bateria-Texto").find('input[type="text"]').show();
+            block.find("#bateria-Texto").find('input[type="text"]').val(orden.dispositivo_ot[0].accesorios.bateria_acc);
+        }
+
+        if(orden.dispositivo_ot[0].accesorios.pantalla_acc == "El equipo no posee problemas con la pantalla."){
+            block.find("#pantallaNo").prop("checked", true);
+        }else{
+            block.find("#pantallaSi").prop("checked", true);
+            block.find("#pantalla-Texto").find('input[type="text"]').show();
+            block.find("#pantalla-Texto").find('input[type="text"]').val(orden.dispositivo_ot[0].accesorios.pantalla_acc);
+        }
+
+        if(orden.dispositivo_ot[0].accesorios.teclado_acc == "El equipo no posee problemas con el teclado."){
+            block.find("#tecladoNo").prop("checked", true);
+        }else{
+            block.find("#tecladoSi").prop("checked", true);
+            block.find("#teclado-Texto").find('input[type="text"]').show();
+            block.find("#teclado-Texto").find('input[type="text"]').val(orden.dispositivo_ot[0].accesorios.teclado_acc);
+        }
+    }
     if (servicioId > 0) {
         $("#bloqueEncargado").css("display", "block");
         $("#bloqueEquipoTecnico").css("display", "block");

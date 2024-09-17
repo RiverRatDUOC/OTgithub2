@@ -12,6 +12,7 @@
             <div class="card">
                 <div class="card-body">
                     <input type="hidden" id="orden" value="{{ json_encode($orden) }}">
+                    <input type="hidden" id="idOrden" value="{{ $orden->numero_ot }}">
                     <form action="" method="POST">
                         @csrf
                         <div class="mb-3">

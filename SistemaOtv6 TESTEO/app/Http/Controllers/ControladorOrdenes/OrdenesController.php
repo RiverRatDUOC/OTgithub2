@@ -45,6 +45,33 @@ class OrdenesController extends Controller
         return view('ordenes.ordenes', compact('ordenes'));
     }
 
+    public function obtenerOrden($id)
+    {
+        $orden = Ot::with([
+            'contacto',
+            'contacto.sucursal',
+            'contacto.sucursal.cliente',
+            'servicio',
+            'tecnicoEncargado',
+            'estado',
+            'prioridad',
+            'tipo',
+            'tipoVisita',
+            'contactoOt',
+            'contactoOt.contacto',
+            'contactoOt.contacto.sucursal',
+            'contactoOt.contacto.sucursal.cliente',
+            'tareasOt',
+            'dispositivoOt',
+            'dispositivoOt.detalles',
+            'dispositivoOt.accesorios',
+            'dispositivoOt.tareaDispositivo',
+            'equipoTecnico'
+        ])
+            ->findOrFail($id);
+
+        return response()->json($orden);
+    }
     public function create()
     {
         $tipos = TipoOt::all();
@@ -497,6 +524,24 @@ class OrdenesController extends Controller
                                         'gomas_det' => $datosValidados['detallesDispositivo-' . $i]['gomas'],
                                         'estado_dispositivo_det' => $datosValidados['detallesDispositivo-' . $i]['estado'],
                                         'observaciones_det' => $datosValidados['detallesDispositivo-' . $i]['observaciones'],
+                                        'cod_dispositivo_ot' =>  $dispositivoOt->id,
+                                    ]);
+                                }
+                            }
+                        }
+
+                        if (isset($datosValidados['accesoriosDispositivo-' . $i])) {
+                            if ($datosValidados['accesoriosDispositivo-' . $i]['existe'] == 1) {
+                                if ($datosValidados['accesoriosDispositivo-' . $i]['dispositivo'] == $dispositivo) {
+                                    $dispositivoOt->accesorios()->create([
+                                        'cargador_acc' => $datosValidados['accesoriosDispositivo-' . $i]['cargador'],
+                                        'cable_acc' => $datosValidados['accesoriosDispositivo-' . $i]['cablePoder'],
+                                        'adaptador_acc' => $datosValidados['accesoriosDispositivo-' . $i]['adaptadorPoder'],
+                                        'bateria_acc' => $datosValidados['accesoriosDispositivo-' . $i]['bateria'],
+                                        'pantalla_acc' => $datosValidados['accesoriosDispositivo-' . $i]['pantalla'],
+                                        'teclado_acc' => $datosValidados['accesoriosDispositivo-' . $i]['teclado'],
+                                        'drum_acc' => $datosValidados['accesoriosDispositivo-' . $i]['drum'],
+                                        'toner_acc' => $datosValidados['accesoriosDispositivo-' . $i]['toner'],
                                         'cod_dispositivo_ot' =>  $dispositivoOt->id,
                                     ]);
                                 }

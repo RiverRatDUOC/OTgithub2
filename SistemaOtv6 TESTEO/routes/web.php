@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
 
 
     // RUTAS DE ORDENES
+    Route::get('/orden/obtenerOrden/{id}', [OrdenesController::class, 'obtenerOrden']);
     Route::get('/ordenes', [OrdenesController::class, 'index'])->middleware('can:ordenes.index')->name('ordenes.index'); // Rutas para la carpeta 'ordenes'
     Route::get('/ordenes/agregar', [OrdenesController::class, 'create'])->middleware('can:ordenes.create')->name('ordenes.create'); // Ruta para crear una nueva orden
     Route::post('/ordenes/agregar', [OrdenesController::class, 'store'])->middleware('can:ordenes.create')->name('ordenes.store'); // Ruta para almacenar la nueva orden
