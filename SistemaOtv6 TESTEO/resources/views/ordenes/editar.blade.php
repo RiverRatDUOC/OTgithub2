@@ -12,6 +12,7 @@
             <div class="card">
                 <div class="card-body">
                     <input type="hidden" id="orden" value="{{ json_encode($orden) }}">
+                    <input type="hidden" id="idOrden" value="{{ $orden->numero_ot }}">
                     <form action="" method="POST">
                         @csrf
                         <div class="mb-3">
@@ -606,7 +607,8 @@
                             <span id="errorCotizacion" class="errMessage"></span>
                         </div>
 
-                        <button type="button" class="btn btn-primary" onclick="validar()">Guardar</button>
+                        <button type="button" class="btn btn-primary"
+                            onclick="validar({{ $orden->numero_ot }})">Guardar</button>
                     </form>
                 </div>
             </div>
