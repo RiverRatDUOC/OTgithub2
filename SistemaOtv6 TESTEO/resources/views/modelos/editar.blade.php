@@ -70,7 +70,7 @@
                                 <select name="cod_categoria" id="cod_categoria" class="form-control" required>
                                     <option value="">Seleccionar Categoría</option>
                                     @foreach ($categorias as $categoria)
-                                    <option value="{{ $categoria->id }}" {{ $modelo->cod_categoria == $categoria->id ? 'selected' : '' }}>
+                                    <option value="{{ $categoria->id }}" {{ $modelo->sublinea->linea->subcategoria->cod_categoria == $categoria->id ? 'selected' : '' }}>
                                         {{ $categoria->nombre_categoria }}
                                     </option>
                                     @endforeach
@@ -86,7 +86,7 @@
                                 <select name="cod_subcategoria" id="cod_subcategoria" class="form-control" required>
                                     <option value="">Seleccionar Subcategoría</option>
                                     @foreach ($subcategorias as $subcategoria)
-                                    <option value="{{ $subcategoria->id }}" {{ $modelo->cod_subcategoria == $subcategoria->id ? 'selected' : '' }}>
+                                    <option value="{{ $subcategoria->id }}" {{ $modelo->sublinea->linea->cod_subcategoria == $subcategoria->id ? 'selected' : '' }}>
                                         {{ $subcategoria->nombre_subcategoria }}
                                     </option>
                                     @endforeach
@@ -102,7 +102,7 @@
                                 <select name="cod_linea" id="cod_linea" class="form-control" required>
                                     <option value="">Seleccionar Línea</option>
                                     @foreach ($lineas as $linea)
-                                    <option value="{{ $linea->id }}" {{ $modelo->cod_linea == $linea->id ? 'selected' : '' }}>
+                                    <option value="{{ $linea->id }}" {{ $modelo->sublinea->cod_linea == $linea->id ? 'selected' : '' }}>
                                         {{ $linea->nombre_linea }}
                                     </option>
                                     @endforeach
@@ -198,4 +198,5 @@
 
 <!-- Incluye el archivo JavaScript -->
 <script src="{{ asset('assets/js/mensajes/mensajes.js') }}"></script>
+<script src="{{ asset('assets/js/modelos/filtromodelos.js') }}"></script>
 @endsection

@@ -58,6 +58,11 @@
                         <i class="fas fa-desktop"></i> <span>Modelos</span></a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link pl-0 text-white {{ Request::is('dispositivos*') ? 'active' : '' }}" href="{{ route('dispositivos.index') }}">
+                        <i class="fas fa-laptop"></i> <span>Dispositivos</span></a>
+                </li>
+
 
                 <li class="nav-item">
                     <a class="nav-link pl-0 text-white {{ Request::is('parametros*') ? 'active' : '' }}" href="{{ route('parametros.index') }}">

@@ -13,6 +13,7 @@ use App\Http\Controllers\ControladorTecnicos\TecnicosController;
 use App\Http\Controllers\ControladorEquipos\ModeloController;
 use App\Http\Controllers\ControladorContactos\ContactosController;
 use App\Http\Controllers\ControladorParametros\ParametrosController;
+use App\Http\Controllers\ControladorDispositivo\DispositivoController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\UserController;
 
@@ -107,6 +108,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/modelos/{id}', [ModeloController::class, 'show'])->name('modelos.show'); // Ruta para mostrar los detalles de un modelo
     Route::delete('/modelos/{id}', [ModeloController::class, 'destroy'])->name('modelos.destroy'); // Ruta para eliminar un modelo
     Route::get('/modelos/buscar', [ModeloController::class, 'buscar'])->name('modelos.buscar'); // Ruta para buscar modelos
+    Route::get('/subcategorias/{categoria}', [ModeloController::class, 'getSubcategorias']);
+    Route::get('/lineas/{subcategoria}', [ModeloController::class, 'getLineas']);
+    Route::get('/sublineas/{linea}', [ModeloController::class, 'getSublineas']);
+    Route::get('/sublineas/{id}', [ModeloController::class, 'getSublineas']);
+    Route::get('/modelos/{marca}/{sublinea}', [ModeloController::class, 'getModelos']);
+
 
     // Ruta para usuarios utilizando el controlador
     Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios.index');
@@ -118,13 +125,22 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/usuarios/buscar', [UserController::class, 'buscar'])->name('usuarios.buscar');
 
     // Rutas para el controlador ParametrosController
-    // Rutas para el controlador ParametrosController
     Route::get('/parametros', [ParametrosController::class, 'index'])->name('parametros.index'); // Ruta para listar parámetros
     Route::get('/parametros/{id}', [ParametrosController::class, 'show'])->name('parametros.show'); // Ruta para mostrar un parámetro específico
     Route::get('/lineas/{id}', [ParametrosController::class, 'showLinea'])->name('lineas.show');
 
-    // RUTAS DE ROLES
+    // Rutas de Dispositivos
+    Route::get('/dispositivos', [DispositivoController::class, 'index'])->name('dispositivos.index'); // Ruta para listar dispositivos
+    Route::get('/dispositivos/agregar', [DispositivoController::class, 'create'])->name('dispositivos.create'); // Ruta para crear un nuevo dispositivo
+    Route::get('/dispositivos/buscar', [DispositivoController::class, 'buscar'])->name('dispositivos.buscar'); // Ruta para buscar dispositivos
+    Route::post('/dispositivos', [DispositivoController::class, 'store'])->name('dispositivos.store'); // Ruta para almacenar el nuevo dispositivo
+    Route::get('/dispositivos/{id}', [DispositivoController::class, 'show'])->name('dispositivos.show'); // Ruta para ver el detalle de un dispositivo
+    Route::get('/dispositivos/{id}/editar', [DispositivoController::class, 'edit'])->name('dispositivos.edit'); // Ruta para editar un dispositivo
+    Route::put('/dispositivos/{id}', [DispositivoController::class, 'update'])->name('dispositivos.update'); // Ruta para actualizar un dispositivo
+    Route::delete('/dispositivos/{id}', [DispositivoController::class, 'destroy'])->name('dispositivos.destroy'); // Ruta para eliminar un dispositivo
 
+
+    // RUTAS DE ROLES
 
     Route::get('/roles', [RolesController::class, 'index'])->middleware('can:roles.index')->name('roles.index'); // Rutas para la carpeta 'roles'
     Route::get('/roles/create', [RolesController::class, 'create'])->middleware('can:roles.create')->name('roles.create');

@@ -48,6 +48,7 @@ class ModeloController extends Controller
         return view('modelos.agregar', compact('categorias', 'subcategorias', 'lineas', 'sublineas', 'marcas'));
     }
 
+
     // Almacena un nuevo modelo en la base de datos
     public function store(Request $request)
     {
@@ -68,18 +69,26 @@ class ModeloController extends Controller
         return redirect()->route('modelos.index')->with('success', 'Modelo agregado con éxito.');
     }
 
-    // Muestra el formulario para editar un modelo existente
     public function edit($id)
     {
-        $modelo = Modelo::findOrFail($id);
+        // Obtener el modelo junto con sus relaciones
+        $modelo = Modelo::with(['sublinea.linea.subcategoria.categoria', 'marca'])->findOrFail($id);
+
+        // Obtener todas las categorías
         $categorias = Categoria::all();
-        $subcategorias = Subcategoria::all();
-        $lineas = Linea::all();
-        $sublineas = Sublinea::all();
+
+        // Obtener subcategorías, líneas y sublíneas basadas en el modelo actual
+        $subcategorias = Subcategoria::where('cod_categoria', $modelo->sublinea->linea->subcategoria->cod_categoria)->get();
+        $lineas = Linea::where('cod_subcategoria', $modelo->sublinea->linea->cod_subcategoria)->get();
+        $sublineas = Sublinea::where('cod_linea', $modelo->sublinea->cod_linea)->get();
+
+        // Obtener todas las marcas
         $marcas = Marca::all();
 
         return view('modelos.editar', compact('modelo', 'categorias', 'subcategorias', 'lineas', 'sublineas', 'marcas'));
     }
+
+
 
     // Actualiza un modelo existente en la base de datos
     public function update(Request $request, $id)
@@ -111,7 +120,27 @@ class ModeloController extends Controller
         return redirect()->route('modelos.index')->with('success', 'Modelo eliminado con éxito.');
     }
 
-    // Obtiene los filtros de la solicitud
+    // Obtiene las subcategorías según la categoría seleccionada (AJAX)
+    public function getSubcategorias($categoriaId)
+    {
+        $subcategorias = Subcategoria::where('cod_categoria', $categoriaId)->get();
+        return response()->json($subcategorias);
+    }
+
+    // Obtiene las líneas según la subcategoría seleccionada (AJAX)
+    public function getLineas($subcategoriaId)
+    {
+        $lineas = Linea::where('cod_subcategoria', $subcategoriaId)->get();
+        return response()->json($lineas);
+    }
+
+    // Obtiene las sublíneas según la línea seleccionada (AJAX)
+    public function getSublineas($lineaId)
+    {
+        $sublineas = Sublinea::where('cod_linea', $lineaId)->get();
+        return response()->json($sublineas);
+    }
+
     private function handleRequest(Request $request)
     {
         $categoriaId = $request->input('categoria');
@@ -179,6 +208,7 @@ class ModeloController extends Controller
                     $query->where('cod_subcategoria', $subcategoria->id);
                 })->count()];
             });
+
         $lineaCounts = Linea::select('id')
             ->get()
             ->mapWithKeys(function ($linea) {
@@ -186,6 +216,7 @@ class ModeloController extends Controller
                     $query->where('cod_linea', $linea->id);
                 })->count()];
             });
+
         $sublineaCounts = Sublinea::select('id')
             ->get()
             ->mapWithKeys(function ($sublinea) {
@@ -198,6 +229,17 @@ class ModeloController extends Controller
                 return [$marca->id => Modelo::where('cod_marca', $marca->id)->count()];
             });
 
-        return view('modelos.modelos', compact('modelos', 'categorias', 'subcategorias', 'lineas', 'sublineas', 'marcas', 'subcategoriaCounts', 'lineaCounts', 'sublineaCounts', 'marcaCounts'));
+        return view('modelos.modelos', compact(
+            'modelos',
+            'categorias',
+            'subcategorias',
+            'lineas',
+            'sublineas',
+            'marcas',
+            'subcategoriaCounts',
+            'lineaCounts',
+            'sublineaCounts',
+            'marcaCounts'
+        ));
     }
 }

@@ -28,7 +28,7 @@
                         <li><strong>Nombre del Modelo:</strong> Nombre completo del modelo.</li>
                         <li><strong>Número de Parte:</strong> Número de parte del modelo, si está disponible.</li>
                         <li><strong>Descripción Corta:</strong> Descripción breve del modelo.</li>
-                        <li><strong>Descripción Larga:</strong> Descripción detallada del modelo.</li> <!-- Nueva entrada -->
+                        <li><strong>Descripción Larga:</strong> Descripción detallada del modelo.</li>
                         <li><strong>Marca:</strong> Seleccione la marca del modelo.</li>
                     </ul>
                 </div>
@@ -40,7 +40,7 @@
                     </div>
                     <div class="card-body">
 
-                        <!-- Mensaje de éxito con SweetAlert2 -->
+                        <!-- Mensaje de éxito -->
                         @if(session('success'))
                         <div id="success-message" class="d-none">
                             <span id="success-type">{{ session('success_type', 'agregar') }}</span>
@@ -197,4 +197,5 @@
 
 <!-- Incluye el archivo JavaScript -->
 <script src="{{ asset('assets/js/mensajes/mensajes.js') }}"></script>
+<script src="{{ asset('assets/js/modelos/filtromodelos.js') }}"></script>
 @endsection

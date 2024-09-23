@@ -81,13 +81,13 @@
                     </div>
                 </div>
 
-                <!-- Formulario de Búsqueda -->
+                <!-- Formulario de Búsqueda
                 <div>
                     <form action="{{ route('modelos.buscar') }}" method="get" class="input-group mt-3">
                         <input type="text" name="search" id="search" class="form-control" placeholder="Buscar por ID, nombre, número de parte o descripción" value="{{ request('search') }}">
                         <button type="submit" class="btn btn-primary" style="background-color: #cc6633; border-color: #cc6633;">Buscar</button>
                     </form>
-                </div>
+                </div>-->
 
                 <!-- Botones de Agregar y Eliminar Filtro -->
                 <div class="d-flex align-items-center justify-content-end mt-3" style="gap: 1rem;">
