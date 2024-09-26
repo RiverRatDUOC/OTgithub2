@@ -24,13 +24,13 @@
                     @method('PUT')
 
                     <div class="mb-3">
-                        <label for="name" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="name" name="name" value="{{ $user->name }}" required>
+                        <label for="nombre_usuario" class="form-label">Nombre de Usuario</label>
+                        <input type="text" class="form-control" id="nombre_usuario" name="nombre_usuario" value="{{ $user->nombre_usuario }}" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}" required>
+                        <label for="email_usuario" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email_usuario" name="email_usuario" value="{{ $user->email_usuario }}" required>
                     </div>
 
                     <div class="mb-3">
@@ -48,7 +48,7 @@
                         <div>
                             @foreach($roles as $role)
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="role{{ $role->id }}" name="roles[]" value="{{ $role->id }}" {{ $user->roles->pluck('id')->contains($role->id) ? 'checked' : '' }}>
+                                <input class="form-check-input" type="checkbox" id="role{{ $role->id }}" name="roles[]" value="{{ $role->id }}" {{ $user->hasRole($role->name) ? 'checked' : '' }}>
                                 <label class="form-check-label" for="role{{ $role->id }}">
                                     {{ $role->name }}
                                 </label>

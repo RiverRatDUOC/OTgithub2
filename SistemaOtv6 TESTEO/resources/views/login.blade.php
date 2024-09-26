@@ -18,10 +18,6 @@
             margin: 0;
         }
 
-        main {
-            margin-top: 50px;
-        }
-
         .login-container {
             width: 100%;
             max-width: 400px;
@@ -31,11 +27,13 @@
             padding: 32px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
         }
 
         .login-card img {
             max-width: 100%;
             height: auto;
+            margin-bottom: 20px;
         }
 
         .input-field label {
@@ -63,6 +61,7 @@
 
         .btn-login {
             background-color: #11283b;
+            width: 100%;
         }
 
         .btn-login:hover {
@@ -75,57 +74,47 @@
     <main>
         <div class="login-container">
             <div class="card z-depth-1 login-card">
-                <form class="col s12" action="{{ route('login.submit') }}" method="post">
-                    @csrf <!-- Agrega el token CSRF -->
-                    <div class="row">
-                        <div class="col s12 center">
-                            <img class="responsive-img" src="img/q.jpg" alt="Logo">
-                        </div>
+                <form class="col s12" action="{{ route('login.submit') }}" method="POST">
+                    @csrf
+                    <div class="row center">
+                        <img class="responsive-img" src="img/q.jpg" alt="Logo">
                     </div>
                     <div class="row">
-                        <div class="input-group">
+                        <div class="input-field col s12">
                             <label for="email">Correo Electrónico</label>
-                            <input class="form-control" type="email" name="email" id="email"
-                                required="required" />
+                            <input type="email" name="email" id="email" required />
                             @error('email')
-                                <span class="error-message">{{ $message }}</span>
+                            <span class="error-message">{{ $message }}</span>
                             @enderror
                         </div>
-
                     </div>
                     <div class="row">
-                        <div class="input-group">
+                        <div class="input-field col s12">
                             <label for="password">Contraseña</label>
-                            <input class="form-control" type="password" name="password" id="password"
-                                required="required" />
+                            <input type="password" name="password" id="password" required />
                             @error('password')
-                                <span class="error-message">{{ $message }}</span>
+                            <span class="error-message">{{ $message }}</span>
                             @enderror
-
-                            <div class="forgot-password" style="margin-top: 10px;">
+                            <div class="forgot-password">
                                 <a class="blue-text" href="#!"><b>¿Olvidaste tu contraseña?</b></a>
                             </div>
                         </div>
                     </div>
 
-
                     <div class="row center">
-                        <button type="submit" name="btn_login"
-                            class="col s12 btn btn-large waves-effect btn-login">Entrar</button>
+                        <button type="submit" class="btn btn-large waves-effect btn-login">Entrar</button>
                     </div>
                     @if (session('error'))
-                        <br>
-                        <div class="red-text">
-                            {{ session('error') }}
-                        </div>
+                    <div class="red-text center">
+                        {{ session('error') }}
+                    </div>
                     @endif
                 </form>
             </div>
         </div>
     </main>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js">
-    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
 </body>
 
 </html>

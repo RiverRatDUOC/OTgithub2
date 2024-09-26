@@ -12,29 +12,45 @@
 
         <div class="card mt-3">
             <div class="card-body">
+                <!-- Mostrar mensajes de error si los hay -->
+                @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+
                 <form action="{{ route('usuarios.store') }}" method="POST">
                     @csrf
 
+                    <!-- Campo Nombre de Usuario -->
                     <div class="mb-3">
-                        <label for="name" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" required>
+                        <label for="nombre_usuario" class="form-label">Nombre de Usuario</label>
+                        <input type="text" class="form-control" id="nombre_usuario" name="nombre_usuario" value="{{ old('nombre_usuario') }}" required>
                     </div>
 
+                    <!-- Campo Email -->
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required>
+                        <label for="email_usuario" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email_usuario" name="email_usuario" value="{{ old('email_usuario') }}" required>
                     </div>
 
+                    <!-- Campo Contraseña -->
                     <div class="mb-3">
-                        <label for="password" class="form-label">Contraseña</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
+                        <label for="password_usuario" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="password_usuario" name="password_usuario" required>
                     </div>
 
+                    <!-- Campo Confirmar Contraseña -->
                     <div class="mb-3">
-                        <label for="password_confirmation" class="form-label">Confirmar Contraseña</label>
-                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
+                        <label for="password_usuario_confirmation" class="form-label">Confirmar Contraseña</label>
+                        <input type="password" class="form-control" id="password_usuario_confirmation" name="password_usuario_confirmation" required>
                     </div>
 
+                    <!-- Selección de Roles -->
                     <div class="mb-3">
                         <label for="roles" class="form-label">Roles</label>
                         <div>
@@ -42,13 +58,14 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="role{{ $role->id }}" name="roles[]" value="{{ $role->id }}">
                                 <label class="form-check-label" for="role{{ $role->id }}">
-                                    {{ $role->name }}
+                                    {{ $role->name }} <!-- Mostrar el nombre del rol creado previamente -->
                                 </label>
                             </div>
                             @endforeach
                         </div>
                     </div>
 
+                    <!-- Botón de Crear Usuario -->
                     <button type="submit" class="btn btn-primary" style="background-color: #cc6633; border-color: #cc6633;">Crear Usuario</button>
                     <a href="{{ route('usuarios.index') }}" class="btn btn-secondary">Cancelar</a>
                 </form>
@@ -56,5 +73,4 @@
         </div>
     </div>
 </main>
-
 @endsection

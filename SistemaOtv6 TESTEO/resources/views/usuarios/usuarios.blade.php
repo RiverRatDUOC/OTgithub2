@@ -35,8 +35,8 @@
                     @foreach ($users as $user)
                     <tr>
                         <td>{{ $user->id }}</td>
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->email }}</td>
+                        <td>{{ $user->nombre_usuario }}</td> <!-- Cambiado a nombre_usuario -->
+                        <td>{{ $user->email_usuario }}</td> <!-- Cambiado a email_usuario -->
                         <td>
                             @foreach ($user->roles as $role)
                             <span class="badge" style="background-color: {{ $role->color }}; color: white;">{{ $role->name }}</span>
