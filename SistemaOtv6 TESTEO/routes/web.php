@@ -18,7 +18,13 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\UserController;
 
 use App\Http\Controllers\migrarController;
+use App\Http\Controllers\PasswordUpdateController;
 
+
+// Ruta para actualizar contraseñas
+Route::get('password-update', [PasswordUpdateController::class, 'index'])->name('password.update');
+// Ruta para migrar datos
+Route::get('migrar', [migrarController::class, 'index']);
 // Ruta para procesar el envío del formulario de inicio de sesión
 Route::post('/login/submit', [LoginController::class, 'login'])->name('login.submit');
 
@@ -26,8 +32,6 @@ Route::post('/login/submit', [LoginController::class, 'login'])->name('login.sub
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 
 Route::middleware(['auth'])->group(function () {
-    // Ruta para migrar datos
-    Route::get('migrar', [migrarController::class, 'index']);
     // Ruta para cerrar sesión
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 

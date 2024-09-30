@@ -30,24 +30,28 @@ class UserController extends Controller
             'nombre_usuario' => 'required|string|max:255',
             'email_usuario' => 'required|string|email|max:255|unique:usuario',
             'password_usuario' => 'required|string|min:8|confirmed',
-            'roles' => 'array'
+            'roles' => 'required|array' // Validar que se seleccione al menos un rol
         ]);
 
-        // Crear el usuario y dejar 'rol_usuario' como nulo
+        // Crear el usuario
         $user = Usuario::create([
             'nombre_usuario' => $request->nombre_usuario,
             'email_usuario' => $request->email_usuario,
             'password_usuario' => bcrypt($request->password_usuario),
-            'rol_usuario' => null, // Dejar el rol como nulo
+            'rol_usuario' => null, // Dejar el rol como nulo, ya que se maneja con el paquete de roles
         ]);
 
-        // Asigna los roles si se han proporcionado
+        // Asignar los roles por ID
         if ($request->roles) {
-            $user->roles()->sync($request->roles);
+            $user->roles()->sync($request->roles); // Asigna directamente los IDs de los roles
         }
 
-        return redirect()->route('usuarios.index')->with('info', 'Usuario creado con éxito');
+        return redirect()->route('usuarios.index')->with('info', 'Usuario creado y roles asignados con éxito');
     }
+
+
+
+
 
 
     public function edit(Usuario $user) // Cambiado a Usuario

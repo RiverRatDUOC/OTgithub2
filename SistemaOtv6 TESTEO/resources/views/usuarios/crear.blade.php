@@ -50,7 +50,6 @@
                         <input type="password" class="form-control" id="password_usuario_confirmation" name="password_usuario_confirmation" required>
                     </div>
 
-                    <!-- Selección de Roles -->
                     <div class="mb-3">
                         <label for="roles" class="form-label">Roles</label>
                         <div>
@@ -58,7 +57,7 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="role{{ $role->id }}" name="roles[]" value="{{ $role->id }}">
                                 <label class="form-check-label" for="role{{ $role->id }}">
-                                    {{ $role->name }} <!-- Mostrar el nombre del rol creado previamente -->
+                                    {{ $role->name }}
                                 </label>
                             </div>
                             @endforeach
