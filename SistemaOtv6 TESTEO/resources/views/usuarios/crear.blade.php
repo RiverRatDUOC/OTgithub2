@@ -50,19 +50,7 @@
                         <input type="password" class="form-control" id="password_usuario_confirmation" name="password_usuario_confirmation" required>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="roles" class="form-label">Roles</label>
-                        <div>
-                            @foreach($roles as $role)
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="role{{ $role->id }}" name="roles[]" value="{{ $role->id }}">
-                                <label class="form-check-label" for="role{{ $role->id }}">
-                                    {{ $role->name }}
-                                </label>
-                            </div>
-                            @endforeach
-                        </div>
-                    </div>
+
 
                     <!-- Botón de Crear Usuario -->
                     <button type="submit" class="btn btn-primary" style="background-color: #cc6633; border-color: #cc6633;">Crear Usuario</button>

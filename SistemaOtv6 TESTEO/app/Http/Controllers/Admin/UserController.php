@@ -30,7 +30,6 @@ class UserController extends Controller
             'nombre_usuario' => 'required|string|max:255',
             'email_usuario' => 'required|string|email|max:255|unique:usuario',
             'password_usuario' => 'required|string|min:8|confirmed',
-            'roles' => 'required|array' // Validar que se seleccione al menos un rol
         ]);
 
         // Crear el usuario
@@ -41,15 +40,9 @@ class UserController extends Controller
             'rol_usuario' => null, // Dejar el rol como nulo, ya que se maneja con el paquete de roles
         ]);
 
-        // Asignar los roles por ID
-        if ($request->roles) {
-            $user->roles()->sync($request->roles); // Asigna directamente los IDs de los roles
-        }
-
-        return redirect()->route('usuarios.index')->with('info', 'Usuario creado y roles asignados con éxito');
+        // Redirigir al índice de usuarios
+        return redirect()->route('usuarios.index')->with('info', 'Usuario creado con éxito');
     }
-
-
 
 
 
