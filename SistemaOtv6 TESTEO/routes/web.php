@@ -9,14 +9,15 @@ use App\Http\Controllers\ControladorClientes\ClientesController;
 use App\Http\Controllers\ControladorSucursales\SucursalesController;
 use App\Http\Controllers\ControladorServicios\ServiciosController;
 use App\Http\Controllers\ControladorServicios\TareaServiciosController;
+// use App\Http\Controllers\ControladorTecnicos\TecnicosController;
 use App\Http\Controllers\ControladorTecnicos\TecnicosController;
+use App\Http\Controllers\ControladorTecnicosDos\TecnicosDosController;
 use App\Http\Controllers\ControladorEquipos\ModeloController;
 use App\Http\Controllers\ControladorContactos\ContactosController;
 use App\Http\Controllers\ControladorParametros\ParametrosController;
 use App\Http\Controllers\ControladorDispositivo\DispositivoController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\UserController;
-
 use App\Http\Controllers\migrarController;
 use App\Http\Controllers\PasswordUpdateController;
 
@@ -33,14 +34,16 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 
 Route::middleware(['auth'])->group(function () {
     // Ruta para cerrar sesión
+
+
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
     // Ruta para la página de inicio
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/home', [HomeController::class, 'index'])->name('home.page');  // Ruta adicional para la página de inicio
 
+    // RUTAS DE OT
 
-    // RUTAS DE ORDENES
     Route::get('/orden/obtenerOrden/{id}', [OrdenesController::class, 'obtenerOrden']);
     Route::get('/ordenes', [OrdenesController::class, 'index'])->middleware('can:ordenes.index')->name('ordenes.index'); // Rutas para la carpeta 'ordenes'
     Route::get('/ordenes/agregar', [OrdenesController::class, 'create'])->middleware('can:ordenes.create')->name('ordenes.create'); // Ruta para crear una nueva orden
@@ -54,9 +57,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/contacto/{sucursalId}', [OrdenesController::class, 'contactos']);
     Route::get('/dispositivo/{sucursalId}/{servicioId}', [OrdenesController::class, 'dispositivos']);
     Route::get('/servicio/{servicioId}', [OrdenesController::class, 'servicioTipo']);
+    Route::get('/tecnicos/{servicioId}', [OrdenesController::class, 'tecnicosServicio']); //ESTE ES EL MALDITO!!!!!!!
+    Route::get('/tecnicos/agregar', [TecnicosController::class, 'create'])->name('tecnicos.create'); // Ruta para crear una nueva sucursal
 
-    Route::get('/tecnicos/{servicioId}', [OrdenesController::class, 'tecnicosServicio']);
     // RUTAS DE CLIENTES
+
+
+
+
     Route::get('/clientes', [ClientesController::class, 'index'])->middleware('can:clientes.index')->name('clientes.index'); // Rutas para la carpeta 'clientes'
     Route::get('/clientes/agregar', [ClientesController::class, 'create'])->middleware('can:clientes.create')->name('clientes.create'); // Ruta para crear un nuevo cliente
     Route::get('/clientes/buscar', [ClientesController::class, 'buscar'])->name('clientes.buscar'); // Ruta para buscar órdenes
@@ -67,10 +75,15 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/clientes/{id}', [ClientesController::class, 'destroy'])->name('clientes.destroy');
 
 
-    // RUTAS DE TÉCNICOS
-    Route::get('/tecnicos', [TecnicosController::class, 'index'])->name('tecnicos.index'); // Ruta para listar técnicos
-    Route::get('/tecnicos/agregar', [TecnicosController::class, 'create'])->name('tecnicos.create'); // Ruta para crear un nuevo técnico
-    Route::get('/tecnicos/buscar', [TecnicosController::class, 'buscar'])->name('tecnicos.buscar'); // Ruta para buscar técnicos
+
+    // Rutas de tecnicos
+    // Rutas de Sucursales
+    Route::get('/tecnicos', [TecnicosController::class, 'index'])->name('tecnicos.index'); // Ruta para listar sucursales
+    Route::get('/tecnicos/buscar', [TecnicosController::class, 'buscar'])->name('tecnicos.buscar'); // Ruta para buscar sucursales
+    Route::get('/tecnicos/{id}', [TecnicosController::class, 'store'])->name('tecnicos.store'); // Ruta para buscar sucursales
+
+
+
 
 
     // Rutas de Sucursales
@@ -86,7 +99,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Rutas de Servicios
     Route::get('/servicios', [ServiciosController::class, 'index'])->name('servicios.index'); // Ruta para listar servicios
-    Route::get('/servicios/agregar', [ServiciosController::class, 'create'])->name('servicios.create'); // Ruta para crear un nuevo servicio
+    // Route::get('/tecnicos/agregar', [TecnicosController::class, 'create'])->name('tecnicos.create');
     Route::get('/servicios/buscar', [ServiciosController::class, 'buscar'])->name('servicios.buscar'); // Ruta para buscar servicios
 
     // Rutas de Contactos

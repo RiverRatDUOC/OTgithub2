@@ -45,6 +45,12 @@
 
                         <td>
                             <div class="d-flex justify-content-center align-items-center">
+                                <!-- <form action="{{ route('tecnicos.create', $user->id) }}" method="GET" style="margin-right: 10px;">
+                                    <button type="submit" class="btn btn-success" style="background-color: #28a745; border-color: #28a745;">
+                                        <i class="fas fa-plus"></i> Agregar Técnico
+                                    </button>
+                                </form> -->
+
                                 <!-- Botón Editar -->
                                 <form action="{{ route('usuarios.editar', $user->id) }}" method="GET" style="margin-right: 10px;">
                                     <button type="submit" class="btn btn-primary" style="background-color: #cc6633; border-color: #cc6633;">

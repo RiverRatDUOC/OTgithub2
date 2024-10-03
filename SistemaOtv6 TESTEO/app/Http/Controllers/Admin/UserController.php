@@ -44,9 +44,6 @@ class UserController extends Controller
         return redirect()->route('usuarios.index')->with('info', 'Usuario creado con éxito');
     }
 
-
-
-
     public function edit(Usuario $user) // Cambiado a Usuario
     {
         $roles = Role::all();
@@ -78,7 +75,6 @@ class UserController extends Controller
 
         return redirect()->route('usuarios.editar', $user)->with('info', 'Usuario actualizado correctamente');
     }
-
 
     public function destroy(Usuario $user) // Cambiado a Usuario
     {

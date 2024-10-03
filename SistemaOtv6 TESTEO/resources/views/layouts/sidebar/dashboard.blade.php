@@ -37,7 +37,11 @@
                         <i class="fas fa-tasks"></i> <span>Tareas</span>
                     </a>
                 </li>
-
+                <li class="nav-item">
+                    <a class="nav-link pl-0 text-white {{ Request::is('tecnicos*') ? 'active' : '' }}" href="{{ route('tecnicos.index') }}">
+                        <i class="fas fa-tasks"></i> <span>Tareas2</span>
+                    </a>
+                </li>
 
 
 
@@ -46,11 +50,6 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link pl-0 text-white {{ Request::is('repuestos*') ? 'active' : '' }}" href="#"><i class="fas fa-tools"></i> <span>Repuestos</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link pl-0 text-white {{ Request::is('tecnicos*') ? 'active' : '' }}" href="{{ route('tecnicos.index') }}">
-                        <i class="fas fa-user-cog"></i> <span>Técnicos</span>
-                    </a>
                 </li>
 
                 <li class="nav-item">
