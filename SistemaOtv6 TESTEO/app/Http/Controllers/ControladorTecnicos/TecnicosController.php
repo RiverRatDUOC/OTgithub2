@@ -61,7 +61,7 @@ class TecnicosController extends Controller
             'telefono_tecnico' => $request->telefono_tecnico,
             'email_tecnico' => $request->email_tecnico,
             'precio_hora_tecnico' => $request->precio_hora_tecnico,
-            'cod_usuario' => $request->cod_usuario, // Puede ser nulo
+            'cod_usuario' => $request->cod_usuario, // Asignar usuario si se seleccionó uno
         ]);
 
         // Asignar los servicios opcionales al técnico
@@ -75,5 +75,13 @@ class TecnicosController extends Controller
         }
 
         return redirect()->route('tecnicos.index')->with('success', 'Técnico creado exitosamente.');
+    }
+
+    public function show($id)
+    {
+        // Buscar el técnico por ID
+        $tecnico = Tecnico::with('usuario')->findOrFail($id); // Asegúrate de que exista el método en el modelo Tecnico
+
+        return view('tecnicos.detalle', compact('tecnico'));
     }
 }

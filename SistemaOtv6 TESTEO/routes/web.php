@@ -42,6 +42,19 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/home', [HomeController::class, 'index'])->name('home.page');  // Ruta adicional para la página de inicio
 
+
+
+    // RUTA TECNICOS
+    Route::get('/tecnicos/agregar', [TecnicosController::class, 'create'])->name('tecnicos.create'); // Ruta para la vista de agregar un nuevo técnico
+    Route::get('/tecnicos', [TecnicosController::class, 'index'])->name('tecnicos.index'); // Ruta para listar técnicos
+    Route::get('/tecnicos/buscar', [TecnicosController::class, 'buscar'])->name('tecnicos.buscar'); // Ruta para buscar técnicos
+    Route::post('/tecnicos', [TecnicosController::class, 'store'])->name('tecnicos.store'); // Ruta para almacenar un nuevo técnico
+    Route::get('/tecnicos/{id}', [TecnicosController::class, 'show'])->name('tecnicos.show'); // Ruta para ver el detalle del técnico
+
+
+
+
+
     // RUTAS DE OT
 
     Route::get('/orden/obtenerOrden/{id}', [OrdenesController::class, 'obtenerOrden']);
@@ -58,7 +71,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dispositivo/{sucursalId}/{servicioId}', [OrdenesController::class, 'dispositivos']);
     Route::get('/servicio/{servicioId}', [OrdenesController::class, 'servicioTipo']);
     Route::get('/tecnicos/{servicioId}', [OrdenesController::class, 'tecnicosServicio']); //ESTE ES EL MALDITO!!!!!!!
-    Route::get('/tecnicos/agregar', [TecnicosController::class, 'create'])->name('tecnicos.create'); // Ruta para crear una nueva sucursal
 
     // RUTAS DE CLIENTES
 
@@ -78,10 +90,6 @@ Route::middleware(['auth'])->group(function () {
 
     // Rutas de tecnicos
     // Rutas de Sucursales
-    Route::get('/tecnicos', [TecnicosController::class, 'index'])->name('tecnicos.index'); // Ruta para listar sucursales
-    Route::get('/tecnicos/buscar', [TecnicosController::class, 'buscar'])->name('tecnicos.buscar'); // Ruta para buscar sucursales
-    Route::get('/tecnicos/{id}', [TecnicosController::class, 'store'])->name('tecnicos.store'); // Ruta para buscar sucursales
-
 
 
 
