@@ -41,6 +41,15 @@ Route::middleware(['auth'])->group(function () {
     // Ruta para la página de inicio
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/home', [HomeController::class, 'index'])->name('home.page');  // Ruta adicional para la página de inicio
+    // Rutas para el controlador TareaServiciosController
+    Route::get('/tareas', [TareaServiciosController::class, 'index'])->name('tareas.index'); // Ruta para listar tareas
+    Route::get('/tareas/agregar', [TareaServiciosController::class, 'create'])->name('tareas.create'); // Ruta para crear una nueva tarea
+    Route::post('/tareas', [TareaServiciosController::class, 'store'])->name('tareas.store'); // Ruta para almacenar una nueva tarea
+    Route::get('/tareas/{id}', [TareaServiciosController::class, 'show'])->name('tareas.show'); // Ruta para mostrar detalles de una tarea
+    Route::get('/tareas/{id}/editar', [TareaServiciosController::class, 'edit'])->name('tareas.edit'); // Ruta para editar una tarea
+    Route::put('/tareas/{id}', [TareaServiciosController::class, 'update'])->name('tareas.update'); // Ruta para actualizar una tarea
+    Route::delete('/tareas/{id}', [TareaServiciosController::class, 'destroy'])->name('tareas.destroy'); // Ruta para eliminar una tarea
+    Route::get('/tareas/buscar', [TareaServiciosController::class, 'buscar'])->name('tareas.buscar'); // Ruta para buscar tareas
 
 
 
@@ -88,10 +97,6 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-    // Rutas de tecnicos
-    // Rutas de Sucursales
-
-
 
 
     // Rutas de Sucursales
@@ -107,8 +112,19 @@ Route::middleware(['auth'])->group(function () {
 
     // Rutas de Servicios
     Route::get('/servicios', [ServiciosController::class, 'index'])->name('servicios.index'); // Ruta para listar servicios
-    // Route::get('/tecnicos/agregar', [TecnicosController::class, 'create'])->name('tecnicos.create');
+    Route::get('/servicios/agregar', [ServiciosController::class, 'create'])->name('servicios.create'); // Ruta para mostrar el formulario de agregar
+    Route::post('/servicios', [ServiciosController::class, 'store'])->name('servicios.store'); // Ruta para guardar un nuevo servicio
+    Route::get('/servicios/{id}/editar', [ServiciosController::class, 'edit'])->name('servicios.edit'); // Ruta para mostrar el formulario de edición
+    Route::put('/servicios/{id}', [ServiciosController::class, 'update'])->name('servicios.update'); // Ruta para actualizar un servicio existente
+    Route::delete('/servicios/{id}', [ServiciosController::class, 'destroy'])->name('servicios.destroy'); // Ruta para eliminar un servicio
     Route::get('/servicios/buscar', [ServiciosController::class, 'buscar'])->name('servicios.buscar'); // Ruta para buscar servicios
+    Route::get('/servicios/{id}', [ServiciosController::class, 'show'])->name('servicios.show'); // Ruta para mostrar los detalles de un servicio
+
+
+
+
+
+
 
     // Rutas de Contactos
     Route::get('/contactos', [ContactosController::class, 'index'])->name('contactos.index'); // Ruta para listar contactos
@@ -121,10 +137,6 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/contactos/{id}', [ContactosController::class, 'destroy'])->name('contactos.destroy'); // Ruta para eliminar un contacto
 
 
-    // Rutas para el controlador TareaServiciosController
-    Route::get('/tareas', [TareaServiciosController::class, 'index'])->name('tareas.index'); // Ruta para listar tareas
-    Route::get('/tareas/agregar', [TareaServiciosController::class, 'create'])->name('tareas.create'); // Ruta para crear una nueva tarea
-    Route::get('/tareas/buscar', [TareaServiciosController::class, 'buscar'])->name('tareas.buscar'); // Ruta para buscar tareas
 
     // Rutas para el controlador ModeloController
     Route::get('/modelos', [ModeloController::class, 'index'])->name('modelos.index'); // Ruta para listar modelos

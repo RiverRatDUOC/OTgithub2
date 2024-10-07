@@ -54,16 +54,18 @@
                                 <td>{{ optional($servicio->sublinea)->nombre_sublinea }}</td>
                                 <td>
                                     <div class="d-flex">
-                                        <a href="" class="btn btn-primary me-1" style="background-color: #cc0066; border-color: #cc0066;">
+                                        <a href="{{ route('servicios.show', $servicio->id) }}" class="btn btn-primary me-1" style="background-color: #cc0066; border-color: #cc0066; height: 38px; display: flex; align-items: center; justify-content: center;">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="" class="btn btn-primary me-1" style="background-color: #cc6633; border-color: #cc6633;">
+                                        <a href="{{ route('servicios.edit', $servicio->id) }}" class="btn btn-primary me-1" style="background-color: #cc6633; border-color: #cc6633; height: 38px; display: flex; align-items: center; justify-content: center;">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a href="#" class="btn btn-danger" style="background-color: #d9534f; border-color: #d43f3a;">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </a>
-                                    </div>
+                                        <form action="{{ route('servicios.destroy', $servicio->id) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger" style="background-color: #d9534f; border-color: #d43f3a; height: 38px; display: flex; align-items: center; justify-content: center;">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
                                 </td>
                             </tr>
                             @endforeach
