@@ -98,4 +98,10 @@ class Ot extends Model
     {
         return $this->hasMany(TareaOt::class, 'cod_ot', 'numero_ot');
     }
+    // Ot.php
+
+    public function avances()
+    {
+        return $this->hasMany(Avance::class, 'cod_ot', 'numero_ot');
+    }
 }

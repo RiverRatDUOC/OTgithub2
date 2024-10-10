@@ -20,6 +20,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\migrarController;
 use App\Http\Controllers\PasswordUpdateController;
+use App\Http\Controllers\ControladorOrdenes\AvancesController;
 
 
 // Ruta para actualizar contraseñas
@@ -40,29 +41,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Ruta para la página de inicio
     Route::get('/', [HomeController::class, 'index'])->name('home');
-    Route::get('/home', [HomeController::class, 'index'])->name('home.page');  // Ruta adicional para la página de inicio
-    // Rutas para el controlador TareaServiciosController
-    Route::get('/tareas', [TareaServiciosController::class, 'index'])->name('tareas.index'); // Ruta para listar tareas
-    Route::get('/tareas/agregar', [TareaServiciosController::class, 'create'])->name('tareas.create'); // Ruta para crear una nueva tarea
-    Route::post('/tareas', [TareaServiciosController::class, 'store'])->name('tareas.store'); // Ruta para almacenar una nueva tarea
-    Route::get('/tareas/{id}', [TareaServiciosController::class, 'show'])->name('tareas.show'); // Ruta para mostrar detalles de una tarea
-    Route::get('/tareas/{id}/editar', [TareaServiciosController::class, 'edit'])->name('tareas.edit'); // Ruta para editar una tarea
-    Route::put('/tareas/{id}', [TareaServiciosController::class, 'update'])->name('tareas.update'); // Ruta para actualizar una tarea
-    Route::delete('/tareas/{id}', [TareaServiciosController::class, 'destroy'])->name('tareas.destroy'); // Ruta para eliminar una tarea
-    Route::get('/tareas/buscar', [TareaServiciosController::class, 'buscar'])->name('tareas.buscar'); // Ruta para buscar tareas
-
-
-
-    // RUTA TECNICOS
-    Route::get('/tecnicos/agregar', [TecnicosController::class, 'create'])->name('tecnicos.create'); // Ruta para la vista de agregar un nuevo técnico
-    Route::get('/tecnicos', [TecnicosController::class, 'index'])->name('tecnicos.index'); // Ruta para listar técnicos
-    Route::get('/tecnicos/buscar', [TecnicosController::class, 'buscar'])->name('tecnicos.buscar'); // Ruta para buscar técnicos
-    Route::post('/tecnicos', [TecnicosController::class, 'store'])->name('tecnicos.store'); // Ruta para almacenar un nuevo técnico
-    Route::get('/tecnicos/{id}', [TecnicosController::class, 'show'])->name('tecnicos.show'); // Ruta para ver el detalle del técnico
-
-
-
-
+    Route::get('/home', [HomeController::class, 'index'])->name('home.page');
 
     // RUTAS DE OT
 
@@ -80,6 +59,37 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dispositivo/{sucursalId}/{servicioId}', [OrdenesController::class, 'dispositivos']);
     Route::get('/servicio/{servicioId}', [OrdenesController::class, 'servicioTipo']);
     Route::get('/tecnicos/{servicioId}', [OrdenesController::class, 'tecnicosServicio']); //ESTE ES EL MALDITO!!!!!!!
+
+    // Rutas para el controlador TareaServiciosController con nuevo prefijo
+    Route::prefix('servicios')->group(function () {
+        Route::get('/tareas', [TareaServiciosController::class, 'index'])->name('tareas.index'); // Ruta para listar tareas
+        Route::get('/tareas/agregar', [TareaServiciosController::class, 'create'])->name('tareas.create'); // Ruta para crear una nueva tarea
+        Route::post('/tareas', [TareaServiciosController::class, 'store'])->name('tareas.store'); // Ruta para almacenar una nueva tarea
+        Route::get('/tareas/{id}', [TareaServiciosController::class, 'show'])->name('tareas.show'); // Ruta para mostrar detalles de una tarea
+        Route::get('/tareas/{id}/editar', [TareaServiciosController::class, 'edit'])->name('tareas.edit'); // Ruta para editar una tarea
+        Route::put('/tareas/{id}', [TareaServiciosController::class, 'update'])->name('tareas.update'); // Ruta para actualizar una tarea
+        Route::delete('/tareas/{id}', [TareaServiciosController::class, 'destroy'])->name('tareas.destroy'); // Ruta para eliminar una tarea
+        Route::get('/tareas/buscar', [TareaServiciosController::class, 'buscar'])->name('tareas.buscar'); // Ruta para buscar tareas
+    });
+
+
+
+
+    // RUTA TECNICOS
+    Route::get('/tecnicos/agregar', [TecnicosController::class, 'create'])->name('tecnicos.create'); // Ruta para la vista de agregar un nuevo técnico
+    Route::get('/tecnicos', [TecnicosController::class, 'index'])->name('tecnicos.index'); // Ruta para listar técnicos
+    Route::get('/tecnicos/buscar', [TecnicosController::class, 'buscar'])->name('tecnicos.buscar'); // Ruta para buscar técnicos
+    Route::post('/tecnicos', [TecnicosController::class, 'store'])->name('tecnicos.store'); // Ruta para almacenar un nuevo técnico
+    Route::get('/tecnicos/{id}', [TecnicosController::class, 'show'])->name('tecnicos.show'); // Ruta para ver el detalle del técnico
+
+    // RUTA ORDENES - AVANCES
+    Route::get('/ordenes/{numero_ot}/avances', [AvancesController::class, 'index'])->name('ordenes.avances'); // Ver avances de una OT específica
+    Route::post('/ordenes/{numero_ot}/avances', [AvancesController::class, 'store'])->name('ordenes.avances.store'); // Agregar avance a una OT específica
+    Route::post('/ordenes/{numero_ot}/finalizar', [AvancesController::class, 'finalizar'])->name('ordenes.finalizar'); // Finalizar una OT y agregar el último avance
+
+
+
+
 
     // RUTAS DE CLIENTES
 

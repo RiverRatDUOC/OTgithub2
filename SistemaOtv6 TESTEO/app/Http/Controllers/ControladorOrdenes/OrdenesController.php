@@ -23,27 +23,95 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+
 // use Illuminate\Support\Facades\Validator;
 
 class OrdenesController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $ordenes = Ot::with([
-            'contacto',
-            'servicio',
-            'tecnicoEncargado',
-            'estado',
-            'prioridad',
-            'tipo',
-            'tipoVisita',
-            'contactoOt' // Integración de la relación contactoOt
-        ])
-            ->orderBy('created_at', 'desc')
-            ->paginate(50); // Ajusta el número de elementos por página según tus necesidades
+        // Obtiene el valor del parámetro 'show_all', por defecto es 'false' (órdenes asignadas)
+        $showAll = $request->input('show_all', 'false');
 
-        return view('ordenes.ordenes', compact('ordenes'));
+        // Obtiene el usuario autenticado
+        $usuario = Auth::user();
+
+        // Verifica si el usuario tiene el permiso para alternar vistas
+        $puedeCambiarVista = $usuario->can('ordenes.toggle_view');
+
+        // Inicializa la variable para el técnico
+        $tecnico = null;
+
+        // Inicializa la variable de órdenes
+        $ordenes = collect();
+
+        // Verifica si el usuario tiene un técnico asociado
+        if ($usuario && $usuario->tecnico) {
+            $tecnico = $usuario->tecnico;
+
+            // Verifica si el usuario seleccionó mostrar todas las órdenes y tiene el permiso
+            if ($showAll === 'true' && $puedeCambiarVista) {
+                // Si el usuario tiene permiso y seleccionó mostrar todas las órdenes
+                $ordenes = Ot::with([
+                    'contacto',
+                    'servicio',
+                    'tecnicoEncargado',
+                    'estado',
+                    'prioridad',
+                    'tipo',
+                    'tipoVisita',
+                    'contactoOt'
+                ])
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(50)
+                    ->appends(['show_all' => $showAll]); // Agrega 'show_all' a la paginación
+            } else {
+                // Obtiene las órdenes asignadas a este técnico
+                $ordenes = Ot::where('cod_tecnico_encargado', $tecnico->id)
+                    ->with([
+                        'contacto',
+                        'servicio',
+                        'tecnicoEncargado',
+                        'estado',
+                        'prioridad',
+                        'tipo',
+                        'tipoVisita',
+                        'contactoOt'
+                    ])
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(10)
+                    ->appends(['show_all' => $showAll]); // Agrega 'show_all' a la paginación
+            }
+        } else {
+            // Si el usuario no tiene un técnico asociado, mostrar todas las órdenes si tiene el permiso
+            if ($puedeCambiarVista) {
+                $ordenes = Ot::with([
+                    'contacto',
+                    'servicio',
+                    'tecnicoEncargado',
+                    'estado',
+                    'prioridad',
+                    'tipo',
+                    'tipoVisita',
+                    'contactoOt'
+                ])
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(50)
+                    ->appends(['show_all' => $showAll]); // Agrega 'show_all' a la paginación
+            }
+        }
+
+        // Selecciona la vista para marcar en el formulario
+        $vistaSeleccionada = $showAll === 'true' ? 'todas' : 'asignadas';
+
+        // Retorna la vista con los datos necesarios
+        return view('ordenes.ordenes', compact('ordenes', 'vistaSeleccionada', 'tecnico', 'puedeCambiarVista'));
     }
+
+
+
+
 
     public function obtenerOrden($id)
     {
@@ -610,8 +678,16 @@ class OrdenesController extends Controller
     public function buscar(Request $request)
     {
         $search = $request->input('search');
+        $showAll = $request->input('show_all', 'false'); // Obtiene el valor de show_all
 
-        $ordenes = Ot::with([
+        // Obtiene el usuario autenticado
+        $usuario = Auth::user();
+
+        // Verifica si el usuario tiene el permiso para alternar vistas
+        $puedeCambiarVista = $usuario->can('ordenes.toggle_view');
+
+        // Inicializa la consulta base
+        $query = Ot::with([
             'contacto',
             'contacto.sucursal',
             'contacto.sucursal.cliente',
@@ -622,59 +698,96 @@ class OrdenesController extends Controller
             'tipo',
             'tipoVisita',
             'contactoOt'
-        ])
-            ->where('numero_ot', 'like', "%$search%")
-            ->orWhere('descripcion_ot', 'like', "%$search%")
-            ->orWhere('cotizacion', 'like', "%$search%")
-            ->orWhereHas('contacto', function ($query) use ($search) {
-                $query->where('nombre_contacto', 'like', "%$search%")
-                    ->orWhereHas('sucursal', function ($query) use ($search) {
-                        $query->where('direccion_sucursal', 'like', "%$search%")
-                            ->orWhereHas('cliente', function ($query) use ($search) {
-                                $query->where('nombre_cliente', 'like', "%$search%");
+        ]);
+
+        // Si el usuario no tiene permiso para ver todas las órdenes, filtramos por técnico
+        if (!$puedeCambiarVista && $usuario->tecnico) {
+            $query->where('cod_tecnico_encargado', $usuario->tecnico->id);
+        }
+
+        // Aplicar filtros de búsqueda dependiendo de la vista seleccionada
+        if ($showAll === 'true') {
+            // Solo aplicar filtros si el usuario está buscando en la vista de "todas las órdenes"
+            $query->where(function ($query) use ($search) {
+                $query->where('numero_ot', 'like', "%$search%")
+                    ->orWhere('descripcion_ot', 'like', "%$search%")
+                    ->orWhere('cotizacion', 'like', "%$search%")
+                    ->orWhereHas('contacto', function ($query) use ($search) {
+                        $query->where('nombre_contacto', 'like', "%$search%")
+                            ->orWhereHas('sucursal', function ($query) use ($search) {
+                                $query->where('direccion_sucursal', 'like', "%$search%")
+                                    ->orWhereHas('cliente', function ($query) use ($search) {
+                                        $query->where('nombre_cliente', 'like', "%$search%");
+                                    });
                             });
-                    });
-            })
-            ->orWhereHas('servicio', function ($query) use ($search) {
-                $query->where('nombre_servicio', 'like', "%$search%");
-            })
-            ->orWhereHas('tecnicoEncargado', function ($query) use ($search) {
-                $query->where('nombre_tecnico', 'like', "%$search%");
-            })
-            ->orWhereHas('estado', function ($query) use ($search) {
-                $query->where('descripcion_estado_ot', 'like', "%$search%");
-            })
-            ->orWhereHas('prioridad', function ($query) use ($search) {
-                $query->where('descripcion_prioridad_ot', 'like', "%$search%");
-            })
-            ->orWhereHas('tipo', function ($query) use ($search) {
-                $query->where('descripcion_tipo_ot', 'like', "%$search%");
-            })
-            ->orWhereHas('tipoVisita', function ($query) use ($search) {
-                $query->where('descripcion_tipo_visita', 'like', "%$search%");
-            })
-            ->orWhereHas('contactoOt', function ($query) use ($search) {
-                $query->whereHas('contacto', function ($query) use ($search) {
-                    $query->where('nombre_contacto', 'like', "%$search%")
-                        ->orWhereHas('sucursal', function ($query) use ($search) {
-                            $query->where('direccion_sucursal', 'like', "%$search%")
-                                ->orWhereHas('cliente', function ($query) use ($search) {
-                                    $query->where('nombre_cliente', 'like', "%$search%");
+                    })
+                    ->orWhereHas('servicio', function ($query) use ($search) {
+                        $query->where('nombre_servicio', 'like', "%$search%");
+                    })
+                    ->orWhereHas('tecnicoEncargado', function ($query) use ($search) {
+                        $query->where('nombre_tecnico', 'like', "%$search%");
+                    })
+                    ->orWhereHas('estado', function ($query) use ($search) {
+                        $query->where('descripcion_estado_ot', 'like', "%$search%");
+                    })
+                    ->orWhereHas('prioridad', function ($query) use ($search) {
+                        $query->where('descripcion_prioridad_ot', 'like', "%$search%");
+                    })
+                    ->orWhereHas('tipo', function ($query) use ($search) {
+                        $query->where('descripcion_tipo_ot', 'like', "%$search%");
+                    })
+                    ->orWhereHas('tipoVisita', function ($query) use ($search) {
+                        $query->where('descripcion_tipo_visita', 'like', "%$search%");
+                    })
+                    ->orWhereHas('contactoOt', function ($query) use ($search) {
+                        $query->whereHas('contacto', function ($query) use ($search) {
+                            $query->where('nombre_contacto', 'like', "%$search%")
+                                ->orWhereHas('sucursal', function ($query) use ($search) {
+                                    $query->where('direccion_sucursal', 'like', "%$search%")
+                                        ->orWhereHas('cliente', function ($query) use ($search) {
+                                            $query->where('nombre_cliente', 'like', "%$search%");
+                                        });
                                 });
                         });
-                });
-            })
-            ->orderBy('numero_ot', 'desc')  // Ordena por `numero_ot` en orden ascendente
-            ->paginate(50);
+                    });
+            });
+        } else {
+            // Si está en la vista de "órdenes asignadas", solo se aplican filtros a las órdenes del técnico
+            if ($usuario->tecnico) {
+                $query->where('cod_tecnico_encargado', $usuario->tecnico->id);
+            }
 
-        return view('ordenes.ordenes', compact('ordenes'));
+            // Aplicar filtros de búsqueda
+            $query->where(function ($query) use ($search) {
+                $query->where('numero_ot', 'like', "%$search%")
+                    ->orWhere('descripcion_ot', 'like', "%$search%")
+                    ->orWhere('cotizacion', 'like', "%$search%")
+                    ->orWhereHas('contacto', function ($query) use ($search) {
+                        $query->where('nombre_contacto', 'like', "%$search%");
+                    });
+                // Aquí se podrían agregar más condiciones si es necesario.
+            });
+        }
+
+        // Obtiene las órdenes paginadas
+        $ordenes = $query->orderBy('numero_ot', 'desc')->paginate(50);
+
+        // Selecciona la vista para marcar en el formulario
+        $vistaSeleccionada = $showAll === 'true' ? 'todas' : 'asignadas';
+
+        return view('ordenes.ordenes', compact('ordenes', 'vistaSeleccionada', 'puedeCambiarVista'));
     }
+
 
 
 
 
     public function show($id)
     {
+        // Obtiene el usuario autenticado
+        $usuario = Auth::user();
+
+        // Encuentra la OT con sus relaciones
         $orden = Ot::with([
             'contacto',
             'servicio',
@@ -683,10 +796,19 @@ class OrdenesController extends Controller
             'prioridad',
             'tipo',
             'tipoVisita',
-            'contactoOt' // Integración de la relación contactoOt
-        ])
-            ->findOrFail($id);
+            'contactoOt'
+        ])->findOrFail($id);
 
+        // Verifica si el usuario tiene el permiso para ver todas las órdenes
+        if (!$usuario->can('ordenes.toggle_view')) {
+            // Si el usuario no tiene permiso, verifica si la OT está asignada al técnico del usuario
+            if ($usuario->tecnico && $orden->cod_tecnico_encargado !== $usuario->tecnico->id) {
+                // Si la OT no está asignada al técnico, redirige o muestra un mensaje de error
+                abort(403, 'No tienes permiso para ver esta orden.');
+            }
+        }
+
+        // Retorna la vista con la OT
         return view('ordenes.detalle', compact('orden'));
     }
 

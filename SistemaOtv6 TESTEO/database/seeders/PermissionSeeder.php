@@ -17,6 +17,7 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'ordenes.index', 'description' => 'Ver el modulo de órdenes']);
         Permission::create(['name' => 'ordenes.create', 'description' => 'Crear órdenes']);
         Permission::create(['name' => 'ordenes.edit', 'description' => 'Editar órdenes']);
+        Permission::create(['name' => 'ordenes.toggle_view', 'description' => 'Cambiar entre órdenes asignadas y todas las órdenes']);
 
         // Permisos para módulo de Roles
         Permission::create(['name' => 'roles.index', 'description' => 'Ver el modulo de roles']);

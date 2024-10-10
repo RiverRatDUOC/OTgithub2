@@ -6,19 +6,20 @@
                 style="max-height: calc(100vh - 60px); overflow-y: auto;">
                 <li class="nav-item">
                     @can('ordenes.index')
-                        <a class="nav-link pl-0 text-white {{ Request::is('ordenes*') ? 'active' : '' }}"
-                            href="{{ route('ordenes.index') }}">
-                            <i class="fas fa-shopping-cart"></i> <span>Órdenes</span>
-                        </a>
+                    <a class="nav-link pl-0 text-white {{ Request::is('ordenes*') ? 'active' : '' }}"
+                        href="{{ route('ordenes.index') }}">
+                        <i class="fas fa-shopping-cart"></i> <span>Órdenes</span>
+                    </a>
                     @endcan
                 </li>
+
 
                 <!-- Aquí van el resto de los elementos del menú -->
                 <li class="nav-item">
                     @can('clientes.index')
-                        <a class="nav-link pl-0 text-white {{ Request::is('clientes*') ? 'active' : '' }}"
-                            href="{{ route('clientes.index') }}"><i class="fas fa-user-friends"></i>
-                            <span>Clientes</span></a>
+                    <a class="nav-link pl-0 text-white {{ Request::is('clientes*') ? 'active' : '' }}"
+                        href="{{ route('clientes.index') }}"><i class="fas fa-user-friends"></i>
+                        <span>Clientes</span></a>
                     @endcan
                 </li>
                 <li class="nav-item">
