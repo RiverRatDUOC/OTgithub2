@@ -21,6 +21,8 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\migrarController;
 use App\Http\Controllers\PasswordUpdateController;
 use App\Http\Controllers\ControladorOrdenes\AvancesController;
+use App\Http\Controllers\ControladorParametros\CategoriaController;
+use App\Http\Controllers\ControladorParametros\SubCategoriaController;
 
 
 // Ruta para actualizar contraseñas
@@ -42,7 +44,6 @@ Route::middleware(['auth'])->group(function () {
     // Ruta para la página de inicio
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/home', [HomeController::class, 'index'])->name('home.page');
-
     // RUTAS DE OT
 
     Route::get('/orden/obtenerOrden/{id}', [OrdenesController::class, 'obtenerOrden']);
@@ -70,6 +71,7 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/tareas/{id}', [TareaServiciosController::class, 'update'])->name('tareas.update'); // Ruta para actualizar una tarea
         Route::delete('/tareas/{id}', [TareaServiciosController::class, 'destroy'])->name('tareas.destroy'); // Ruta para eliminar una tarea
         Route::get('/tareas/buscar', [TareaServiciosController::class, 'buscar'])->name('tareas.buscar'); // Ruta para buscar tareas
+
     });
 
 
@@ -187,6 +189,29 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dispositivos/{id}/editar', [DispositivoController::class, 'edit'])->name('dispositivos.edit'); // Ruta para editar un dispositivo
     Route::put('/dispositivos/{id}', [DispositivoController::class, 'update'])->name('dispositivos.update'); // Ruta para actualizar un dispositivo
     Route::delete('/dispositivos/{id}', [DispositivoController::class, 'destroy'])->name('dispositivos.destroy'); // Ruta para eliminar un dispositivo
+
+
+
+    // Rutas de Categorias
+    Route::get('/categoria', [CategoriaController::class, 'index'])->name('categoria.index');
+    Route::get('/categoria/{id}', [CategoriaController::class, 'show'])->name('categoria.show');
+    Route::get('/categoria/crear', [CategoriaController::class, 'create'])->name('categoria.create');
+    Route::post('/categoria', [CategoriaController::class, 'store'])->name('categoria.store');
+    Route::get('/categoria/{id}/editar', [CategoriaController::class, 'edit'])->name('categoria.edit');
+    Route::put('/categoria/{id}', [CategoriaController::class, 'update'])->name('categoria.update');
+    Route::delete('/categoria/{id}', [CategoriaController::class, 'destroy'])->name('categoria.destroy');
+
+    // Rutas de Subcategorias
+    Route::get('/subcategoria', [SubcategoriaController::class, 'index'])->name('subcategoria.index');
+    Route::get('/subcategoria/{id}', [SubcategoriaController::class, 'show'])->name('subcategoria.show');
+    Route::get('/subcategoria/crear', [SubcategoriaController::class, 'create'])->name('subcategoria.create');
+    Route::post('/subcategoria', [SubcategoriaController::class, 'store'])->name('subcategoria.store');
+    Route::get('/subcategoria/{id}/editar', [SubcategoriaController::class, 'edit'])->name('subcategoria.edit');
+    Route::put('/subcategoria/{id}', [SubcategoriaController::class, 'update'])->name('subcategoria.update');
+    Route::delete('/subcategoria/{id}', [SubcategoriaController::class, 'destroy'])->name('subcategoria.destroy');
+
+
+
 
 
     // RUTAS DE ROLES

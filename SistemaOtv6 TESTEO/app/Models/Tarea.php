@@ -28,6 +28,7 @@ class Tarea extends Model
     // Define the relationship
     public function servicio()
     {
-        return $this->belongsTo(Servicio::class, 'cod_servicio');
+        // Especificar la clave primaria de la tabla 'servicio' si es diferente de 'id'
+        return $this->belongsTo(Servicio::class, 'cod_servicio', 'id'); // 'id' es la clave primaria de Servicio
     }
 }

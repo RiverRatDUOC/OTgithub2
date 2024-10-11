@@ -90,14 +90,15 @@ class TareaServiciosController extends Controller
     {
         $search = $request->input('search');
 
-        // Filtrar tareas por 'nombre_tarea', 'cod_servicio' o 'nombre_servicio' relacionado y ordenar los resultados de manera descendente
-        $tareas = Tarea::where('nombre_tarea', 'like', "%$search%")
-            ->orWhere('cod_servicio', 'like', "%$search%")
-            ->orWhereHas('servicio', function ($query) use ($search) {
-                $query->where('nombre_servicio', 'like', "%$search%");
-            })
-            ->orderBy('id', 'desc') // Ordenar los resultados de manera descendente por el campo 'id' o cualquier otro campo relevante
-            ->paginate(20); // Ajusta el número de resultados por página según tus necesidades
+        // Filtrar tareas por nombre de tarea o nombre de servicio relacionado
+        $tareas = Tarea::where(function ($query) use ($search) {
+            $query->where('nombre_tarea', 'like', "%$search%")
+                ->orWhereHas('servicio', function ($query) use ($search) {
+                    $query->where('nombre_servicio', 'like', "%$search%");
+                });
+        })
+            ->orderBy('id', 'desc') // Ordenar los resultados de manera descendente
+            ->paginate(20); // Paginación de 20 resultados
 
         return view('tareas.tareas', compact('tareas'));
     }
