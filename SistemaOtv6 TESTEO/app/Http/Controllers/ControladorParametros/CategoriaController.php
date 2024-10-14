@@ -32,7 +32,7 @@ class CategoriaController extends Controller
             'nombre_categoria' => $request->input('nombre_categoria'),
         ]);
 
-        return redirect()->route('categoria.index')->with('success', 'Categoría creada exitosamente');
+        return redirect()->route('parametros.index')->with('success', 'Categoría creada exitosamente');
     }
 
     // Muestra el detalle de una categoría específica

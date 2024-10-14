@@ -201,6 +201,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/categoria/{id}', [CategoriaController::class, 'update'])->name('categoria.update');
     Route::delete('/categoria/{id}', [CategoriaController::class, 'destroy'])->name('categoria.destroy');
 
+
     // Rutas de Subcategorias
     Route::get('/subcategoria', [SubcategoriaController::class, 'index'])->name('subcategoria.index');
     Route::get('/subcategoria/{id}', [SubcategoriaController::class, 'show'])->name('subcategoria.show');
