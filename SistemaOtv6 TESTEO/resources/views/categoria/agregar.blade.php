@@ -69,7 +69,7 @@
                                 </button>
 
                                 <!-- Botón Cancelar -->
-                                <a href="{{ route('categoria.index') }}" class="btn btn-secondary" style="background-color: #cc6633; border-color: #cc6633;">
+                                <a href="{{ route('parametros.index') }}" class="btn btn-secondary" style="background-color: #cc6633; border-color: #cc6633;">
                                     <i class="fas fa-times-circle"></i> Cancelar
                                 </a>
                             </div>

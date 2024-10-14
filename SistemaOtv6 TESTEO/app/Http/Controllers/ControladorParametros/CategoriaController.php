@@ -18,7 +18,7 @@ class CategoriaController extends Controller
     // Muestra el formulario de creación de una nueva categoría
     public function create()
     {
-        return view('categoria.crear');
+        return view('categoria.agregar');
     }
 
     // Almacena una nueva categoría

@@ -45,7 +45,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/home', [HomeController::class, 'index'])->name('home.page');
     // RUTAS DE OT
-
+    Route::get('/categoria/agregar', [CategoriaController::class, 'create'])->name('categoria.create'); // Formulario para agregar categoría
+    Route::post('/categoria', [CategoriaController::class, 'store'])->name('categoria.store');
     Route::get('/orden/obtenerOrden/{id}', [OrdenesController::class, 'obtenerOrden']);
     Route::get('/ordenes', [OrdenesController::class, 'index'])->middleware('can:ordenes.index')->name('ordenes.index'); // Rutas para la carpeta 'ordenes'
     Route::get('/ordenes/agregar', [OrdenesController::class, 'create'])->middleware('can:ordenes.create')->name('ordenes.create'); // Ruta para crear una nueva orden
@@ -195,8 +196,7 @@ Route::middleware(['auth'])->group(function () {
     // Rutas de Categorias
     Route::get('/categoria', [CategoriaController::class, 'index'])->name('categoria.index');
     Route::get('/categoria/{id}', [CategoriaController::class, 'show'])->name('categoria.show');
-    Route::get('/categoria/crear', [CategoriaController::class, 'create'])->name('categoria.create');
-    Route::post('/categoria', [CategoriaController::class, 'store'])->name('categoria.store');
+
     Route::get('/categoria/{id}/editar', [CategoriaController::class, 'edit'])->name('categoria.edit');
     Route::put('/categoria/{id}', [CategoriaController::class, 'update'])->name('categoria.update');
     Route::delete('/categoria/{id}', [CategoriaController::class, 'destroy'])->name('categoria.destroy');
