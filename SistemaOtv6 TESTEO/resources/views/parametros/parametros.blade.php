@@ -59,8 +59,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <<a href="{{ route('categoria.create') }}" class="btn btn-primary" style="background-color: #cc6633; border-color: #cc6633;">Agregar Categoría</a>
-
+                            <a href="{{ route('categoria.create') }}" class="btn btn-primary" style="background-color: #cc6633; border-color: #cc6633;">Agregar Categoría</a>
                         </details>
 
                         <!-- Subcategorías -->
@@ -76,6 +75,7 @@
                                             <th>Id</th>
                                             <th>Nombre</th>
                                             <th>Categoría</th>
+                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -83,14 +83,30 @@
                                         <tr>
                                             <td>{{ $subcategoria->id }}</td>
                                             <td>{{ $subcategoria->nombre_subcategoria }}</td>
-                                            <td>{{ $subcategoria->categoria->nombre_categoria ?? 'No asignada' }}
+                                            <td>{{ $subcategoria->categoria->nombre_categoria ?? 'No asignada' }}</td>
+                                            <td>
+                                                <a href="{{ route('subcategoria.show', $subcategoria->id) }}"
+                                                    class="btn btn-info btn-sm"
+                                                    style="background-color: #cc0066; border-color: #cc0066;">Ver</a>
+                                                <a href="{{ route('subcategoria.edit', $subcategoria->id) }}"
+                                                    class="btn btn-warning btn-sm"
+                                                    style="background-color: #ffcc00; border-color: #ffcc00;">Editar</a>
+                                                <form action="{{ route('subcategoria.destroy', $subcategoria->id) }}"
+                                                    method="POST" style="display:inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                        class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar esta subcategoría?')">Eliminar</button>
+                                                </form>
                                             </td>
                                         </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
                             </div>
+                            <a href="{{ route('subcategoria.create') }}" class="btn btn-primary" style="background-color: #cc6633; border-color: #cc6633;">Agregar Subcategoría</a>
                         </details>
+
 
                         <!-- Líneas -->
                         <details style="width: 100%; margin-bottom: 10px;">

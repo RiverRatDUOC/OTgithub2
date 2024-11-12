@@ -8,11 +8,18 @@ use Illuminate\Http\Request;
 
 class CategoriaController extends Controller
 {
-    // Muestra la lista de categorías
+    // Muestra la lista de categorías (solo las no eliminadas)
     public function index()
     {
-        $categorias = Categoria::all();
+        $categorias = Categoria::all(); // Muestra categorías no eliminadas
         return view('categoria.index', compact('categorias'));
+    }
+
+    // Muestra las categorías eliminadas
+    public function trashed()
+    {
+        $categorias = Categoria::onlyTrashed()->get(); // Muestra solo las categorías eliminadas
+        return view('categoria.trashed', compact('categorias'));
     }
 
     // Muestra el formulario de creación de una nueva categoría
@@ -64,12 +71,30 @@ class CategoriaController extends Controller
         return redirect()->route('parametros.index')->with('success', 'Categoría actualizada exitosamente');
     }
 
-    // Elimina una categoría
+    // Elimina una categoría (soft delete)
     public function destroy($id)
     {
         $categoria = Categoria::findOrFail($id);
         $categoria->delete();
 
         return redirect()->route('parametros.index')->with('success', 'Categoría eliminada exitosamente');
+    }
+
+    // Restaurar una categoría eliminada
+    public function restore($id)
+    {
+        $categoria = Categoria::withTrashed()->findOrFail($id);
+        $categoria->restore();
+
+        return redirect()->route('parametros.index')->with('success', 'Categoría restaurada exitosamente');
+    }
+
+    // Elimina permanentemente una categoría
+    public function forceDelete($id)
+    {
+        $categoria = Categoria::withTrashed()->findOrFail($id);
+        $categoria->forceDelete();
+
+        return redirect()->route('parametros.index')->with('success', 'Categoría eliminada permanentemente');
     }
 }

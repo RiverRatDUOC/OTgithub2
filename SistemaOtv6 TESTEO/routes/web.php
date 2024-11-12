@@ -193,23 +193,22 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-    // Rutas de Categorias
-    Route::get('/categoria', [CategoriaController::class, 'index'])->name('categoria.index');
-    Route::get('/categoria/{id}', [CategoriaController::class, 'show'])->name('categoria.show');
+    // Rutas de Categorías
+    Route::get('/categoria', [CategoriaController::class, 'index'])->name('categoria.index'); // Listar categorías activas
+    Route::get('/categoria/trashed', [CategoriaController::class, 'trashed'])->name('categoria.trashed'); // Listar categorías eliminadas
+    Route::get('/categoria/agregar', [CategoriaController::class, 'create'])->name('categoria.create'); // Formulario de creación
+    Route::post('/categoria', [CategoriaController::class, 'store'])->name('categoria.store'); // Guardar una nueva categoría
+    Route::get('/categoria/{id}', [CategoriaController::class, 'show'])->name('categoria.show'); // Ver detalles de una categoría
+    Route::get('/categoria/{id}/editar', [CategoriaController::class, 'edit'])->name('categoria.edit'); // Formulario de edición
+    Route::put('/categoria/{id}', [CategoriaController::class, 'update'])->name('categoria.update'); // Actualizar una categoría
+    Route::delete('/categoria/{id}', [CategoriaController::class, 'destroy'])->name('categoria.destroy'); // Eliminar una categoría (soft delete)
+    Route::post('/categoria/{id}/restore', [CategoriaController::class, 'restore'])->name('categoria.restore'); // Restaurar una categoría eliminada
+    Route::delete('/categoria/{id}/force-delete', [CategoriaController::class, 'forceDelete'])->name('categoria.forceDelete'); // Eliminar una categoría permanentemente
 
-    Route::get('/categoria/{id}/editar', [CategoriaController::class, 'edit'])->name('categoria.edit');
-    Route::put('/categoria/{id}', [CategoriaController::class, 'update'])->name('categoria.update');
-    Route::delete('/categoria/{id}', [CategoriaController::class, 'destroy'])->name('categoria.destroy');
 
 
     // Rutas de Subcategorias
-    Route::get('/subcategoria', [SubcategoriaController::class, 'index'])->name('subcategoria.index');
-    Route::get('/subcategoria/{id}', [SubcategoriaController::class, 'show'])->name('subcategoria.show');
-    Route::get('/subcategoria/crear', [SubcategoriaController::class, 'create'])->name('subcategoria.create');
-    Route::post('/subcategoria', [SubcategoriaController::class, 'store'])->name('subcategoria.store');
-    Route::get('/subcategoria/{id}/editar', [SubcategoriaController::class, 'edit'])->name('subcategoria.edit');
-    Route::put('/subcategoria/{id}', [SubcategoriaController::class, 'update'])->name('subcategoria.update');
-    Route::delete('/subcategoria/{id}', [SubcategoriaController::class, 'destroy'])->name('subcategoria.destroy');
+    Route::resource('subcategoria', SubcategoriaController::class);
 
 
 
