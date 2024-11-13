@@ -31,13 +31,23 @@ class SubcategoriaController extends Controller
             'cod_categoria' => 'required|exists:categoria,id',
         ]);
 
-        Subcategoria::create([
+        // Crear la subcategoría
+        $subcategoria = Subcategoria::create([
             'nombre_subcategoria' => $request->input('nombre_subcategoria'),
             'cod_categoria' => $request->input('cod_categoria'),
         ]);
 
-        return redirect()->route('parametros.index')->with('success', 'Subcategoría creada exitosamente');
+        // Obtener el nombre de la categoría asociada
+        $categoria = Categoria::find($request->input('cod_categoria'));
+
+        // Pasar los datos a la sesión
+        return redirect()->route('parametros.index')->with([
+            'success' => 'Subcategoría creada exitosamente',
+            'subcategoria_nombre' => $subcategoria->nombre_subcategoria,
+            'categoria_nombre' => $categoria->nombre_categoria,
+        ]);
     }
+
 
     // Muestra el detalle de una subcategoría específica
     public function show($id)

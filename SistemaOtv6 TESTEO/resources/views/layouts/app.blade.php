@@ -10,6 +10,8 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <style>
 body {
 	color: #fff;
@@ -24,7 +26,7 @@ body {
 .form-control:focus {
 	border-color: #5cb85c;
 }
-.form-control, .btn {        
+.form-control, .btn {
 	border-radius: 3px;
 }
 .signup-form {
@@ -47,7 +49,7 @@ body {
 	position: absolute;
 	top: 50%;
 	z-index: 2;
-}	
+}
 .signup-form h2:before {
 	left: 0;
 }
@@ -73,9 +75,9 @@ body {
 .signup-form input[type="checkbox"] {
 	margin-top: 3px;
 }
-.signup-form .btn {        
+.signup-form .btn {
 	font-size: 16px;
-	font-weight: bold;		
+	font-weight: bold;
 	min-width: 140px;
 	outline: none !important;
 }
@@ -84,7 +86,7 @@ body {
 }
 .signup-form .row div:last-child {
 	padding-left: 10px;
-}    	
+}
 .signup-form a {
 	color: #fff;
 	text-decoration: underline;
@@ -95,10 +97,10 @@ body {
 .signup-form form a {
 	color: #5cb85c;
 	text-decoration: none;
-}	
+}
 .signup-form form a:hover {
 	text-decoration: underline;
-}  
+}
 </style>
 </head>
 <body>

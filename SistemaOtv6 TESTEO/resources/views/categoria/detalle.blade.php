@@ -30,6 +30,33 @@
                                 style="background-color: #cc6633;">Editar</a>
                         </div>
                     </div>
+
+                    <!-- Lista de Subcategorías -->
+                    @if($categoria->subcategorias && $categoria->subcategorias->count() > 0)
+                        <div class="card mt-3">
+                            <div class="card-header">
+                                Subcategorías de {{ $categoria->nombre_categoria }}
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group">
+                                    @foreach($categoria->subcategorias as $subcategoria)
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            {{ $subcategoria->nombre_subcategoria }}
+                                            <div>
+                                                <a href="{{ route('subcategoria.show', $subcategoria->id) }}" class="btn btn-sm btn-info" style="background-color: #cc0066; border-color: #cc0066;">Ver</a>
+                                                <a href="{{ route('subcategoria.edit', $subcategoria->id) }}" class="btn btn-sm btn-warning" style="background-color: #ffcc00; border-color: #ffcc00;">Editar</a>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    @else
+                        <div class="alert alert-info mt-3">
+                            No hay subcategorías asignadas a esta categoría.
+                        </div>
+                    @endif
+
                 </div>
             </div>
         </div>

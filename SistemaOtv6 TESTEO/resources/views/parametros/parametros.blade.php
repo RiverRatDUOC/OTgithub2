@@ -735,4 +735,14 @@
                 </div>
             </div>
 </main>
+@if(session('subcategoria_nombre') && session('categoria_nombre'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Subcategoría Creada',
+            text: "La subcategoría '{{ session('subcategoria_nombre') }}' ha sido creada y asignada a la categoría'{{ session('categoria_nombre') }}' correctamente.",
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+@endif
 @endsection

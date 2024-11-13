@@ -24,7 +24,7 @@ class Subcategoria extends Model
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
-    // Define la relación con Categoria usando 'cod_categoria' como clave foránea
+    // Relación con Categoria
     public function categoria()
     {
         return $this->belongsTo(Categoria::class, 'cod_categoria');

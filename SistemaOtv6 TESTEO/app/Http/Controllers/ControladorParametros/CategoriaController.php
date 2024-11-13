@@ -45,9 +45,10 @@ class CategoriaController extends Controller
     // Muestra el detalle de una categoría específica
     public function show($id)
     {
-        $categoria = Categoria::findOrFail($id);
+        $categoria = Categoria::with('subcategorias')->findOrFail($id);
         return view('categoria.detalle', compact('categoria'));
     }
+
 
     // Muestra el formulario para editar una categoría
     public function edit($id)
