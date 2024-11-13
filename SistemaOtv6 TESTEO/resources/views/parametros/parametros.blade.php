@@ -35,28 +35,32 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($categorias as $categoria)
-                                        <tr>
-                                            <td>{{ $categoria->id }}</td>
-                                            <td>{{ $categoria->nombre_categoria }}</td>
-                                            <td>
-                                                <a href="{{ route('categoria.show', $categoria->id) }}"
-                                                    class="btn btn-info btn-sm"
-                                                    style="background-color: #cc0066; border-color: #cc0066;">Ver</a>
-                                                <a href="{{ route('categoria.edit', $categoria->id) }}"
-                                                    class="btn btn-warning btn-sm"
-                                                    style="background-color: #ffcc00; border-color: #ffcc00;">Editar</a>
-                                                <form action="{{ route('categoria.destroy', $categoria->id) }}"
-                                                    method="POST" style="display:inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit"
-                                                        class="btn btn-danger btn-sm">Eliminar</button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
+                                        <tbody>
+                                            @foreach ($categorias as $categoria)
+                                            <tr>
+                                                <td>{{ $categoria->id }}</td>
+                                                <td>{{ $categoria->nombre_categoria }}</td>
+                                                <td>
+                                                    <a href="{{ route('categoria.show', $categoria->id) }}" class="btn btn-info btn-sm"
+                                                        style="background-color: #cc0066; border-color: #cc0066;">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    <a href="{{ route('categoria.edit', $categoria->id) }}" class="btn btn-warning btn-sm"
+                                                        style="background-color: #CC6633; border-color: #CC6633;">
+                                                        <i class="fas fa-edit text-white"></i>
+                                                    </a>
+                                                    <form action="{{ route('categoria.destroy', $categoria->id) }}" method="POST" style="display:inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger btn-sm">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+
                                 </table>
                             </div>
                             <a href="{{ route('categoria.create') }}" class="btn btn-primary" style="background-color: #cc6633; border-color: #cc6633;">Agregar Categoría</a>
@@ -87,16 +91,25 @@
                                             <td>
                                                 <a href="{{ route('subcategoria.show', $subcategoria->id) }}"
                                                     class="btn btn-info btn-sm"
-                                                    style="background-color: #cc0066; border-color: #cc0066;">Ver</a>
+                                                    style="background-color: #cc0066; border-color: #cc0066;">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+
                                                 <a href="{{ route('subcategoria.edit', $subcategoria->id) }}"
                                                     class="btn btn-warning btn-sm"
-                                                    style="background-color: #ffcc00; border-color: #ffcc00;">Editar</a>
+                                                    style="background-color: #CC6633; border-color: #CC6633;">
+                                                    <i class="fas fa-edit text-white"></i>
+                                                </a> <!-- Cierre correcto del botón de edición -->
+
                                                 <form action="{{ route('subcategoria.destroy', $subcategoria->id) }}"
                                                     method="POST" style="display:inline;">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit"
-                                                        class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar esta subcategoría?')">Eliminar</button>
+                                                        class="btn btn-danger btn-sm"
+                                                        onclick="return confirm('¿Estás seguro de que deseas eliminar esta subcategoría?')">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
                                                 </form>
                                             </td>
                                         </tr>

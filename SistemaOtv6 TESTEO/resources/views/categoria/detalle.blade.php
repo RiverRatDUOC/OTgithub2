@@ -25,9 +25,9 @@
                         <div class="card-body">
                             <p><strong>Nombre:</strong> {{ $categoria->nombre_categoria }}</p>
                             <a href="{{ route('parametros.index') }}" class="btn btn-primary"
-                                style="background-color: #cc6633;">Volver a la lista</a>
+                                style="background-color: #cc6633; border-color: #cc6633;">Volver a la lista</a>
                             <a href="{{ route('categoria.edit', $categoria->id) }}" class="btn btn-warning"
-                                style="background-color: #cc6633;">Editar</a>
+                                style="background-color: #d39a7e; border-color: #cc6633;">Editar</a>
                         </div>
                     </div>
 
@@ -35,7 +35,7 @@
                     @if($categoria->subcategorias && $categoria->subcategorias->count() > 0)
                         <div class="card mt-3">
                             <div class="card-header">
-                                Subcategorías de {{ $categoria->nombre_categoria }}
+                                <p><strong>Subcategoría(s): </strong>{{ $categoria->nombre_categoria }}</p>
                             </div>
                             <div class="card-body">
                                 <ul class="list-group">
@@ -43,8 +43,8 @@
                                         <li class="list-group-item d-flex justify-content-between align-items-center">
                                             {{ $subcategoria->nombre_subcategoria }}
                                             <div>
-                                                <a href="{{ route('subcategoria.show', $subcategoria->id) }}" class="btn btn-sm btn-info" style="background-color: #cc0066; border-color: #cc0066;">Ver</a>
-                                                <a href="{{ route('subcategoria.edit', $subcategoria->id) }}" class="btn btn-sm btn-warning" style="background-color: #ffcc00; border-color: #ffcc00;">Editar</a>
+                                                <a href="{{ route('subcategoria.show', $subcategoria->id) }}" class="btn btn-sm btn-info" style="background-color: #cc6633; border-color: #cc6633;">Ver</a>
+                                                <a href="{{ route('subcategoria.edit', $subcategoria->id) }}" class="btn btn-sm btn-warning" style="background-color: #d39a7e; border-color: #cc6633;">Editar</a>
                                             </div>
                                         </li>
                                     @endforeach
