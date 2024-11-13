@@ -65,16 +65,16 @@
 
                             <!-- Seleccionar Categoría -->
                             <div class="form-group">
-                                <label for="categoria_id">Categoría</label>
-                                <select name="categoria_id" id="categoria_id" class="form-control" required>
+                                <label for="cod_categoria">Categoría</label>
+                                <select name="cod_categoria" id="cod_categoria" class="form-control" required>
                                     <option value="">Seleccione una Categoría</option>
                                     @foreach($categorias as $categoria)
-                                        <option value="{{ $categoria->id }}" {{ old('categoria_id') == $categoria->id ? 'selected' : '' }}>
+                                        <option value="{{ $categoria->id }}" {{ old('cod_categoria') == $categoria->id ? 'selected' : '' }}>
                                             {{ $categoria->nombre_categoria }}
                                         </option>
                                     @endforeach
                                 </select>
-                                @error('categoria_id')
+                                @error('cod_categoria')
                                 <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
