@@ -23,6 +23,7 @@ use App\Http\Controllers\PasswordUpdateController;
 use App\Http\Controllers\ControladorOrdenes\AvancesController;
 use App\Http\Controllers\ControladorParametros\CategoriaController;
 use App\Http\Controllers\ControladorParametros\SubCategoriaController;
+use App\Http\Controllers\ControladorParametros\LineaController;
 
 
 // Ruta para actualizar contraseñas
@@ -160,8 +161,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/modelos/{id}', [ModeloController::class, 'show'])->name('modelos.show'); // Ruta para mostrar los detalles de un modelo
     Route::delete('/modelos/{id}', [ModeloController::class, 'destroy'])->name('modelos.destroy'); // Ruta para eliminar un modelo
     Route::get('/modelos/buscar', [ModeloController::class, 'buscar'])->name('modelos.buscar'); // Ruta para buscar modelos
-    Route::get('/subcategorias/{categoria}', [ModeloController::class, 'getSubcategorias']);
-    Route::get('/lineas/{subcategoria}', [ModeloController::class, 'getLineas']);
+    // Route::get('/subcategorias/{categoria}', [ModeloController::class, 'getSubcategorias']);
+    // Route::get('/lineas/{subcategoria}', [ModeloController::class, 'getLineas']);
     Route::get('/sublineas/{linea}', [ModeloController::class, 'getSublineas']);
     Route::get('/sublineas/{id}', [ModeloController::class, 'getSublineas']);
     Route::get('/modelos/{marca}/{sublinea}', [ModeloController::class, 'getModelos']);
@@ -179,7 +180,7 @@ Route::middleware(['auth'])->group(function () {
     // Rutas para el controlador ParametrosController
     Route::get('/parametros', [ParametrosController::class, 'index'])->name('parametros.index'); // Ruta para listar parámetros
     Route::get('/parametros/{id}', [ParametrosController::class, 'show'])->name('parametros.show'); // Ruta para mostrar un parámetro específico
-    Route::get('/lineas/{id}', [ParametrosController::class, 'showLinea'])->name('lineas.show');
+    // Route::get('/lineas/{id}', [ParametrosController::class, 'showLinea'])->name('lineas.show');
 
     // Rutas de Dispositivos
     Route::get('/dispositivos', [DispositivoController::class, 'index'])->name('dispositivos.index'); // Ruta para listar dispositivos
@@ -209,6 +210,9 @@ Route::middleware(['auth'])->group(function () {
 
     // Rutas de Subcategorias
     Route::resource('subcategoria', SubcategoriaController::class);
+
+    // Rutas de Lineas
+    Route::resource('lineas', LineaController::class);
 
 
 
