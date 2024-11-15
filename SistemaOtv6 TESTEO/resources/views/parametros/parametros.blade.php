@@ -19,194 +19,18 @@
                         <h5 class="mb-0">Categorías, Subcategorías, Líneas y Sublíneas</h5>
                     </div>
                     <div class="card-body">
-                        <!-- Categorías -->
-                        <details style="width: 100%; margin-bottom: 10px;">
-                            <summary
-                                style="font-size: 1.25rem; padding: 10px; border: 1px solid #ddd; background-color: #f7f7f7; cursor: pointer; width: 100%;">
-                                Categorías</summary>
-                            <div class="table-responsive mt-3"
-                                style="max-height: 300px; overflow-y: auto; width: 100%;">
-                                <table class="table table-striped" style="width: 100%;">
-                                    <thead>
-                                        <tr>
-                                            <th>Id</th>
-                                            <th>Nombre</th>
-                                            <th>Acciones</th> <!-- Columna para acciones -->
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tbody>
-                                            @foreach ($categorias as $categoria)
-                                            <tr>
-                                                <td>{{ $categoria->id }}</td>
-                                                <td>{{ $categoria->nombre_categoria }}</td>
-                                                <td>
-                                                    <a href="{{ route('categoria.show', $categoria->id) }}" class="btn btn-info btn-sm"
-                                                        style="background-color: #cc0066; border-color: #cc0066;">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-                                                    <a href="{{ route('categoria.edit', $categoria->id) }}" class="btn btn-warning btn-sm"
-                                                        style="background-color: #CC6633; border-color: #CC6633;">
-                                                        <i class="fas fa-edit text-white"></i>
-                                                    </a>
-                                                    <form action="{{ route('categoria.destroy', $categoria->id) }}" method="POST" style="display:inline;">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger btn-sm">
-                                                            <i class="fas fa-trash-alt"></i>
-                                                        </button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
 
-                                </table>
-                            </div>
-                            <a href="{{ route('categoria.create') }}" class="btn btn-primary" style="background-color: #cc6633; border-color: #cc6633;">Agregar Categoría</a>
-                        </details>
+                        <!-- Categorías -->
+                        @include('parametros._partials.categorias')
 
                         <!-- Subcategorías -->
-                        <details style="width: 100%; margin-bottom: 10px;">
-                            <summary
-                                style="font-size: 1.25rem; padding: 10px; border: 1px solid #ddd; background-color: #f7f7f7; cursor: pointer; width: 100%;">
-                                Subcategorías</summary>
-                            <div class="table-responsive mt-3"
-                                style="max-height: 300px; overflow-y: auto; width: 100%;">
-                                <table class="table table-striped" style="width: 100%;">
-                                    <thead>
-                                        <tr>
-                                            <th>Id</th>
-                                            <th>Nombre</th>
-                                            <th>Categoría</th>
-                                            <th>Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($subcategorias as $subcategoria)
-                                        <tr>
-                                            <td>{{ $subcategoria->id }}</td>
-                                            <td>{{ $subcategoria->nombre_subcategoria }}</td>
-                                            <td>{{ $subcategoria->categoria->nombre_categoria ?? 'No asignada' }}</td>
-                                            <td>
-                                                <a href="{{ route('subcategoria.show', $subcategoria->id) }}"
-                                                    class="btn btn-info btn-sm"
-                                                    style="background-color: #cc0066; border-color: #cc0066;">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-
-                                                <a href="{{ route('subcategoria.edit', $subcategoria->id) }}"
-                                                    class="btn btn-warning btn-sm"
-                                                    style="background-color: #CC6633; border-color: #CC6633;">
-                                                    <i class="fas fa-edit text-white"></i>
-                                                </a> <!-- Cierre correcto del botón de edición -->
-
-                                                <form action="{{ route('subcategoria.destroy', $subcategoria->id) }}"
-                                                    method="POST" style="display:inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit"
-                                                        class="btn btn-danger btn-sm"
-                                                        onclick="return confirm('¿Estás seguro de que deseas eliminar esta subcategoría?')">
-                                                        <i class="fas fa-trash-alt"></i>
-                                                    </button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                            <a href="{{ route('subcategoria.create') }}" class="btn btn-primary" style="background-color: #cc6633; border-color: #cc6633;">Agregar Subcategoría</a>
-                        </details>
-
+                        @include('parametros._partials.subcategorias')
 
                         <!-- Líneas -->
-                        <details style="width: 100%; margin-bottom: 10px;">
-                            <summary
-                                style="font-size: 1.25rem; padding: 10px; border: 1px solid #ddd; background-color: #f7f7f7; cursor: pointer; width: 100%;">
-                                Líneas</summary>
-                            <div class="table-responsive mt-3"
-                                style="max-height: 300px; overflow-y: auto; width: 100%;">
-                                <table class="table table-striped" style="width: 100%;">
-                                    <thead>
-                                        <tr>
-                                            <th>Id</th>
-                                            <th>Nombre</th>
-                                            <th>Subcategoría</th>
-                                            <th>Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($lineas as $linea)
-                                        <tr>
-                                            <td>{{ $linea->id }}</td>
-                                            <td>{{ $linea->nombre_linea }}</td>
-                                            <td>{{ $linea->subcategoria->nombre_subcategoria ?? 'No asignada' }}</td>
-                                            <td>
-                                                <a href="{{ route('lineas.show', $linea->id) }}" class="btn btn-info btn-sm" style="background-color: #cc0066; border-color: #cc0066;">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                                <a href="{{ route('lineas.edit', $linea->id) }}" class="btn btn-warning btn-sm" style="background-color: #CC6633; border-color: #CC6633;">
-                                                    <i class="fas fa-edit text-white"></i>
-                                                </a>
-                                                <form action="{{ route('lineas.destroy', $linea->id) }}" method="POST" style="display:inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit"
-                                                        class="btn btn-danger btn-sm"
-                                                        onclick="return confirm('¿Estás seguro de que deseas eliminar esta línea?')">
-                                                        <i class="fas fa-trash-alt"></i>
-                                                    </button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                            <a href="{{ route('lineas.create') }}" class="btn btn-primary" style="background-color: #cc6633; border-color: #cc6633;">Agregar Línea</a>
-                        </details>
+                        @include('parametros._partials.lineas')
 
                         <!-- Sublíneas -->
-                        <details style="width: 100%; margin-bottom: 10px;">
-                            <summary
-                                style="font-size: 1.25rem; padding: 10px; border: 1px solid #ddd; background-color: #f7f7f7; cursor: pointer; width: 100%;">
-                                Sublíneas</summary>
-                            <div class="table-responsive mt-3"
-                                style="max-height: 300px; overflow-y: auto; width: 100%;">
-                                <table class="table table-striped" style="width: 100%;">
-                                    <thead>
-                                        <tr>
-                                            <th>Id</th>
-                                            <th>Nombre</th>
-                                            <th>Línea</th>
-                                            <th>Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($sublineas as $sublinea)
-                                        <tr>
-                                            <td>{{ $sublinea->id }}</td>
-                                            <td>{{ $sublinea->nombre_sublinea }}</td>
-                                            <td>{{ $sublinea->linea->nombre_linea ?? 'No asignada' }}</td>
-                                            <td>
-                                                <div class="d-flex">
-                                                    <a href="{{ route('parametros.show', $sublinea->id) }}"
-                                                        class="btn btn-primary me-1"
-                                                        style="background-color: #cc0066; border-color: #cc0066;">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </details>
-                    </div>
-                </div>
+                        @include('parametros._partials.sublineas')
 
                 <!-- Sección: Marcas -->
                 <div class="card mb-4">
@@ -215,81 +39,14 @@
                     </div>
                     <div class="card-body">
                         <!-- Marcas -->
-                        <details style="width: 100%; margin-bottom: 10px;">
-                            <summary
-                                style="font-size: 1.25rem; padding: 10px; border: 1px solid #ddd; background-color: #f7f7f7; cursor: pointer; width: 100%;">
-                                Marcas</summary>
-                            <div class="table-responsive mt-3"
-                                style="max-height: 300px; overflow-y: auto; width: 100%;">
-                                <table class="table table-striped" style="width: 100%;">
-                                    <thead>
-                                        <tr>
-                                            <th>Id</th>
-                                            <th>Nombre</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($marcas as $marca)
-                                        <tr>
-                                            <td>{{ $marca->id }}</td>
-                                            <td>{{ $marca->nombre_marca }}</td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </details>
+                        @include('parametros._partials.marcas')
 
                         <!-- Estados de OT -->
-                        <details style="width: 100%;">
-                            <summary
-                                style="font-size: 1.25rem; padding: 10px; border: 1px solid #ddd; background-color: #f7f7f7; cursor: pointer; width: 100%;">
-                                Estados de OT</summary>
-                            <div class="table-responsive mt-3"
-                                style="max-height: 300px; overflow-y: auto; width: 100%;">
-                                <table class="table table-striped" style="width: 100%;">
-                                    <thead>
-                                        <tr>
-                                            <th>Id</th>
-                                            <th>Descripción</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($estados_ot as $estado_ot)
-                                        <tr>
-                                            <td>{{ $estado_ot->id }}</td>
-                                            <td>{{ $estado_ot->descripcion_estado_ot }}</td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </details>
+                        @include('parametros._partials.estadosOt')
+
                         <!-- Tipos de Visita -->
-                        <details style="width: 100%;">
-                            <summary
-                                style="font-size: 1.25rem; padding: 10px; border: 1px solid #ddd; background-color: #f7f7f7; cursor: pointer; width: 100%;">
-                                Tipos de Visita</summary>
-                            <div class="table-responsive mt-3"
-                                style="max-height: 300px; overflow-y: auto; width: 100%;">
-                                <table class="table table-striped" style="width: 100%;">
-                                    <thead>
-                                        <tr>
-                                            <th>Id</th>
-                                            <th>Descripción</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($tipos_visita as $tipo_visita)
-                                        <tr>
-                                            <td>{{ $tipo_visita->id }}</td>
-                                            <td>{{ $tipo_visita->descripcion_tipo_visita }}</td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </details>
+                        @include('parametros._partials.tiposVisita')
+                        
                         <!-- Tipos de Servicio -->
                         <details style="width: 100%;">
                             <summary
@@ -351,7 +108,7 @@
                             </div>
                         </details>
 
-
+    @include('parametros._partials.usuarios')
                         <!-- Usuarios -->
                         <details style="width: 100%;">
                             <summary
