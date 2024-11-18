@@ -41,8 +41,9 @@
                         <!-- Marcas -->
                         @include('parametros._partials.marcas')
 
-                        <!-- Estados de OT -->
-                        @include('parametros._partials.estadosOt')
+                        <!-- Modelos -->
+                        @include('parametros._partials.modelos')
+
 
                         <!-- Tipos de Visita -->
                         @include('parametros._partials.tiposVisita')
@@ -50,8 +51,6 @@
                         <!-- Tipos de Servicio -->
                         @include('parametros._partials.tipoServicios')
 
-                        <!-- Modelos -->
-                        @include('parametros._partials.modelos')
 
                         <!-- Usuarios -->
                         @include('parametros._partials.usuarios')
@@ -80,17 +79,20 @@
                         <!-- Dispositivos -->
                         @include('parametros._partials.dispositivos')
 
-                        <!-- Dispositivos OT -->
+                        <!-- Estados de OT -->
+                        @include('parametros._partials.estadosOt')
+
+                        {{-- <!-- Dispositivos OT -->
                         @include('parametros._partials.dispositivosOt')
 
                         <!-- Tareas OT -->
-                        @include('parametros._partials.tareasOt')
+                        @include('parametros._partials.tareasOt') --}}
 
-                        <!-- Contactos OT -->
-                        @include('parametros._partials.contactosOt')
+                        {{-- <!-- Contactos OT -->
+                        @include('parametros._partials.contactosOt') --}}
 
-                        <!-- Equipos Técnicos -->
-                        @include('parametros._partials.equiposTecnicos')
+                        {{-- <!-- Equipos Técnicos -->
+                        @include('parametros._partials.equiposTecnicos') --}}
 
 
 
