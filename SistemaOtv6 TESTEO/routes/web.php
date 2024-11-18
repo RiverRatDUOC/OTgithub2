@@ -9,7 +9,7 @@ use App\Http\Controllers\ControladorClientes\ClientesController;
 use App\Http\Controllers\ControladorSucursales\SucursalesController;
 use App\Http\Controllers\ControladorServicios\ServiciosController;
 use App\Http\Controllers\ControladorServicios\TareaServiciosController;
-// use App\Http\Controllers\ControladorTecnicos\TecnicosController;
+
 use App\Http\Controllers\ControladorTecnicos\TecnicosController;
 use App\Http\Controllers\ControladorTecnicosDos\TecnicosDosController;
 use App\Http\Controllers\ControladorEquipos\ModeloController;
@@ -24,6 +24,7 @@ use App\Http\Controllers\ControladorOrdenes\AvancesController;
 use App\Http\Controllers\ControladorParametros\CategoriaController;
 use App\Http\Controllers\ControladorParametros\SubCategoriaController;
 use App\Http\Controllers\ControladorParametros\LineaController;
+use App\Http\Controllers\ControladorParametros\SublineaController;
 
 
 // Ruta para actualizar contraseñas
@@ -135,11 +136,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/servicios/{id}', [ServiciosController::class, 'show'])->name('servicios.show'); // Ruta para mostrar los detalles de un servicio
 
 
-
-
-
-
-
     // Rutas de Contactos
     Route::get('/contactos', [ContactosController::class, 'index'])->name('contactos.index'); // Ruta para listar contactos
     Route::get('/contactos/agregar', [ContactosController::class, 'create'])->name('contactos.create'); // Ruta para crear un nuevo contacto
@@ -163,8 +159,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/modelos/buscar', [ModeloController::class, 'buscar'])->name('modelos.buscar'); // Ruta para buscar modelos
     // Route::get('/subcategorias/{categoria}', [ModeloController::class, 'getSubcategorias']);
     // Route::get('/lineas/{subcategoria}', [ModeloController::class, 'getLineas']);
-    Route::get('/sublineas/{linea}', [ModeloController::class, 'getSublineas']);
-    Route::get('/sublineas/{id}', [ModeloController::class, 'getSublineas']);
+    // Route::get('/sublineas/{linea}', [ModeloController::class, 'getSublineas']);
+    // Route::get('/sublineas/{id}', [ModeloController::class, 'getSublineas']);
     Route::get('/modelos/{marca}/{sublinea}', [ModeloController::class, 'getModelos']);
 
 
@@ -213,6 +209,10 @@ Route::middleware(['auth'])->group(function () {
 
     // Rutas de Lineas
     Route::resource('lineas', LineaController::class);
+
+    // Rutas de Sublineas
+    Route::resource('sublineas', SublineaController::class);
+
 
 
 

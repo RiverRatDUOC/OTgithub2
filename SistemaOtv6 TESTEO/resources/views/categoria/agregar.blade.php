@@ -19,17 +19,15 @@
                 <!-- Sección Tutorial -->
                 <div class="alert alert-info mt-4" role="alert">
                     <h5 class="alert-heading">Tutorial</h5>
-                    <p>Agregue la siguiente información para agregar una categoría correctamente:</p>
+                    <p>Siga las siguientes indicaciones para agregar una categoría correctamente:</p>
                     <ul>
-                        <li><strong>Nombre de la Categoría:</strong> Nombre de la nueva categoría.</li>
+                        <li><strong>Nombre de la Categoría:</strong> Agregue una nueva categoría.</li>
                     </ul>
                 </div>
 
                 <!-- Formulario de Adición -->
                 <div class="card mt-3">
-                    <div class="card-header">
-                        Agregar Información de la Categoría
-                    </div>
+
                     <div class="card-body">
 
                         <!-- Mensaje de éxito -->
@@ -69,7 +67,7 @@
                                 </button>
 
                                 <!-- Botón Cancelar -->
-                                <a href="{{ route('parametros.index') }}" class="btn btn-secondary" style="background-color: #cc6633; border-color: #cc6633;">
+                                <a href="{{ route('parametros.index') }}" class="btn btn-secondary" style="background-color: #666666; border-color: #666666;">
                                     <i class="fas fa-times-circle"></i> Cancelar
                                 </a>
                             </div>

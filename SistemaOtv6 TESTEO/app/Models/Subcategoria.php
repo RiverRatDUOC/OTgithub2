@@ -29,4 +29,10 @@ class Subcategoria extends Model
     {
         return $this->belongsTo(Categoria::class, 'cod_categoria');
     }
+
+    public function lineas()
+    {
+        return $this->hasMany(Linea::class, 'cod_subcategoria');
+    }
+
 }

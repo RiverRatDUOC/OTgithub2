@@ -52,9 +52,11 @@ class SubcategoriaController extends Controller
     // Muestra el detalle de una subcategoría específica
     public function show($id)
     {
-        $subcategoria = Subcategoria::with('categoria')->findOrFail($id);
+        $subcategoria = Subcategoria::with('lineas')->findOrFail($id);
+
         return view('subcategoria.detalle', compact('subcategoria'));
     }
+
 
     // Muestra el formulario para editar una subcategoría
     public function edit($id)

@@ -18,8 +18,8 @@
 
                 <!-- Sección Tutorial -->
                 <div class="alert alert-info mt-4" role="alert">
-                    <h5 class="alert-heading">Tutorial</h5>
-                    <p>Agregue la siguiente información para agregar una subcategoría correctamente:</p>
+                    <h5 class="alert-heading"><strong>Tutorial</strong></h5>
+                    <p>Siga las siguientes indicaciones para agregar una subcategoría correctamente:</p>
                     <ul>
                         <li><strong>Nombre de la Subcategoría:</strong> Nombre de la nueva subcategoría.</li>
                         <li><strong>Categoría:</strong> Seleccione la categoría a la que pertenece esta subcategoría.</li>
@@ -28,9 +28,7 @@
 
                 <!-- Formulario de Adición -->
                 <div class="card mt-3">
-                    <div class="card-header">
-                        Agregar Información de la Subcategoría
-                    </div>
+
                     <div class="card-body">
 
                         <!-- Mensaje de éxito -->
@@ -86,7 +84,7 @@
                                 </button>
 
                                 <!-- Botón Cancelar -->
-                                <a href="{{ route('parametros.index') }}" class="btn btn-secondary" style="background-color: #cc6633; border-color: #cc6633;">
+                                <a href="{{ route('parametros.index') }}" class="btn btn-secondary" style="background-color: #666666; border-color: #666666;">
                                     <i class="fas fa-times-circle"></i> Cancelar
                                 </a>
                             </div>

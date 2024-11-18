@@ -24,7 +24,6 @@ class Sublinea extends Model
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
-    // Define the relationship
     public function linea()
     {
         return $this->belongsTo(Linea::class, 'cod_linea');

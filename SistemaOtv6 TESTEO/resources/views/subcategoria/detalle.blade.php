@@ -24,16 +24,49 @@
                         </div>
                         <div class="card-body">
                             <p><strong>Nombre:</strong> {{ $subcategoria->nombre_subcategoria }}</p>
-                            <p><strong>Categoría:</strong> {{ $subcategoria->categoria->nombre_categoria ?? 'Sin categoría' }}</p>
-                            <a href="{{ route('parametros.index') }}" class="btn btn-primary"
-                                style="background-color: #cc6633; border-color: #cc6633;">Volver a la lista</a>
-                            <a href="{{ route('subcategoria.edit', $subcategoria->id) }}" class="btn btn-warning"
-                                style="background-color: #d39a7e; border-color: #cc6633;">Editar</a>
+                            <p><strong>Categoría:</strong>
+                                {{ $subcategoria->categoria->nombre_categoria ?? 'Sin categoría' }}
+                            </p>
+                            <div class="d-flex justify-content-between">
+                                <a href="{{ route('parametros.index') }}" class="btn btn-primary"
+                                    style="background-color: #cc6633; border-color: #cc6633;">
+                                    <i class="bi bi-list"></i> Volver a la lista
+                                </a>
+                                <a href="{{ route('subcategoria.edit', $subcategoria->id) }}" class="btn btn-warning"
+                                    style="background-color: #d39a7e; border-color: #cc6633;">
+                                    <i class="bi bi-pencil-square"></i> Editar
+                                </a>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Aquí puedes agregar más información relacionada si es necesario -->
-
+                    <!-- Lista de Líneas -->
+                    @if($subcategoria->lineas && $subcategoria->lineas->count() > 0)
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <p><strong>Líneas asociadas:</strong></p>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group">
+                                @foreach($subcategoria->lineas as $linea)
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        {{ $linea->nombre_linea }}
+                                        <div>
+                                            <a href="{{ route('lineas.show', $linea->id) }}" class="btn btn-sm btn-info"
+                                                style="background-color: #cc6633; border-color: #cc6633;">Ver</a>
+                                            <a href="{{ route('lineas.edit', $linea->id) }}" class="btn btn-sm btn-warning"
+                                                style="background-color: #d39a7e; border-color: #cc6633;">Editar</a>
+                                        </div>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                @else
+                    <div class="alert alert-info mt-3">
+                        No hay líneas asignadas a esta subcategoría.
+                    </div>
+                @endif
                 </div>
             </div>
         </div>

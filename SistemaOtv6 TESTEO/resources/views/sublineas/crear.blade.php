@@ -8,18 +8,18 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col">
-                    <!-- Agregar Línea -->
+                    <!-- Agregar Sublínea -->
                     <div class="d-flex justify-content-between align-items-center mt-3">
-                        <h2>Agregar Línea</h2>
+                        <h2>Agregar Sublínea</h2>
                     </div>
 
                     <!-- Sección Tutorial -->
                     <div class="alert alert-info mt-4" role="alert">
                         <h5 class="alert-heading"><strong>Tutorial</strong></h5>
-                        <p>Siga las siguientes indicaciones para agregar una línea correctamente:</p>
+                        <p>Siga las siguientes indicaciones para agregar una sublínea correctamente:</p>
                         <ul>
-                            <li><strong>Nombre de la Línea:</strong> Nombre de la nueva línea.</li>
-                            <li><strong>Subcategoría:</strong> Seleccione la subcategoría a la que pertenece esta línea.</li>
+                            <li><strong>Nombre de la Sublínea:</strong> Nombre de la nueva sublínea.</li>
+                            <li><strong>Línea:</strong> Seleccione la línea a la que pertenece esta sublínea.</li>
                         </ul>
                     </div>
 
@@ -46,30 +46,30 @@
                             </div>
                             @endif
 
-                            <form action="{{ route('lineas.store') }}" method="POST">
+                            <form action="{{ route('sublineas.store') }}" method="POST">
                                 @csrf
 
-                                <!-- Nombre de la Línea -->
+                                <!-- Nombre de la Sublínea -->
                                 <div class="form-group">
-                                    <label for="nombre_linea">Nombre de la Línea</label>
-                                    <input type="text" name="nombre_linea" id="nombre_linea" class="form-control" value="{{ old('nombre_linea') }}" required>
-                                    @error('nombre_linea')
+                                    <label for="nombre_sublinea">Nombre de la Sublínea</label>
+                                    <input type="text" name="nombre_sublinea" id="nombre_sublinea" class="form-control" value="{{ old('nombre_sublinea') }}" required>
+                                    @error('nombre_sublinea')
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
 
-                                <!-- Seleccionar Subcategoría -->
+                                <!-- Seleccionar Línea -->
                                 <div class="form-group">
-                                    <label for="cod_subcategoria">Subcategoría</label>
-                                    <select name="cod_subcategoria" id="cod_subcategoria" class="form-control" required>
-                                        <option value="">Seleccione una Subcategoría</option>
-                                        @foreach($subcategorias as $subcategoria)
-                                            <option value="{{ $subcategoria->id }}" {{ old('cod_subcategoria') == $subcategoria->id ? 'selected' : '' }}>
-                                                {{ $subcategoria->nombre_subcategoria }}
+                                    <label for="cod_linea">Línea</label>
+                                    <select name="cod_linea" id="cod_linea" class="form-control" required>
+                                        <option value="">Seleccione una Línea</option>
+                                        @foreach($lineas as $linea)
+                                            <option value="{{ $linea->id }}" {{ old('cod_linea') == $linea->id ? 'selected' : '' }}>
+                                                {{ $linea->nombre_linea }}
                                             </option>
                                         @endforeach
                                     </select>
-                                    @error('cod_subcategoria')
+                                    @error('cod_linea')
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
