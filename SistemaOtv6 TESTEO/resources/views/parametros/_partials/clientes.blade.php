@@ -19,7 +19,7 @@
                 @foreach ($clientes as $cliente)
                 <tr>
                     <td>{{ $cliente->id }}</td>
-                    <td>{{ $cliente->nombre_cliente }}</td>
+                    <td>{{ html_entity_decode($cliente->nombre_cliente) }}</td>
                     <td>{{ $cliente->rut_cliente }}</td>
                     <td>{{ $cliente->web_cliente }}</td>
                     <td>{{ $cliente->telefono_cliente }}</td>

@@ -29,10 +29,16 @@ class LineaController extends Controller
             'cod_subcategoria' => 'required|exists:subcategoria,id',
         ]);
 
-        Linea::create($request->all());
+        $linea = Linea::create($request->all());
+
+        $subcategoria = $linea->subcategoria->nombre_subcategoria ?? '';
+
+        session()->flash('linea_nombre', $linea->nombre_linea);
+        session()->flash('subcategoria_nombre', $subcategoria);
 
         return redirect()->route('parametros.index')->with('success', 'Línea creada exitosamente');
     }
+
 
     public function show($id)
     {

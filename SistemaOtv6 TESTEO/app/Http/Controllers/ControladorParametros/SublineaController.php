@@ -29,10 +29,16 @@ class SublineaController extends Controller
             'cod_linea' => 'required|exists:linea,id',
         ]);
 
-        Sublinea::create($request->all());
+        $sublinea = Sublinea::create($request->all());
+
+        $linea = $sublinea->linea->nombre_linea ?? '';
+
+        session()->flash('sublinea_nombre', $sublinea->nombre_sublinea);
+        session()->flash('linea_nombre', $linea);
 
         return redirect()->route('parametros.index')->with('success', 'Sublínea creada exitosamente');
     }
+
 
     public function show($id)
     {

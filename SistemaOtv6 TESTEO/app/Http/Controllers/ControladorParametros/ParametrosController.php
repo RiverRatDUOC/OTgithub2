@@ -27,78 +27,97 @@ use App\Models\DispositivoOt;
 use App\Models\TareaOt;
 use App\Models\ContactoOt;
 use App\Models\EquipoTecnico;
-use App\Models\Avance; // Importa el modelo Avance
+use App\Models\Avance;
 use Illuminate\Http\Request;
 
 class ParametrosController extends Controller
 {
-    // Muestra la lista de todas las entidades y busca según los criterios
     public function index(Request $request)
     {
         $search = $request->input('search', '');
 
-        // Consultas de cada modelo
-        $categorias = Categoria::where('nombre_categoria', 'like', "%{$search}%")->get();
+        $categorias = Categoria::where('nombre_categoria', 'like', "%{$search}%")->paginate(10);
         $subcategorias = Subcategoria::with('categoria')
             ->where('nombre_subcategoria', 'like', "%{$search}%")
-            ->get();
+            ->paginate(10);
         $lineas = Linea::with('subcategoria')
             ->where('nombre_linea', 'like', "%{$search}%")
-            ->get();
+            ->paginate(10);
         $sublineas = Sublinea::with('linea')
             ->where('nombre_sublinea', 'like', "%{$search}%")
-            ->get();
-        $marcas = Marca::where('nombre_marca', 'like', "%{$search}%")->get();
-        $tipos_ot = TipoOt::where('descripcion_tipo_ot', 'like', "%{$search}%")->get();
-        $prioridades_ot = PrioridadOt::where('descripcion_prioridad_ot', 'like', "%{$search}%")->get();
-        $estados_ot = EstadoOt::where('descripcion_estado_ot', 'like', "%{$search}%")->get();
-        $tipos_visita = TipoVisita::where('descripcion_tipo_visita', 'like', "%{$search}%")->get();
-        $tipos_servicio = TipoServicio::where('descripcion_tipo_servicio', 'like', "%{$search}%")->get();
+            ->paginate(10);
+        $marcas = Marca::where('nombre_marca', 'like', "%{$search}%")->paginate(10);
+        $tipos_ot = TipoOt::where('descripcion_tipo_ot', 'like', "%{$search}%")->paginate(10);
+        $prioridades_ot = PrioridadOt::where('descripcion_prioridad_ot', 'like', "%{$search}%")->paginate(10);
+        $estados_ot = EstadoOt::where('descripcion_estado_ot', 'like', "%{$search}%")->paginate(10);
+        $tipos_visita = TipoVisita::where('descripcion_tipo_visita', 'like', "%{$search}%")->paginate(10);
+        $tipos_servicio = TipoServicio::where('descripcion_tipo_servicio', 'like', "%{$search}%")->paginate(10);
         $modelos = Modelo::with('marca', 'sublinea')
             ->where('nombre_modelo', 'like', "%{$search}%")
-            ->get();
+            ->paginate(10);
         $usuarios = Usuario::where('nombre_usuario', 'like', "%{$search}%")
             ->orWhere('email_usuario', 'like', "%{$search}%")
-            ->get();
+            ->paginate(10);
         $tecnicos = Tecnico::with('usuario')
             ->where('nombre_tecnico', 'like', "%{$search}%")
-            ->get();
+            ->paginate(10);
         $clientes = Cliente::where('nombre_cliente', 'like', "%{$search}%")
             ->orWhere('email_cliente', 'like', "%{$search}%")
-            ->get();
+            ->paginate(10);
         $sucursales = Sucursal::with('cliente')
             ->where('nombre_sucursal', 'like', "%{$search}%")
-            ->get();
+            ->paginate(10);
         $contactos = Contacto::with('sucursal')
             ->where('nombre_contacto', 'like', "%{$search}%")
-            ->get();
+            ->paginate(10);
         $servicios = Servicio::with('tipoServicio', 'sublinea')
             ->where('nombre_servicio', 'like', "%{$search}%")
-            ->get();
-        $tecnico_servicios = TecnicoServicio::with('tecnico', 'servicio')
-            ->get();
+            ->paginate(10);
+        $tecnico_servicios = TecnicoServicio::with('tecnico', 'servicio')->paginate(10);
         $tareas = Tarea::with('servicio')
             ->where('nombre_tarea', 'like', "%{$search}%")
-            ->get();
+            ->paginate(10);
         $dispositivos = Dispositivo::with('modelo', 'sucursal')
             ->where('numero_serie_dispositivo', 'like', "%{$search}%")
-            ->get();
-        $dispositivos_ot = DispositivoOt::with('dispositivo', 'ot', 'detalles', 'accesorios')
-            ->get();
-        $tareas_ot = TareaOt::with('tarea', 'ot')
-            ->get();
-        $contactos_ot = ContactoOt::with('contacto', 'ot')
-            ->get();
-        $equipos_tecnicos = EquipoTecnico::with('tecnico', 'ot')
-            ->get();
+            ->paginate(10);
+        $dispositivos_ot = DispositivoOt::with('dispositivo', 'ot', 'detalles', 'accesorios')->paginate(10);
+        $tareas_ot = TareaOt::with('tarea', 'ot')->paginate(10);
+        $contactos_ot = ContactoOt::with('contacto', 'ot')->paginate(10);
+        $equipos_tecnicos = EquipoTecnico::with('tecnico', 'ot')->paginate(10);
         $avances = Avance::with('ot')
             ->where('comentario_avance', 'like', "%{$search}%")
-            ->get(); // Consulta de Avance
+            ->paginate(10);
 
-        return view('parametros.parametros', compact('categorias', 'subcategorias', 'lineas', 'sublineas', 'marcas', 'tipos_ot', 'prioridades_ot', 'estados_ot', 'tipos_visita', 'tipos_servicio', 'modelos', 'usuarios', 'tecnicos', 'clientes', 'sucursales', 'contactos', 'servicios', 'tecnico_servicios', 'tareas', 'dispositivos', 'dispositivos_ot', 'tareas_ot', 'contactos_ot', 'equipos_tecnicos', 'avances', 'search'));
+        return view('parametros.parametros', compact(
+            'categorias',
+            'subcategorias',
+            'lineas',
+            'sublineas',
+            'marcas',
+            'tipos_ot',
+            'prioridades_ot',
+            'estados_ot',
+            'tipos_visita',
+            'tipos_servicio',
+            'modelos',
+            'usuarios',
+            'tecnicos',
+            'clientes',
+            'sucursales',
+            'contactos',
+            'servicios',
+            'tecnico_servicios',
+            'tareas',
+            'dispositivos',
+            'dispositivos_ot',
+            'tareas_ot',
+            'contactos_ot',
+            'equipos_tecnicos',
+            'avances',
+            'search'
+        ));
     }
 
-    // Muestra el detalle de una entidad específica
     public function show($id)
     {
         $avance = Avance::with('ot')->findOrFail($id);

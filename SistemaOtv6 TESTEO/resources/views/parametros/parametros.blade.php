@@ -61,17 +61,17 @@
                         <!-- Clientes -->
                         @include('parametros._partials.clientes')
 
-                        <!-- Sucursales -->
-                        @include('parametros._partials.sucursales')
-
                         <!-- Contactos -->
                         @include('parametros._partials.contactos')
+
+                        <!-- Sucursales -->
+                        @include('parametros._partials.sucursales')
 
                         <!-- Servicios -->
                         @include('parametros._partials.servicios')
 
-                        <!-- Técnico-Servicios -->
-                        @include('parametros._partials.tecnicoServicios')
+                        {{-- <!-- Técnico-Servicios -->
+                        @include('parametros._partials.tecnicoServicios') --}}
 
                         <!-- Tareas -->
                         @include('parametros._partials.tareas')
@@ -100,6 +100,19 @@
                 </div>
             </div>
 </main>
+
+<!-- Scripts de SweetAlert -->
+@if(session('categoria_nombre'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Categoría Creada',
+            text: "La categoría '{{ session('categoria_nombre') }}' ha sido creada correctamente.",
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+@endif
+
 @if(session('subcategoria_nombre') && session('categoria_nombre'))
     <script>
         Swal.fire({
@@ -110,4 +123,29 @@
         });
     </script>
 @endif
+
+@if(session('linea_nombre') && session('subcategoria_nombre'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Línea Creada',
+            text: "La línea '{{ session('linea_nombre') }}' ha sido creada y asignada a la subcategoría '{{ session('subcategoria_nombre') }}' correctamente.",
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+@endif
+
+@if(session('sublinea_nombre') && session('linea_nombre'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Sublínea Creada',
+            text: "La sublínea '{{ session('sublinea_nombre') }}' ha sido creada y asignada a la línea '{{ session('linea_nombre') }}' correctamente.",
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+@endif
+
+
+
 @endsection

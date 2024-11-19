@@ -35,12 +35,14 @@ class CategoriaController extends Controller
             'nombre_categoria' => 'required|string|max:255',
         ]);
 
-        Categoria::create([
-            'nombre_categoria' => $request->input('nombre_categoria'),
-        ]);
+        // Crea directamente usando todos los campos del request
+        $categoria = Categoria::create($request->all());
+
+        session()->flash('categoria_nombre', $categoria->nombre_categoria);
 
         return redirect()->route('parametros.index')->with('success', 'Categoría creada exitosamente');
     }
+
 
     // Muestra el detalle de una categoría específica
     public function show($id)
