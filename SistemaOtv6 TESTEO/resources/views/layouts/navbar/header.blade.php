@@ -10,20 +10,6 @@
 
     <div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">
         <div class="navbar-nav ml-auto">
-            <div class="navbar-form-wrapper">
-                <form class="navbar-form form-inline">
-                    <div class="input-group search-box" style="border-bottom: 2px solid #ff9900;">
-                        <input type="text" id="search" class="form-control" placeholder="Search Here..." style="border-bottom: none;">
-                        <div class="input-group-append">
-                            <span class="input-group-text" style="border-bottom: none;">
-                                <i class="material-icons">&#xE8B6;</i>
-                            </span>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <img src="{{ asset('assets/image/logo-small.png') }}" alt="Logo Sc Informatica" height="40">
-
             <!-- Contenedor de perfil y logout -->
             <div class="nav-item nav-link">
                 <div style="display: flex; align-items: center;">
