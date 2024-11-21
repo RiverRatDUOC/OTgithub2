@@ -2,14 +2,14 @@
 
 /* Fondo del navbar */
 .navbar {
-    background-color: #333333; /* Fondo oscuro */
+    background-color: #333333;
     padding: 10px 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Enlaces del navbar */
 .navbar a.nav-link {
-    color: #FFFFFF; /* Texto blanco */
+    color: #FFFFFF;
     font-size: 14px;
     font-weight: bold;
     text-transform: uppercase;
@@ -18,7 +18,7 @@
 }
 
 .navbar a.nav-link:hover {
-    color: #CC0066; /* Hover rosado */
+    color: #CC0066;
 }
 
 /* Imagen del logo */
@@ -31,12 +31,12 @@
 .nav-item.nav-link {
     display: flex;
     align-items: center;
-    color: #FFFFFF; /* Texto blanco */
+    color: #FFFFFF;
 }
 
 /* Imagen de perfil */
 .nav-item.nav-link .profile-circle {
-    background-color: #666666; /* Gris */
+    background-color: #666666;
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -47,16 +47,16 @@
 .nav-item.nav-link .user-info p {
     margin: 0;
     font-size: 12px;
-    color: #FFFFFF; /* Texto blanco */
+    color: #FFFFFF;
 }
 
 /* Ícono de logout */
 .nav-item.nav-link i.fa-sign-out {
-    color: #FFFFFF; /* Blanco */
+    color: #FFFFFF;
     font-size: 18px;
     transition: color 0.3s ease;
 }
 
 .nav-item.nav-link i.fa-sign-out:hover {
-    color: #CC0066; /* Hover rosado */
+    color: #CC0066;
 }
