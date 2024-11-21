@@ -21,7 +21,7 @@
                     <div class="card-body">
 
                         <!-- Categorías -->
-                        @include('parametros._partials.categorias')
+                        @include('parametros._partials.categorias', ['categorias' => $categorias])
 
                         <!-- Subcategorías -->
                         @include('parametros._partials.subcategorias')

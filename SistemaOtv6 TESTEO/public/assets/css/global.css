@@ -1,0 +1,86 @@
+/* General styles for inputs */
+input {
+    background-color: #333333 !important;
+    color: #ffffff !important;
+    caret-color: #ffffff !important;
+    border: none !important;
+    border-radius: 3px;
+    padding: 10px;
+    font-size: 16px;
+    transition: background-color 0.3s ease, color 0.3s ease, border-bottom 0.3s ease;
+    border-bottom: 3px solid #FF9900 !important;
+}
+
+/* Estilo al enfocar el input */
+input:focus {
+    background-color: #333333 !important;
+    color: #ffffff !important;
+    caret-color: #ffffff !important;
+    outline: none !important;
+    border-bottom: 3px solid #FF9900 !important;
+}
+
+/* Estilo al pasar el mouse sobre el input */
+input:hover {
+    background-color: #333333 !important;
+    color: #ffffff !important;
+    border-bottom: 3px solid #FF9900 !important;
+}
+
+/* Estilos para el autocompletado */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px #333333 inset !important;
+    box-shadow: 0 0 0px 1000px #333333 inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+    caret-color: #ffffff !important;
+    border: none !important;
+    border-bottom: 1px solid #FF9900 !important;
+    transition: background-color 0.3s ease, color 0.3s ease, border-bottom 0.3s ease;
+}
+
+input:not(:focus):-webkit-autofill {
+    background-color: #333333 !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-bottom: 1px solid #FF9900 !important; 
+}
+
+/* Estilo general para textareas */
+textarea {
+    background-color: #333333 !important;
+    color: #ffffff !important;
+    caret-color: #ffffff !important;
+    border: none !important;
+    border-radius: 3px;
+    padding: 10px;
+    font-size: 16px;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Estilo al enfocar el textarea */
+textarea:focus {
+    background-color: #333333 !important;
+    outline: none !important;
+}
+
+/* Botón general */
+button {
+    background-color: #FF9900;
+    color: #ffffff;
+    border: none !important;
+    border-radius: 3px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+button:hover {
+    background-color: #e68a00;
+}
+
+button:focus {
+    outline: none !important;
+}

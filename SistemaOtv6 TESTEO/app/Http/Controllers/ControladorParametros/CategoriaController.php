@@ -8,34 +8,36 @@ use Illuminate\Http\Request;
 
 class CategoriaController extends Controller
 {
-    // Muestra la lista de categorías (solo las no eliminadas)
-    public function index()
+
+    public function index(Request $request)
     {
-        $categorias = Categoria::all(); // Muestra categorías no eliminadas
-        return view('categoria.index', compact('categorias'));
+        $categorias = Categoria::paginate(10);
+
+        if ($request->ajax()) {
+            return view('parametros._partials.categorias', compact('categorias'))->render();
+        }
+
+        return view('parametros.index', compact('categorias'));
     }
 
-    // Muestra las categorías eliminadas
+
     public function trashed()
     {
-        $categorias = Categoria::onlyTrashed()->get(); // Muestra solo las categorías eliminadas
+        $categorias = Categoria::onlyTrashed()->get();
         return view('categoria.trashed', compact('categorias'));
     }
 
-    // Muestra el formulario de creación de una nueva categoría
     public function create()
     {
         return view('categoria.agregar');
     }
 
-    // Almacena una nueva categoría
     public function store(Request $request)
     {
         $request->validate([
             'nombre_categoria' => 'required|string|max:255',
         ]);
 
-        // Crea directamente usando todos los campos del request
         $categoria = Categoria::create($request->all());
 
         session()->flash('categoria_nombre', $categoria->nombre_categoria);
@@ -43,23 +45,18 @@ class CategoriaController extends Controller
         return redirect()->route('parametros.index')->with('success', 'Categoría creada exitosamente');
     }
 
-
-    // Muestra el detalle de una categoría específica
     public function show($id)
     {
         $categoria = Categoria::with('subcategorias')->findOrFail($id);
         return view('categoria.detalle', compact('categoria'));
     }
 
-
-    // Muestra el formulario para editar una categoría
     public function edit($id)
     {
         $categoria = Categoria::findOrFail($id);
         return view('categoria.editar', compact('categoria'));
     }
 
-    // Actualiza una categoría existente
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -83,7 +80,6 @@ class CategoriaController extends Controller
         return redirect()->route('parametros.index')->with('success', 'Categoría eliminada exitosamente');
     }
 
-    // Restaurar una categoría eliminada
     public function restore($id)
     {
         $categoria = Categoria::withTrashed()->findOrFail($id);
@@ -92,7 +88,6 @@ class CategoriaController extends Controller
         return redirect()->route('parametros.index')->with('success', 'Categoría restaurada exitosamente');
     }
 
-    // Elimina permanentemente una categoría
     public function forceDelete($id)
     {
         $categoria = Categoria::withTrashed()->findOrFail($id);
