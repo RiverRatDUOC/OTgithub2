@@ -1,0 +1,10 @@
+/* Estilo personalizado para los encabezados de tarjetas */
+.card-header-custom {
+    background-color: #cc6633;
+    color: white;
+}
+
+/* Opcional: Estilo para el efecto hover o estados activos */
+.card-header-custom:hover {
+    background-color: #b35930;
+}

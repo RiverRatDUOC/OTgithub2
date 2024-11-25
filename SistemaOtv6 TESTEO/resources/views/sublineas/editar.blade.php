@@ -6,14 +6,12 @@
         <div class="container-fluid">
             <h2 class="mb-4">Editar Sublínea</h2>
 
-            <!-- Mensajes de éxito -->
             @if(session('success'))
                 <div class="alert alert-success">
                     {{ session('success') }}
                 </div>
             @endif
 
-            <!-- Mensajes de error -->
             @if ($errors->any())
                 <div class="alert alert-danger">
                     <strong>¡Error!</strong> Por favor, corrige los siguientes errores:

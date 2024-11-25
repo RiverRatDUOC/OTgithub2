@@ -1,5 +1,3 @@
-<!-- detalle-linea.blade.php -->
-
 @extends('layouts.master')
 
 @section('content')

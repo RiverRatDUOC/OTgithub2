@@ -13,7 +13,7 @@
 
                 <!-- Sección: Categorías, Subcategorías, Líneas y Sublíneas -->
                 <div class="card mb-4">
-                    <div class="card-header" style="background-color: #cc6633; color: white;">
+                    <div class="card-header card-header-custom">
                         <h5 class="mb-0">Categorías, Subcategorías, Líneas y Sublíneas</h5>
                     </div>
                     <div class="card-body">
@@ -32,7 +32,7 @@
 
                 <!-- Sección: Marcas -->
                 <div class="card mb-4">
-                    <div class="card-header" style="background-color: #cc6633; color: white;">
+                    <div class="card-header card-header-custom">
                         <h5 class="mb-0">Marcas</h5>
                     </div>
                     <div class="card-body">
@@ -143,7 +143,5 @@
         });
     </script>
 @endif
-
-
 
 @endsection

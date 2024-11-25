@@ -2,9 +2,6 @@
 
 @section('content')
 
-<link rel="stylesheet" href="{{ URL::to('assets/css/profile.css') }}">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
 <main id="main-content" class="col bg-faded py-3 flex-grow-1">
     <div class="container-fluid">
         <div class="row">

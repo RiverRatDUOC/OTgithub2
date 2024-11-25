@@ -2,8 +2,6 @@
 
 @section('content')
 
-<link rel="stylesheet" href="{{ URL::to('assets/css/profile.css') }}">
-
 <main id="main-content" class="col bg-faded py-3 flex-grow-1">
     <div class="container-fluid">
         <div class="row">

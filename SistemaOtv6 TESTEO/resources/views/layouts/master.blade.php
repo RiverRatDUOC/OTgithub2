@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="{{ URL::to('assets/css/components/comp-navbar.css') }}">
     <link rel="stylesheet" href="{{ URL::to('assets/css/components/comp-sidebar.css') }}">
     <link rel="stylesheet" href="{{ URL::to('assets/css/components/comp-buttons.css') }}">
+    <link rel="stylesheet" href="{{ URL::to('assets/css/components/comp-cars.css')}}">
     <link rel="stylesheet" href="{{ URL::to('assets/css/pages/global.css') }}">
 
     <!-- Estilos de DataTables -->

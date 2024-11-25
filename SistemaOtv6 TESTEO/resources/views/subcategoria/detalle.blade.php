@@ -22,7 +22,13 @@
                         <div class="card-body">
                             <p><strong>Nombre:</strong> {{ $subcategoria->nombre_subcategoria }}</p>
                             <p><strong>Categoría:</strong>
-                                {{ $subcategoria->categoria->nombre_categoria ?? 'Sin categoría' }}
+                                @if($subcategoria->categoria)
+                                    <a href="{{ route('categoria.show', $subcategoria->categoria->id) }}">
+                                        {{ $subcategoria->categoria->nombre_categoria }}
+                                    </a>
+                                @else
+                                    Sin subcategoría
+                                @endif
                             </p>
                             <div class="d-flex justify-content-between">
                                 <a href="{{ route('parametros.index') }}" class="btn btn-custom-primary">

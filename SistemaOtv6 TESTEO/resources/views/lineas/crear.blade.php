@@ -1,9 +1,6 @@
 @extends('layouts.master')
-@include('layouts.navbar.header')
 
 @section('content')
-    @include('layouts.sidebar.dashboard')
-
     <main id="main-content" class="col bg-faded py-3 flex-grow-1">
         <div class="container-fluid">
             <div class="row">

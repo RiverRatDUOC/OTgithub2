@@ -2,8 +2,6 @@
 
 @section('content')
 
-    <link rel="stylesheet" href="{{ asset('assets/css/ordenes.css') }}">
-
     <main class="col py-3 flex-grow-1">
         <div class="container-fluid">
             {{-- <h3 class="mb-4">Home / Ordenes / Agregar</h3>

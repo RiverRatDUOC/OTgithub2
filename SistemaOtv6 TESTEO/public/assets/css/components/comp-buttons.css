@@ -1,6 +1,15 @@
 /* comp-buttons.css */
+/* resources/css/app.css */
+a {
+    color: #CC0066;
+}
 
+/* Opcional: Cambiar el color al pasar el cursor sobre el enlace */
+a:hover {
+    color: #99004D;
+}
 /* Botones personalizados */
+
 
 /* Botón Secundario Personalizado */
 .btn-custom-secondary {
