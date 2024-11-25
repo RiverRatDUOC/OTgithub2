@@ -1,6 +1,11 @@
 <link rel="stylesheet" href="{{ asset('assets/css/components/comp-navbar.css') }}">
 
 <nav class="navbar navbar-light">
+    <!-- Botón para ocultar/mostrar el sidebar -->
+    <button id="toggleSidebarButton" class="nav-item nav-link">
+        <i class="fa fa-bars"></i>
+    </button>
+
     <!-- Logo -->
     <a class="navbar-brand" href="{{ route('home.page') }}">
         <img src="{{ asset('assets/image/logo-small.png') }}" alt="Logo Sc Informatica">

@@ -8,6 +8,12 @@
     flex-direction: column;
     padding: 10px 0;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+/* Clase para ocultar el sidebar */
+.sidebar.hidden {
+    transform: translateX(-100%);
 }
 
 /* Navegación dentro del sidebar */

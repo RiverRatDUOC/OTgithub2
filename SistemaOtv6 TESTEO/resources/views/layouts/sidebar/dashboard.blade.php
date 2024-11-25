@@ -1,6 +1,6 @@
 
 <link rel="stylesheet" href="{{ asset('assets/css/components/comp-sidebar.css') }}">
-<aside class="sidebar">
+<aside id="sidebar" class="sidebar">
     <nav class="navbar navbar-expand navbar-dark">
         <div class="navbar-collapse">
             <ul class="navbar-nav">

@@ -16,7 +16,6 @@
     <!-- Incluye el CSS de Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-
     {{-- data table --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
@@ -32,21 +31,21 @@
     {{-- Style CSS --}}
     <link rel="stylesheet" href="{{ URL::to('assets/css/style.css') }}">
 
-
+    
 </head>
 
 <body>
     {{-- nav bar header --}}
+    @include('layouts.navbar.header')
 
-    {{-- menu sidebar left --}}
     <div class="container-fluid">
         <div class="row min-vh-100 flex-column flex-md-row">
+            {{-- menu sidebar left --}}
+            @include('layouts.sidebar.dashboard')
             {{-- content layout --}}
             @yield('content')
-
         </div>
     </div>
-
 
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
@@ -71,6 +70,11 @@
                         })
                     }
                 }
+            });
+
+            // JavaScript para ocultar/mostrar el sidebar
+            $('#toggleSidebarButton').on('click', function() {
+                $('#sidebar').toggleClass('hidden');
             });
         });
     </script>

@@ -1,8 +1,8 @@
 @extends('layouts.master')
-@include('layouts.navbar.header')
+{{-- @include('layouts.navbar.header') --}}
+{{-- @include('layouts.sidebar.dashboard') --}}
 
 @section('content')
-@include('layouts.sidebar.dashboard')
 
 <link rel="stylesheet" href="{{ URL::to('assets/css/profile.css') }}">
 

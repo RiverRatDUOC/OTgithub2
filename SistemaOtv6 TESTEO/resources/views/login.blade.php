@@ -37,8 +37,6 @@
                         <label for="email">Correo Electrónico</label>
                     </div>
 
-
-
                     <!-- Campo de Contraseña -->
                     <div class="input-field">
                         <i class="material-icons prefix" style="color: #FF9900;">lock</i>
