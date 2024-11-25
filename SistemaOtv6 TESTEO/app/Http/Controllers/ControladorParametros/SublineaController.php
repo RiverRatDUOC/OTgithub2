@@ -49,7 +49,7 @@ class SublineaController extends Controller
     public function edit($id)
     {
         $sublinea = Sublinea::findOrFail($id);
-        $lineas = Linea::all();
+        $lineas = \App\Models\Linea::all();
         return view('sublineas.editar', compact('sublinea', 'lineas'));
     }
 

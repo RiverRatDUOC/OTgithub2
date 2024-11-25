@@ -1,29 +1,35 @@
+/* comp-sidebar.css */
+
 /* Estilo general del sidebar */
-.sidebar {
+#sidebar {
     background-color: #333333;
+    width: 250px; /* Ancho del sidebar */
     height: 100vh;
-    width: 250px;
+    flex-shrink: 0; /* Evita que el sidebar se encoja */
     overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    padding: 10px 0;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease;
+    transition: width 0.3s ease;
 }
 
 /* Clase para ocultar el sidebar */
-.sidebar.hidden {
-    transform: translateX(-100%);
+#sidebar.hidden {
+    width: 0; /* Reduce el ancho a 0 para ocultarlo */
+    overflow: hidden; /* Oculta cualquier contenido que quede */
 }
 
-/* Navegación dentro del sidebar */
-.sidebar .navbar {
-    flex-direction: column;
-    padding: 0;
+/* Estilo del contenido */
+.content {
+    flex-grow: 1;
+    transition: flex-grow 0.3s ease;
+    /* Sin margin-left, el Flexbox maneja el espacio */
+}
+
+/* Cuando el contenido está expandido (sidebar oculto) */
+.content.expanded {
+    flex-grow: 1; /* Asegura que el contenido ocupe todo el espacio disponible */
 }
 
 /* Lista de navegación */
-.sidebar .navbar-nav {
+#sidebar .navbar-nav {
     flex-direction: column;
     width: 100%;
     padding: 0;
@@ -31,12 +37,12 @@
 }
 
 /* Elementos de la lista */
-.sidebar .nav-item {
+#sidebar .nav-item {
     width: 100%;
 }
 
 /* Enlaces del sidebar */
-.sidebar .nav-link {
+#sidebar .nav-link {
     color: #FFFFFF;
     padding: 12px 20px;
     font-size: 14px;
@@ -49,19 +55,19 @@
 }
 
 /* Hover en enlaces */
-.sidebar .nav-link:hover {
+#sidebar .nav-link:hover {
     background-color: #666666;
     border-left: 3px solid #CC0066;
 }
 
 /* Enlace activo */
-.sidebar .nav-link.active {
+#sidebar .nav-link.active {
     background-color: #666666;
     border-left: 3px solid #CC0066;
 }
 
 /* Íconos dentro de los enlaces */
-.sidebar .nav-link i {
+#sidebar .nav-link i {
     font-size: 18px;
     margin-right: 10px;
     color: #CC0066;
@@ -69,38 +75,38 @@
 }
 
 /* Texto dentro de los enlaces */
-.sidebar .nav-link span {
+#sidebar .nav-link span {
     color: #FFFFFF;
     font-size: 14px;
     transition: color 0.3s ease;
 }
 
 /* Hover en íconos */
-.sidebar .nav-link:hover i {
+#sidebar .nav-link:hover i {
     color: #FFFFFF;
 }
 
 /* Hover en texto */
-.sidebar .nav-link:hover span {
+#sidebar .nav-link:hover span {
     color: #FFFFFF;
 }
 
 /* Scroll personalizado */
-.sidebar::-webkit-scrollbar {
+#sidebar::-webkit-scrollbar {
     width: 8px;
 }
 
-.sidebar::-webkit-scrollbar-thumb {
+#sidebar::-webkit-scrollbar-thumb {
     background-color: #666666;
     border-radius: 4px;
 }
 
-.sidebar::-webkit-scrollbar-thumb:hover {
+#sidebar::-webkit-scrollbar-thumb:hover {
     background-color: #CC0066;
 }
 
 /* Botón salir */
-.sidebar .nav-link.logout {
+#sidebar .nav-link.logout {
     color: #FFFFFF;
     font-size: 14px;
     margin-top: 20px;
@@ -108,6 +114,6 @@
     transition: all 0.3s ease;
 }
 
-.sidebar .nav-link.logout:hover {
+#sidebar .nav-link.logout:hover {
     color: #CC0066;
 }

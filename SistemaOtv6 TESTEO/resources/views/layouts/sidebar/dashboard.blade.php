@@ -1,26 +1,24 @@
-
-<link rel="stylesheet" href="{{ asset('assets/css/components/comp-sidebar.css') }}">
 <aside id="sidebar" class="sidebar">
     <nav class="navbar navbar-expand navbar-dark">
         <div class="navbar-collapse">
             <ul class="navbar-nav">
                 <!-- Órdenes -->
+                @can('ordenes.index')
                 <li class="nav-item">
-                    @can('ordenes.index')
                     <a class="nav-link {{ Request::is('ordenes*') ? 'active' : '' }}" href="{{ route('ordenes.index') }}">
                         <i class="fas fa-shopping-cart"></i> <span>Órdenes</span>
                     </a>
-                    @endcan
                 </li>
+                @endcan
 
                 <!-- Clientes -->
+                @can('clientes.index')
                 <li class="nav-item">
-                    @can('clientes.index')
                     <a class="nav-link {{ Request::is('clientes*') ? 'active' : '' }}" href="{{ route('clientes.index') }}">
                         <i class="fas fa-user-friends"></i> <span>Clientes</span>
                     </a>
-                    @endcan
                 </li>
+                @endcan
 
                 <!-- Sucursales -->
                 <li class="nav-item">

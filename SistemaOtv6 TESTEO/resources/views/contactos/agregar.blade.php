@@ -1,8 +1,6 @@
 @extends('layouts.master')
-@include('layouts.navbar.header')
 
 @section('content')
-@include('layouts.sidebar.dashboard')
 
 <link rel="stylesheet" href="{{ URL::to('assets/css/profile.css') }}">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">

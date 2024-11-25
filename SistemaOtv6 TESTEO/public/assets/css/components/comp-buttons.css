@@ -1,0 +1,63 @@
+/* comp-buttons.css */
+
+/* Botones personalizados */
+
+/* Botón Secundario Personalizado */
+.btn-custom-secondary {
+    background-color: #cc6633;
+    border-color: #cc6633;
+    color: #FFFFFF;
+}
+
+.btn-custom-secondary:hover {
+    background-color: #b3552a;
+    border-color: #b3552a;
+    color: #FFFFFF;
+}
+
+/* Botón Primario Personalizado */
+.btn-custom-primary {
+    background-color: #cc6633;
+    border-color: #cc6633;
+    color: #FFFFFF;
+}
+
+.btn-custom-primary:hover {
+    background-color: #b3552a;
+    border-color: #b3552a;
+    color: #FFFFFF;
+}
+
+/* Botón de Advertencia Personalizado */
+.btn-custom-warning {
+    background-color: #d39a7e;
+    border-color: #cc6633;
+    color: #FFFFFF;
+}
+
+.btn-custom-warning:hover {
+    background-color: #c1826e;
+    border-color: #b3552a;
+    color: #FFFFFF;
+}
+
+/* Botón de Información Personalizado */
+.btn-custom-info {
+    background-color: #CC0066;
+    border-color: #CC0066;
+    color: #FFFFFF;
+}
+
+.btn-custom-info:hover {
+    background-color: #cc00668a;
+    border-color: #CC0066;
+    color: #FFFFFF;
+}
+
+/* Acomodar Iconos y Texto en los Botones */
+.btn-custom-secondary i,
+.btn-custom-primary i,
+.btn-custom-warning i,
+.btn-custom-info i {
+    margin-right: 5px;
+}

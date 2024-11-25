@@ -32,4 +32,9 @@ class Linea extends Model
     {
         return $this->belongsTo(Subcategoria::class, 'cod_subcategoria');
     }
+
+    public function sublines()
+    {
+        return $this->hasMany(Sublinea::class, 'cod_linea');
+    }
 }

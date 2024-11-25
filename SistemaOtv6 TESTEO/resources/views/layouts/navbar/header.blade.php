@@ -1,3 +1,4 @@
+<!-- Incluye el CSS personalizado del navbar -->
 <link rel="stylesheet" href="{{ asset('assets/css/components/comp-navbar.css') }}">
 
 <nav class="navbar navbar-light">
@@ -27,8 +28,8 @@
                 </div>
 
                 <!-- Enlace de Logout -->
-                <a href="{{ route('logout') }}" class="nav-item nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    <i class="fa fa-sign-out"></i>
+                <a href="{{ route('logout') }}" class="nav-item nav-link logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <i class="fa fa-sign-out-alt logout-icon"></i>
                 </a>
 
                 <!-- Formulario de logout -->

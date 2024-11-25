@@ -56,12 +56,12 @@
 }
 
 /* Ícono de logout */
-.nav-item.nav-link i.fa-sign-out {
+.logout-icon {
     color: #FFFFFF;
     font-size: 18px;
     transition: color 0.3s ease;
 }
 
-.nav-item.nav-link i.fa-sign-out:hover {
+.logout-icon:hover {
     color: #CC0066;
 }

@@ -42,7 +42,7 @@ class LineaController extends Controller
 
     public function show($id)
     {
-        $linea = Linea::with('subcategoria')->findOrFail($id);
+        $linea = Linea::with(['subcategoria', 'sublines'])->findOrFail($id);
         return view('lineas.detalle', compact('linea'));
     }
 
