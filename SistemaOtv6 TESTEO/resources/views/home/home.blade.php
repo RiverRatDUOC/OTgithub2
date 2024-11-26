@@ -1,5 +1,4 @@
-@extends('layouts.master')
-@include('layouts.navbar.header')
+{{-- @extends('layouts.master')
 @section('content')
 @include('layouts.sidebar.dashboard')
 <link rel="stylesheet" href="{{URL::to('assets/css/profile.css')}}">
@@ -289,4 +288,4 @@
     <!-- Footer End -->
     </div>
     <!-- Content End -->
-    @endsection
+    @endsection --}}

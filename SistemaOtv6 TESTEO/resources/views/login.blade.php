@@ -5,116 +5,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión</title>
+
+    <!-- Iconos y estilos -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/materialize.css') }}">
-    <link href="{{ asset('css/main.css') }}" rel="stylesheet">
-    <style>
-        body {
-            background-color: #141923;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .login-container {
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .login-card {
-            padding: 32px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
-        }
-
-        .login-card img {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 20px;
-        }
-
-        .input-field label {
-            color: #546e7a;
-        }
-
-        .input-field input[type="email"],
-        .input-field input[type="password"] {
-            border: 1px solid #ccc;
-            box-shadow: none;
-            border-radius: 4px;
-        }
-
-        .error-message {
-            color: red;
-            font-size: 14px;
-            margin-top: 8px;
-            display: block;
-        }
-
-        .forgot-password {
-            float: right;
-            margin-top: -10px;
-        }
-
-        .btn-login {
-            background-color: #11283b;
-            width: 100%;
-        }
-
-        .btn-login:hover {
-            background-color: #082249;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/materialize.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/pages/login.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/global.css') }}">
 </head>
 
-<body>
-    <main>
-        <div class="login-container">
-            <div class="card z-depth-1 login-card">
-                <form class="col s12" action="{{ route('login.submit') }}" method="POST">
+<body class="dark-background">
+    <div class="login-wrapper">
+        <div class="login-card">
+            <!-- Imagen lateral -->
+            <div class="login-image-wrapper">
+                <img src="{{ asset('assets/image/logo-small.png') }}" alt="Logo" class="login-logo">
+            </div>
+
+            <!-- Formulario -->
+            <div class="login-form-wrapper">
+                <h5 class="center-align">INGRESE A SU CUENTA</h5>
+                <p class="center-align" style="color: #CCCCCC;">Ingrese sus credenciales a continuación</p>
+
+                <!-- Formulario de inicio de sesión -->
+                <form action="{{ route('login.submit') }}" method="POST">
                     @csrf
-                    <div class="row center">
-                        <img class="responsive-img" src="img/q.jpg" alt="Logo">
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <label for="email">Correo Electrónico</label>
-                            <input type="email" name="email" id="email" required />
-                            @error('email')
-                            <span class="error-message">{{ $message }}</span>
-                            @enderror
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <label for="password">Contraseña</label>
-                            <input type="password" name="password" id="password" required />
-                            @error('password')
-                            <span class="error-message">{{ $message }}</span>
-                            @enderror
-                            <div class="forgot-password">
-                                <a class="blue-text" href="#!"><b>¿Olvidaste tu contraseña?</b></a>
-                            </div>
-                        </div>
+
+                    <!-- Campo de Correo Electrónico -->
+                    <div class="input-field">
+                        <i class="material-icons prefix">email</i>
+                        <input type="email" id="email" name="email" value="{{ old('email') }}" required>
+                        <label for="email">Correo Electrónico</label>
                     </div>
 
-                    <div class="row center">
-                        <button type="submit" class="btn btn-large waves-effect btn-login">Entrar</button>
+                    <!-- Campo de Contraseña -->
+                    <div class="input-field">
+                        <i class="material-icons prefix" style="color: #FF9900;">lock</i>
+                        <input type="password" id="password" name="password" required>
+                        <label for="password">Contraseña</label>
+
                     </div>
-                    @if (session('error'))
-                    <div class="red-text center">
-                        {{ session('error') }}
+
+                    <!-- Botón de envío -->
+                    <div class="input-field center-align" style="margin-top: 20px;">
+                        <button type="submit" class="btn waves-effect waves-light login-btn">Ingresar</button>
                     </div>
-                    @endif
+
+                    @error('email')
+                    <span class="red-text">{{ $message }}</span>
+                    @enderror
+                    @error('password')
+                    <span class="red-text">{{ $message }}</span>
+                    @enderror
                 </form>
             </div>
         </div>
-    </main>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
 </body>
 
 </html>

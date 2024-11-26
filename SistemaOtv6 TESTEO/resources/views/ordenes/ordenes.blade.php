@@ -1,10 +1,6 @@
 @extends('layouts.master')
-@include('layouts.navbar.header')
 
 @section('content')
-@include('layouts.sidebar.dashboard')
-
-<link rel="stylesheet" href="{{ URL::to('assets/css/profile.css') }}">
 
 <main class="col bg-faded py-3 flex-grow-1">
     <div class="container-fluid">
@@ -38,8 +34,6 @@
                 </div>
             </form>
 
-
-
             <form action="{{ route('ordenes.buscar') }}" method="get" class="input-group">
                 <input type="text" name="search" id="search" class="form-control" placeholder="Buscar por..." value="{{ request()->input('search') }}">
 
@@ -51,12 +45,7 @@
                     <i class="bi bi-x-circle"></i> Eliminar Filtro
                 </a>
             </form>
-
-
-
-
         </div>
-
 
         <div class="table-responsive mt-3">
             <table class="table table-striped" id="ot_tabledata">
@@ -144,7 +133,6 @@
                     </tr>
                     @endforeach
                 </tbody>
-
             </table>
         </div>
 
@@ -207,7 +195,6 @@
                 </ul>
             </nav>
             @endif
-
         </div>
 
         <!-- Modal Structure -->

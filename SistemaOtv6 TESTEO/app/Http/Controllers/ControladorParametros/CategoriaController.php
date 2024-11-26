@@ -8,48 +8,55 @@ use Illuminate\Http\Request;
 
 class CategoriaController extends Controller
 {
-    // Muestra la lista de categorías
-    public function index()
+
+    public function index(Request $request)
     {
-        $categorias = Categoria::all();
-        return view('categoria.index', compact('categorias'));
+        $categorias = Categoria::paginate(10, ['*'], 'categorias_page');
+
+        if ($request->ajax()) {
+            return view('parametros._partials.categorias', compact('categorias'))->render();
+        }
+
+        return view('parametros.index', compact('categorias'));
     }
 
-    // Muestra el formulario de creación de una nueva categoría
+
+    public function trashed()
+    {
+        $categorias = Categoria::onlyTrashed()->get();
+        return view('categoria.trashed', compact('categorias'));
+    }
+
     public function create()
     {
         return view('categoria.agregar');
     }
 
-    // Almacena una nueva categoría
     public function store(Request $request)
     {
         $request->validate([
             'nombre_categoria' => 'required|string|max:255',
         ]);
 
-        Categoria::create([
-            'nombre_categoria' => $request->input('nombre_categoria'),
-        ]);
+        $categoria = Categoria::create($request->all());
 
-        return redirect()->route('parametros.index')->with('success', 'Categoría creada exitosamente');
+        return redirect()->route('parametros.index')
+            ->with('categoria_nombre', $categoria->nombre_categoria)
+            ->with('success', 'Categoría creada exitosamente');
     }
 
-    // Muestra el detalle de una categoría específica
     public function show($id)
     {
-        $categoria = Categoria::findOrFail($id);
+        $categoria = Categoria::with('subcategorias')->findOrFail($id);
         return view('categoria.detalle', compact('categoria'));
     }
 
-    // Muestra el formulario para editar una categoría
     public function edit($id)
     {
         $categoria = Categoria::findOrFail($id);
         return view('categoria.editar', compact('categoria'));
     }
 
-    // Actualiza una categoría existente
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -64,12 +71,33 @@ class CategoriaController extends Controller
         return redirect()->route('parametros.index')->with('success', 'Categoría actualizada exitosamente');
     }
 
-    // Elimina una categoría
+    // Elimina una categoría (soft delete)
     public function destroy($id)
     {
-        $categoria = Categoria::findOrFail($id);
-        $categoria->delete();
+        try {
+            $categoria = Categoria::findOrFail($id);
+            $nombre = $categoria->nombre_categoria;
+            $categoria->delete();
+            return redirect()->route('parametros.index')->with('categoria_deleted', $nombre);
+        } catch (\Exception $e) {
 
-        return redirect()->route('parametros.index')->with('success', 'Categoría eliminada exitosamente');
+            return redirect()->route('parametros.index')->with('delete_error', 'No se pudo eliminar la categoría. Inténtalo de nuevo.');
+        }
+    }
+
+    public function restore($id)
+    {
+        $categoria = Categoria::withTrashed()->findOrFail($id);
+        $categoria->restore();
+
+        return redirect()->route('parametros.index')->with('success', 'Categoría restaurada exitosamente');
+    }
+
+    public function forceDelete($id)
+    {
+        $categoria = Categoria::withTrashed()->findOrFail($id);
+        $categoria->forceDelete();
+
+        return redirect()->route('parametros.index')->with('success', 'Categoría eliminada permanentemente');
     }
 }

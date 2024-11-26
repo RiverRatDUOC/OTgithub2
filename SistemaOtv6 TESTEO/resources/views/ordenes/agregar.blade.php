@@ -1,9 +1,6 @@
 @extends('layouts.master')
-@include('layouts.navbar.header')
-@section('content')
-    @include('layouts.sidebar.dashboard')
 
-    <link rel="stylesheet" href="{{ asset('assets/css/ordenes.css') }}">
+@section('content')
 
     <main class="col py-3 flex-grow-1">
         <div class="container-fluid">

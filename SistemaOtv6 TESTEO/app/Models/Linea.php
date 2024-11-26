@@ -27,8 +27,14 @@ class Linea extends Model
         'deleted_at',
     ];
 
+
     public function subcategoria()
     {
-        return $this->belongsTo(Subcategoria::class, 'cod_subcategoria', 'id');
+        return $this->belongsTo(Subcategoria::class, 'cod_subcategoria');
+    }
+
+    public function sublines()
+    {
+        return $this->hasMany(Sublinea::class, 'cod_linea');
     }
 }

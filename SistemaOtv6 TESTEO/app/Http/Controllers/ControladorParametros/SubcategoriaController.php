@@ -4,74 +4,84 @@ namespace App\Http\Controllers\ControladorParametros;
 
 use App\Http\Controllers\Controller;
 use App\Models\Subcategoria;
-use App\Models\Categoria; // Asegúrate de que la relación exista
+use App\Models\Categoria;
 use Illuminate\Http\Request;
 
 class SubcategoriaController extends Controller
 {
-    // Muestra la lista de subcategorías
-    public function index()
+    public function index(Request $request)
     {
-        $subcategorias = Subcategoria::with('categoria')->get();
+
+        $subcategorias = Subcategoria::with('categoria')->paginate(10, ['*'], 'subcategorias_page');
+
+
+        if ($request->ajax()) {
+
+            return view('subcategoria.index', compact('subcategorias'))->render();
+        }
+
+
         return view('subcategoria.index', compact('subcategorias'));
     }
 
-    // Muestra el formulario de creación de una nueva subcategoría
     public function create()
     {
-        $categorias = Categoria::all(); // Obtener todas las categorías
+        $categorias = Categoria::all();
         return view('subcategoria.crear', compact('categorias'));
     }
 
-    // Almacena una nueva subcategoría
+
     public function store(Request $request)
     {
         $request->validate([
             'nombre_subcategoria' => 'required|string|max:255',
-            'categoria_id' => 'required|exists:categorias,id', // Asegúrate de que la categoría existe
+            'cod_categoria' => 'required|exists:categoria,id',
         ]);
 
-        Subcategoria::create([
+        $subcategoria = Subcategoria::create([
             'nombre_subcategoria' => $request->input('nombre_subcategoria'),
-            'categoria_id' => $request->input('categoria_id'),
+            'cod_categoria' => $request->input('cod_categoria'),
         ]);
 
-        return redirect()->route('parametros.index')->with('success', 'Subcategoría creada exitosamente');
+        $categoria = Categoria::find($request->input('cod_categoria'));
+
+        return redirect()->route('parametros.index')->with([
+            'success' => 'Subcategoría creada exitosamente',
+            'subcategoria_nombre' => $subcategoria->nombre_subcategoria,
+            'categoria_nombre' => $categoria->nombre_categoria,
+        ]);
     }
 
-    // Muestra el detalle de una subcategoría específica
     public function show($id)
     {
         $subcategoria = Subcategoria::with('categoria')->findOrFail($id);
+
         return view('subcategoria.detalle', compact('subcategoria'));
     }
 
-    // Muestra el formulario para editar una subcategoría
     public function edit($id)
     {
         $subcategoria = Subcategoria::findOrFail($id);
-        $categorias = Categoria::all(); // Obtener todas las categorías para el select
+        $categorias = Categoria::all();
         return view('subcategoria.editar', compact('subcategoria', 'categorias'));
     }
 
-    // Actualiza una subcategoría existente
     public function update(Request $request, $id)
     {
         $request->validate([
             'nombre_subcategoria' => 'required|string|max:255',
-            'categoria_id' => 'required|exists:categorias,id', // Asegúrate de que la categoría existe
+            'cod_categoria' => 'required|exists:categoria,id',
         ]);
 
         $subcategoria = Subcategoria::findOrFail($id);
         $subcategoria->update([
             'nombre_subcategoria' => $request->input('nombre_subcategoria'),
-            'categoria_id' => $request->input('categoria_id'),
+            'cod_categoria' => $request->input('cod_categoria'),
         ]);
 
         return redirect()->route('parametros.index')->with('success', 'Subcategoría actualizada exitosamente');
     }
 
-    // Elimina una subcategoría
     public function destroy($id)
     {
         $subcategoria = Subcategoria::findOrFail($id);

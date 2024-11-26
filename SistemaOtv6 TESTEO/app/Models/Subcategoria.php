@@ -24,9 +24,15 @@ class Subcategoria extends Model
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
-    // Define the relationship
+    // Relación con Categoria
     public function categoria()
     {
         return $this->belongsTo(Categoria::class, 'cod_categoria');
     }
+
+    public function lineas()
+    {
+        return $this->hasMany(Linea::class, 'cod_subcategoria');
+    }
+
 }

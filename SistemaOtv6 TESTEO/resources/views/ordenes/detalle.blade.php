@@ -1,9 +1,7 @@
 @extends('layouts.master')
-@include('layouts.navbar.header')
 
 @section('content')
-@include('layouts.sidebar.dashboard')
-<link rel="stylesheet" href="{{ asset('assets/css/detalleOrden.css') }}">
+
 <main class="col bg-faded py-3 flex-grow-1">
     <div class="container-fluid">
         <h2 class="text-center mt-3">Detalle de la Orden</h2>

@@ -1,0 +1,18 @@
+/* =================================
+   Variables CSS
+================================= */
+:root {
+    /* Colores */
+    --color-principal: #cc6633;
+    --color-principal-hover: #b34d59;
+    --color-segundario: #CC6633;
+    --color-segundario-hover: #b35930;
+    --color-info: #cc0066;
+    --color-info-hover: #b34d59;
+    --color-boton: #FF9900;
+    --color-boton-hover: #e68a00;
+    --color-autofill-bg: #333333;
+    --color-autofill-text: #ffffff;
+    --color-summary-bg: #f7f7f7;
+    --color-summary-border: #ddd;
+}

@@ -25,4 +25,9 @@ class Categoria extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    public function subcategorias()
+    {
+        return $this->hasMany(Subcategoria::class, 'cod_categoria');
+    }
 }
