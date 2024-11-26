@@ -1,10 +1,9 @@
-<details id="categorias-section" style="width: 100%; margin-bottom: 10px;" open>
-    <summary
-        style="font-size: 1.25rem; padding: 10px; border: 1px solid #ddd; background-color: #f7f7f7; cursor: pointer; width: 100%;">
+<details id="categorias-section" class="categorias-section" open>
+    <summary class="categorias-summary categorias-summary-custom">
         Categorías
     </summary>
-    <div id="categorias-table" class="table-responsive mt-3" style="max-height: 300px; overflow-y: auto; width: 100%;">
-        <table class="table table-striped" style="width: 100%;">
+    <div id="categorias-table" class="table-responsive mt-3 categorias-table">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th>Id</th>
@@ -18,19 +17,25 @@
                         <td>{{ $categoria->id }}</td>
                         <td>{{ $categoria->nombre_categoria }}</td>
                         <td>
-                            <a href="{{ route('categoria.show', $categoria->id) }}" class="btn btn-info btn-sm"
-                                style="background-color: #cc0066; border-color: #cc0066;">
+                            <!-- Botón Ver -->
+                            <a href="{{ route('categoria.show', $categoria->id) }}" class="btn btn-sm btn-custom-info">
                                 <i class="fas fa-eye"></i>
+                                Ver
                             </a>
-                            <a href="{{ route('categoria.edit', $categoria->id) }}" class="btn btn-warning btn-sm"
-                                style="background-color: #CC6633; border-color: #CC6633;">
-                                <i class="fas fa-edit text-white"></i>
+
+                            <!-- Botón Editar -->
+                            <a href="{{ route('categoria.edit', $categoria->id) }}" class="btn btn-sm btn-custom-warning">
+                                <i class="fas fa-edit"></i>
+                                Editar
                             </a>
-                            <form action="{{ route('categoria.destroy', $categoria->id) }}" method="POST" style="display:inline;">
+
+                            <!-- Botón Eliminar -->
+                            <form action="{{ route('categoria.destroy', $categoria->id) }}" method="POST" class="delete-form" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">
+                                <button type="submit" class="btn btn-sm btn-custom-danger">
                                     <i class="fas fa-trash-alt"></i>
+                                    Eliminar
                                 </button>
                             </form>
                         </td>
@@ -50,52 +55,60 @@
             </div>
         </div>
     </div>
-    <a href="{{ route('categoria.create') }}" class="btn btn-primary" style="background-color: #cc6633; border-color: #cc6633;">Agregar Categoría</a>
+    <!-- Botón Agregar Categoría -->
+    <a href="{{ route('categoria.create') }}" class="btn btn-sm btn-custom-primary">Agregar Categoría</a>
 </details>
 
-<!-- Script para manejo de paginación AJAX -->
+<!-- Script para manejo de paginación AJAX para Categorías -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        $(document).on('click', '.pagination a', function (e) {
+        // Delegación de Eventos para Paginación AJAX de Categorías
+        $(document).on('click', '#categorias-section .pagination a', function (e) {
             e.preventDefault();
             let url = $(this).attr('href');
 
             // Cargar la tabla de forma dinámica
-            loadTable(url);
+            loadCategoriasTable(url);
         });
 
-        function loadTable(url) {
+        function loadCategoriasTable(url) {
             $.ajax({
                 url: url,
                 type: 'GET',
                 success: function (data) {
-                    $('#categorias-section').replaceWith($(data).find('#categorias-section'));
+                    // Reemplazar únicamente el contenedor de la tabla para mantener otras secciones intactas
+                    $('#categorias-table').replaceWith($(data).find('#categorias-table'));
                 },
                 error: function () {
-                    alert('Error al cargar los datos. Inténtalo de nuevo.');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error al cargar los datos. Inténtalo de nuevo.',
+                        confirmButtonText: 'Aceptar'
+                    });
                 }
             });
         }
+
+        // Confirmación de Eliminación con SweetAlert2 para Categorías
+        $(document).on('submit', '.delete-form', function (e) {
+            e.preventDefault();
+            let form = this;
+
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "No podrás revertir esto.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
     });
 </script>
-
-<style>
-    /* Cambiar color de los números de la paginación */
-    .pagination .page-link {
-        color: #cc6633; /* Cambia el color de los números */
-    }
-
-    /* Cambiar color del número activo */
-    .pagination .page-item.active .page-link {
-        background-color: #cc6633; /* Fondo del número activo */
-        border-color: #cc6633; /* Borde del número activo */
-        color: #ffffff; /* Color del texto del número activo */
-    }
-
-    /* Cambiar color de los números al pasar el mouse */
-    .pagination .page-link:hover {
-        background-color: #d39a7e; /* Fondo al hacer hover */
-        border-color: #d39a7e; /* Borde al hacer hover */
-        color: #ffffff; /* Texto al hacer hover */
-    }
-</style>

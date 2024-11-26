@@ -11,11 +11,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <!-- Estilos personalizados -->
-    <link rel="stylesheet" href="{{ URL::to('assets/css/components/comp-navbar.css') }}">
-    <link rel="stylesheet" href="{{ URL::to('assets/css/components/comp-sidebar.css') }}">
-    <link rel="stylesheet" href="{{ URL::to('assets/css/components/comp-buttons.css') }}">
-    <link rel="stylesheet" href="{{ URL::to('assets/css/components/comp-cars.css')}}">
-    <link rel="stylesheet" href="{{ URL::to('assets/css/pages/global.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/global.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/components/comp-navbar.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/components/comp-sidebar.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/components/comp-buttons.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/components/comp-pagination.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/components/comp-cars.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/components/comp-forms.css') }}">
 
     <!-- Estilos de DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
@@ -47,7 +49,7 @@
     <script src="https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.7/js/responsive.bootstrap4.min.js"></script>
 
-    <!-- Script de SweetAlert2 -->
+    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Scripts personalizados -->
@@ -65,6 +67,9 @@
             });
         });
     </script>
+
+    <!-- Sección de Scripts Específicos por Vistas -->
+    @yield('scripts') <!-- Opcional: para incluir scripts adicionales en vistas específicas -->
 </body>
 
 </html>

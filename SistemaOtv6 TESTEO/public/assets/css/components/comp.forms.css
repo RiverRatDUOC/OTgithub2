@@ -1,0 +1,136 @@
+/* =================================
+   Estilos para Formularios
+================================= */
+
+/* Contenedor del formulario */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Grupo de formulario */
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Estilos para labels */
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: var(--color-autofill-text);
+}
+
+/* Estilos generales para inputs */
+input,
+textarea,
+select {
+    background-color: var(--color-autofill-bg);
+    color: var(--color-autofill-text);
+    caret-color: var(--color-autofill-text);
+    border: none;
+    border-radius: 3px;
+    padding: 10px;
+    font-size: 16px;
+    transition: background-color 0.3s ease, color 0.3s ease, border-bottom 0.3s ease;
+}
+
+/* Estilo específico para inputs */
+input {
+    border-bottom: 3px solid var(--color-boton);
+}
+
+input:focus,
+input:hover {
+    background-color: var(--color-autofill-bg);
+    color: var(--color-autofill-text);
+    border-bottom: 3px solid var(--color-boton);
+    outline: none;
+}
+
+/* Estilos para el autocompletado */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px var(--color-autofill-bg) inset;
+    box-shadow: 0 0 0px 1000px var(--color-autofill-bg) inset;
+    -webkit-text-fill-color: var(--color-autofill-text);
+    caret-color: var(--color-autofill-text);
+    border: none;
+    border-bottom: 1px solid var(--color-boton);
+    transition: background-color 0.3s ease, color 0.3s ease, border-bottom 0.3s ease;
+}
+
+input:not(:focus):-webkit-autofill {
+    background-color: var(--color-autofill-bg);
+    color: var(--color-autofill-text);
+    border: none;
+    border-bottom: 1px solid var(--color-boton);
+}
+
+/* Estilo general para textareas */
+textarea {
+    border-radius: 3px;
+    padding: 10px;
+    font-size: 16px;
+    transition: all 0.3s ease-in-out;
+    resize: vertical;
+}
+
+textarea:focus {
+    background-color: var(--color-autofill-bg);
+    outline: none;
+}
+
+/* Estilos para selects */
+select {
+    border-bottom: 3px solid var(--color-boton);
+}
+
+select:focus,
+select:hover {
+    background-color: var(--color-autofill-bg);
+    color: var(--color-autofill-text);
+    border-bottom: 3px solid var(--color-boton);
+    outline: none;
+}
+
+/* Botón de envío */
+button[type="submit"] {
+    align-self: flex-start;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: var(--color-principal);
+    color: var(--color-autofill-text);
+    border: none;
+    border-radius: 3px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+button[type="submit"]:hover {
+    background-color: var(--color-principal-hover);
+}
+
+button[type="submit"]:focus {
+    outline: none;
+}
+
+/* Responsividad */
+@media (max-width: 600px) {
+    form {
+        padding: 0 10px;
+    }
+
+    .form-group {
+        flex-direction: column;
+    }
+
+    button[type="submit"] {
+        width: 100%;
+        text-align: center;
+    }
+}

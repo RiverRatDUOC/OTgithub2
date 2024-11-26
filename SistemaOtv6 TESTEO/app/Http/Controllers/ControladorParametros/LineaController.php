@@ -12,7 +12,10 @@ class LineaController extends Controller
 
     public function index()
     {
-        $lineas = Linea::with('subcategoria')->get();
+        $lineas = Linea::with('subcategoria')->paginate(10, ['*'], 'lineas_page');
+        if ($request->ajax()) {
+            return view('lineas.index', compact('lineas'))->render();
+        }
         return view('lineas.index', compact('lineas'));
     }
 

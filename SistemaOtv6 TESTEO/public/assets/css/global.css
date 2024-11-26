@@ -1,105 +1,18 @@
-/* General styles for inputs */
-input {
-    background-color: #333333 !important;
-    color: #ffffff !important;
-    caret-color: #ffffff !important;
-    border: none !important;
-    border-radius: 3px;
-    padding: 10px;
-    font-size: 16px;
-    transition: background-color 0.3s ease, color 0.3s ease, border-bottom 0.3s ease;
-    border-bottom: 3px solid #FF9900 !important;
-}
-
-/* Estilo al enfocar el input */
-input:focus {
-    background-color: #333333 !important;
-    color: #ffffff !important;
-    caret-color: #ffffff !important;
-    outline: none !important;
-    border-bottom: 3px solid #FF9900 !important;
-}
-
-/* Estilo al pasar el mouse sobre el input */
-input:hover {
-    background-color: #333333 !important;
-    color: #ffffff !important;
-    border-bottom: 3px solid #FF9900 !important;
-}
-
-/* Estilos para el autocompletado */
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus {
-    -webkit-box-shadow: 0 0 0px 1000px #333333 inset !important;
-    box-shadow: 0 0 0px 1000px #333333 inset !important;
-    -webkit-text-fill-color: #ffffff !important;
-    caret-color: #ffffff !important;
-    border: none !important;
-    border-bottom: 1px solid #FF9900 !important;
-    transition: background-color 0.3s ease, color 0.3s ease, border-bottom 0.3s ease;
-}
-
-input:not(:focus):-webkit-autofill {
-    background-color: #333333 !important;
-    color: #ffffff !important;
-    border: none !important;
-    border-bottom: 1px solid #FF9900 !important;
-}
-
-/* Estilo general para textareas */
-textarea {
-    background-color: #333333 !important;
-    color: #ffffff !important;
-    caret-color: #ffffff !important;
-    border: none !important;
-    border-radius: 3px;
-    padding: 10px;
-    font-size: 16px;
-    transition: all 0.3s ease-in-out;
-}
-
-/* Estilo al enfocar el textarea */
-textarea:focus {
-    background-color: #333333 !important;
-    outline: none !important;
-}
-
-/* Botón general */
-button {
-    background-color: #FF9900;
-    color: #ffffff;
-    border: none !important;
-    border-radius: 3px;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-}
-
-button:hover {
-    background-color: #e68a00;
-}
-
-button:focus {
-    outline: none !important;
-}
-
-/* Cambiar color de los números de la paginación */
-.pagination .page-link {
-    color: #cc6633;
-}
-
-/* Cambiar color del número activo */
-.pagination .page-item.active .page-link {
-    background-color: #cc6633;
-    border-color: #cc6633;
-    color: #ffffff;
-}
-
-/* Cambiar color de los números al pasar el mouse */
-.pagination .page-link:hover {
-    background-color: #d39a7e;
-    border-color: #d39a7e;
-    color: #ffffff;
+/* =================================
+   Variables CSS
+================================= */
+:root {
+    /* Colores */
+    --color-principal: #cc6633;
+    --color-principal-hover: #b34d59;
+    --color-segundario: #CC6633;
+    --color-segundario-hover: #b35930;
+    --color-info: #cc0066;
+    --color-info-hover: #b34d59;
+    --color-boton: #FF9900;
+    --color-boton-hover: #e68a00;
+    --color-autofill-bg: #333333;
+    --color-autofill-text: #ffffff;
+    --color-summary-bg: #f7f7f7;
+    --color-summary-border: #ddd;
 }

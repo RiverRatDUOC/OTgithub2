@@ -11,7 +11,7 @@ class CategoriaController extends Controller
 
     public function index(Request $request)
     {
-        $categorias = Categoria::paginate(10);
+        $categorias = Categoria::paginate(10, ['*'], 'categorias_page');
 
         if ($request->ajax()) {
             return view('parametros._partials.categorias', compact('categorias'))->render();
@@ -40,9 +40,9 @@ class CategoriaController extends Controller
 
         $categoria = Categoria::create($request->all());
 
-        session()->flash('categoria_nombre', $categoria->nombre_categoria);
-
-        return redirect()->route('parametros.index')->with('success', 'Categoría creada exitosamente');
+        return redirect()->route('parametros.index')
+            ->with('categoria_nombre', $categoria->nombre_categoria)
+            ->with('success', 'Categoría creada exitosamente');
     }
 
     public function show($id)
@@ -74,10 +74,15 @@ class CategoriaController extends Controller
     // Elimina una categoría (soft delete)
     public function destroy($id)
     {
-        $categoria = Categoria::findOrFail($id);
-        $categoria->delete();
+        try {
+            $categoria = Categoria::findOrFail($id);
+            $nombre = $categoria->nombre_categoria;
+            $categoria->delete();
+            return redirect()->route('parametros.index')->with('categoria_deleted', $nombre);
+        } catch (\Exception $e) {
 
-        return redirect()->route('parametros.index')->with('success', 'Categoría eliminada exitosamente');
+            return redirect()->route('parametros.index')->with('delete_error', 'No se pudo eliminar la categoría. Inténtalo de nuevo.');
+        }
     }
 
     public function restore($id)
