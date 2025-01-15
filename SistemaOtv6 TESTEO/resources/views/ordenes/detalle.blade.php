@@ -1,5 +1,7 @@
 @extends('layouts.master')
-
+@section('css')
+    <link rel="stylesheet" href="{{ asset('assets/css/pages/detallesOT.css') }}">
+@endsection
 @section('content')
 
 <main class="col bg-faded py-3 flex-grow-1">

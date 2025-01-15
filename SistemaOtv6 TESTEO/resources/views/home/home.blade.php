@@ -1,7 +1,7 @@
-{{-- @extends('layouts.master')
+@extends('layouts.master')
 @section('content')
-@include('layouts.sidebar.dashboard')
-<link rel="stylesheet" href="{{URL::to('assets/css/profile.css')}}">
+{{-- @include('layouts.sidebar.dashboard') -->
+<!-- <link rel="stylesheet" href="{{URL::to('assets/css/profile.css')}}"> --> --}}
 <main class="col bg-faded py-3 flex-grow-1">
     <!-- Sale & Revenue Start -->
     <div class="container-fluid pt-4 px-4">
@@ -288,4 +288,4 @@
     <!-- Footer End -->
     </div>
     <!-- Content End -->
-    @endsection --}}
+@endsection 

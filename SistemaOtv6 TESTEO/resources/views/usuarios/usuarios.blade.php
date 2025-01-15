@@ -51,7 +51,7 @@
                                 </form> -->
 
                                 <!-- Botón Editar -->
-                                <form action="{{ route('usuarios.editar', $user->id) }}" method="GET" style="margin-right: 10px;">
+                                <form action="{{ route('usuarios.edit', $user->id) }}" method="GET" style="margin-right: 10px;">
                                     <button type="submit" class="btn btn-primary" style="background-color: #cc6633; border-color: #cc6633;">
                                         <i class="fas fa-edit"></i> Editar
                                     </button>

@@ -67,9 +67,9 @@
             });
         });
     </script>
-
     <!-- Sección de Scripts Específicos por Vistas -->
     @yield('scripts') <!-- Opcional: para incluir scripts adicionales en vistas específicas -->
+    @yield('css')
 </body>
 
 </html>

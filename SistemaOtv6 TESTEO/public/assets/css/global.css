@@ -16,3 +16,7 @@
     --color-summary-bg: #f7f7f7;
     --color-summary-border: #ddd;
 }
+
+body{
+    overflow-x:hidden;
+}

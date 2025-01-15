@@ -10,7 +10,7 @@ $(document).ready(function () {
     idOrden = document.getElementById("idOrden").value;
     $.ajax({
         type: 'GET',
-        url: '/orden/obtenerOrden/' + idOrden,
+        url: '/ordenes/obtenerOrden/' + idOrden,
         dataType: 'json',
         success: function(data) {
             orden = data;
@@ -35,47 +35,35 @@ function cargarTareas(servicioId) {
             url: "/tareas/" + servicioId,
             success: function (data) {
                 var listaTareas = "";
-
-                // console.log(orden.dispositivo_ot[0].tarea_dispositivo[0].cod_tarea);
-                // var listaTareas = {};
-                // console.log(orden.dispositivo_ot[1].tarea_dispositivo);
-                // orden.dispositivo_ot.forEach(dispositivo => {
-                //     dispositivo.tarea_dispositivo.forEach(tarea => {
-                //         listaTareas.push(tarea.cod_tarea);
-                //     });
-                // });
-
-                // console.log(listaTareas);
+                console.log(orden.dispositivo_ot[0].tarea_dispositivo);
 
                 $.each(data, function (index, tarea) {
-                    if(orden.dispositivo_ot[0].tarea_dispositivo[0].cod_tarea == tarea.id){
-                        listaTareas +=
-                        "<li class='list-group-item'> <input style='margin-left:2px;' class='form-check-input ' type='checkbox' checked value='" +
-                        tarea.id +
-                        "' id='" +
-                        tarea.id +
-                        "'>" +
-                        "<label style='margin-left:20px' class='form-check-label stretched-link' for='" +
-                        tarea.id +
-                        "'>" +
-                        tarea.nombre_tarea +
-                        "</label>" +
-                        "</li>";
-                    }else{
-                        listaTareas +=
-                        "<li class='list-group-item'> <input style='margin-left:2px;' class='form-check-input ' type='checkbox' value='" +
-                        tarea.id +
-                        "' id='" +
-                        tarea.id +
-                        "'>" +
-                        "<label style='margin-left:20px' class='form-check-label stretched-link' for='" +
-                        tarea.id +
-                        "'>" +
-                        tarea.nombre_tarea +
-                        "</label>" +
-                        "</li>";
-                    }
+                    // Initialize a variable to track if the tarea is found in tarea_dispositivo
+                    let isChecked = false;
 
+                    // Loop through all tarea_dispositivo items
+                    $.each(orden.dispositivo_ot[0].tarea_dispositivo, function (i, tareaDispositivo) {
+                        if (tareaDispositivo.cod_tarea == tarea.id) {
+                            isChecked = true; // Set to true if a match is found
+                            return false; // Break out of the loop
+                        }
+                    });
+
+                    // Build the list item based on whether it should be checked or not
+                    listaTareas +=
+                    "<li class='list-group-item'> <input style='margin-left:2px;' class='form-check-input ' type='checkbox' " +
+                    (isChecked ? "checked" : "") + // Check if isChecked is true
+                    " value='" +
+                    tarea.id +
+                    "' id='" +
+                    tarea.id +
+                    "'>" +
+                    "<label style='margin-left:20px' class='form-check-label stretched-link' for='" +
+                    tarea.id +
+                    "'>" +
+                    tarea.nombre_tarea +
+                    "</label>" +
+                    "</li>";
                 });
 
                 $("#tareas-0").html(listaTareas);
@@ -673,6 +661,16 @@ function manejarCambioServicio(servicioId, sucursal){
         $("#bloqueEncargado").css("display", "none");
         $("#bloqueEquipoTecnico").css("display", "none");
     }
+    console.log('cantidad de dispositivos: '+orden.dispositivo_ot.length);
+
+    for (let index = 1; index < orden.dispositivo_ot.length; index++) {
+        //console.log('Aca estan los dispositivos');
+        //console.log(orden.dispositivo_ot[index]);
+        var bloque = clonarBloque(block);
+
+        //Se debe restructurar la carga de la información de los dispositivos desde 0
+
+    }
 }
 
 $("#servicio").on("change", function () {
@@ -769,14 +767,13 @@ $("#bloqueDispositivos")
 
 var blockCounter = 1;
 
-$(".btn-add").on("click", function () {
-    var block = $(this).closest(".block-relieve");
+function clonarBloque(block) {
     var clone = block.clone(true);
-    // console.log(clone);
-    // Asignar un nombre único al bloque clonado
+    
+    // Assign a unique name to the cloned block
     clone.attr("id", "bloque-" + blockCounter);
 
-    // Asignar nuevos id a los elementos de la lista de tareas
+    // Assign new IDs to the elements in the task list
     clone.find("li.list-group-item").each(function (index, element) {
         var taskId = $(element).find("input.form-check-input").val();
         var newId = "task-" + taskId + "-" + blockCounter + "-" + index;
@@ -784,25 +781,28 @@ $(".btn-add").on("click", function () {
         $(element).find("label.form-check-label").attr("for", newId);
         $(element).find("input.detalleSiNo").attr("id", "detalleSiNo-" + blockCounter);
     });
-    clone.find("input.detalleSiNo").attr("id", "detalleSiNo-" + blockCounter);
-    clone.find("select#dispositivo-0").attr("id","dispositivo-" + blockCounter);
-    clone.find("span#errorDispositivo-0").attr("id","errorDispositivo-" + blockCounter);
-    clone.find("ul#tareas-0").attr("id","tareas-" + blockCounter);
-    clone.find("span#errorTareas-0").attr("id","errorTareas-" + blockCounter);
-    clone.find("span#errorRayones-0").attr("id","errorRayones-" + blockCounter);
-    clone.find("span#errorRupturas-0").attr("id","errorRupturas-" + blockCounter);
-    clone.find("span#errorTornillos-0").attr("id","errorTornillos-" + blockCounter);
-    clone.find("span#errorGomas-0").attr("id","errorGomas-" + blockCounter);
-    clone.find("span#errorEstadoDis-0").attr("id","errorEstadoDis-"+blockCounter);
-    clone.find("span#errorCargador-0").attr("id","errorCargador-"+blockCounter);
-    clone.find("span#errorCablePoder-0").attr("id","errorCablePoder-"+blockCounter);
-    clone.find("span#errorAdaptador-0").attr("id","errorAdaptador-"+blockCounter);
-    clone.find("span#errorBateria-0").attr("id","errorBateria-"+blockCounter);
-    clone.find("span#errorPantalla-0").attr("id","errorPantalla-"+blockCounter);
-    clone.find("span#errorTeclado-0").attr("id","errorTeclado-"+blockCounter);
-    clone.find("span#errorDrum-0").attr("id","errorDrum-"+blockCounter);
-    clone.find("span#errorToner-0").attr("id","errorToner-"+blockCounter);
 
+    // Update IDs for various elements
+    clone.find("input.detalleSiNo").attr("id", "detalleSiNo-" + blockCounter);
+    clone.find("select#dispositivo-0").attr("id", "dispositivo-" + blockCounter);
+    clone.find("span#errorDispositivo-0").attr("id", "errorDispositivo-" + blockCounter);
+    clone.find("ul#tareas-0").attr("id", "tareas-" + blockCounter);
+    clone.find("span#errorTareas-0").attr("id", "errorTareas-" + blockCounter);
+    clone.find("span#errorRayones-0").attr("id", "errorRayones-" + blockCounter);
+    clone.find("span#errorRupturas-0").attr("id", "errorRupturas-" + blockCounter);
+    clone.find("span#errorTornillos-0").attr("id", "errorTornillos-" + blockCounter);
+    clone.find("span#errorGomas-0").attr("id", "errorGomas-" + blockCounter);
+    clone.find("span#errorEstadoDis-0").attr("id", "errorEstadoDis-" + blockCounter);
+    clone.find("span#errorCargador-0").attr("id", "errorCargador-" + blockCounter);
+    clone.find("span#errorCablePoder-0").attr("id", "errorCablePoder-" + blockCounter);
+    clone.find("span#errorAdaptador-0").attr("id", "errorAdaptador-" + blockCounter);
+    clone.find("span#errorBateria-0").attr("id", "errorBateria-" + blockCounter);
+    clone.find("span#errorPantalla-0").attr("id", "errorPantalla-" + blockCounter);
+    clone.find("span#errorTeclado-0").attr("id", "errorTeclado-" + blockCounter);
+    clone.find("span#errorDrum-0").attr("id", "errorDrum-" + blockCounter);
+    clone.find("span#errorToner-0").attr("id", "errorToner-" + blockCounter);
+
+    // Update radio button names
     clone.find("input[type='radio']").each(function () {
         var radio = $(this);
         var groupName = radio.attr("name");
@@ -810,42 +810,45 @@ $(".btn-add").on("click", function () {
         radio.attr("name", newGroupName);
     });
 
+    // Update div IDs
     clone.find("div.form-check.textoInf").each(function () {
         var div = $(this);
         var groupName = div.attr("id");
         var groupNames = groupName.split("-");
         var newGroupName = groupNames[0] + "-" + blockCounter;
         var finalGroupName = newGroupName + "-" + groupNames[1];
-
-        // div.attr("id", finalGroupName);
         div.prop("id", finalGroupName);
-
     });
 
-    blockCounter++; // Incrementar el contador global
+    blockCounter++; // Increment the global counter
 
-    // Resto del código para clonar el bloque...
-    clone.find("select").val("0"); // resetear valores de los selects
+    // Reset values of selects and checkboxes
+    clone.find("select").val("0"); // Reset values of selects
     clone.find("input[type='checkbox']").prop("checked", false);
-    clone
-        .find(".btn-add")
-        .removeClass("btn-add")
-        .addClass("btn-remove")
-        .text("-"); // reemplazar clases y texto
+
+    // Remove the add button and add a remove button
+    clone.find(".btn-add").remove();
+    var newButton = $('<button class="btn btn-primary btn-remove boton-inferior-derecha" type="button">-</button>');
+    clone.append(newButton); // Add the new button to the block
+
+    // Append the cloned block after the original block
     block.after(clone);
+
+    // Bind events for the new buttons
     clone.find("#botonAgregarDetalle").on("click", mostrarDetalles.bind(clone));
-    clone
-        .find("#botonCancelarDetalle")
-        .on("click", cancelarDetalles.bind(clone));
-    clone
-        .find("#botonAgregarAccesorio")
-        .on("click", mostrarAccesorios.bind(clone));
-    clone
-        .find("#botonCancelarAccesorio")
-        .on("click", cancelarAccesorios.bind(clone));
+    clone.find("#botonCancelarDetalle").on("click", cancelarDetalles.bind(clone));
+    clone.find("#botonAgregarAccesorio").on("click", mostrarAccesorios.bind(clone));
+    clone.find("#botonCancelarAccesorio").on("click", cancelarAccesorios.bind(clone));
+}
+
+$(".btn-add").on("click", function () {
+    var block = $(this).closest(".block-relieve");
+    clonarBloque(block);
 });
 $(document).on("click", ".btn-remove", function () {
+    console.log("se clicka el botón");
     var block = $(this).closest(".block-relieve");
+    console.log(block);
     block.remove();
 });
 

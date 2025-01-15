@@ -1,5 +1,7 @@
 @extends('layouts.master')
-
+@section('css')
+    <link rel="stylesheet" href="{{ asset('assets/css/pages/ordenes.css') }}">
+@endsection
 @section('content')
     
     <main class="col py-3 flex-grow-1">
@@ -610,5 +612,8 @@
             </div>
         </div>
     </main>
+@endsection
+
+@section('scripts')
     <script src="{{ asset('assets/js/ordenes/editarOrden.js') }}"></script>
 @endsection

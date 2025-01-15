@@ -206,10 +206,10 @@ function cargarContactos(sucursalId) {
                     listContactos +=
                     "<li class='list-group-item'> <input style='margin-left:2px;' class='form-check-input ' type='checkbox' value='" +
                     contacto.id +
-                    "' id='" +
+                    "' id='c_" +
                     contacto.id +
                     "'" + (isChecked ? " checked" : "") + ">" +
-                    "<label style='margin-left:20px' class='form-check-label stretched-link' for='" +
+                    "<label style='margin-left:20px' class='form-check-label stretched-link' for='c_" +
                     contacto.id +
                     "'>" +
                     contacto.nombre_contacto +
@@ -448,6 +448,7 @@ $("#servicio").on("change", function () {
 });
 
 $("#cliente").on("change", function () {
+    // console.log('Cambio el cliente');
     for (var key in selectedContacts) {
         delete selectedContacts[key];
     }
@@ -533,7 +534,9 @@ $("#bloqueDispositivos")
 
 var blockCounter = 1;
 
-$(".btn-add").on("click", function () {
+$(".btn-add").on("click", function (event) {
+    event.preventDefault();
+    console.log('se clona');
     var block = $(this).closest(".block-relieve");
     var clone = block.clone(true);
     // console.log(clone);
@@ -591,11 +594,12 @@ $(".btn-add").on("click", function () {
     // Resto del código para clonar el bloque...
     clone.find("select").val("0"); // resetear valores de los selects
     clone.find("input[type='checkbox']").prop("checked", false);
-    clone
-        .find(".btn-add")
-        .removeClass("btn-add")
-        .addClass("btn-remove")
-        .text("-"); // reemplazar clases y texto
+    clone.find(".btn-add").remove();
+
+    // Crea un nuevo botón en vez de clonar el anterior
+    var newButton = $('<button class="btn btn-primary btn-remove boton-inferior-derecha" type="button">-</button>');
+    clone.append(newButton); // Añade el nuevo botton al bloque
+
     block.after(clone);
     clone.find("#botonAgregarDetalle").on("click", mostrarDetalles.bind(clone));
     clone
@@ -608,10 +612,38 @@ $(".btn-add").on("click", function () {
         .find("#botonCancelarAccesorio")
         .on("click", cancelarAccesorios.bind(clone));
 });
-$(document).on("click", ".btn-remove", function () {
+
+
+
+$(document).on("click", ".btn-remove", function (event) {
+    event.preventDefault(); // Prevent default action
+    event.stopPropagation(); // Prevent event bubbling
+
+    console.log("se clicka el botón"); // Debugging log
     var block = $(this).closest(".block-relieve");
-    block.remove();
+    console.log(block); // Log the block to be removed
+
+    if (block.length > 0) {
+        block.remove(); // Remove the block
+        console.log("Block removed"); // Log removal
+    } else {
+        console.log("No block found to remove"); // Log if no block found
+    }
 });
+
+// $(document).on("click", ".btn-remove", function () {
+//     console.log("se clicka el botón");
+//     var block = $(this).closest(".block-relieve");
+//     console.log(block);
+
+//     if (block.length > 0) {
+//         block.remove(); // Remove the block
+//         console.log("Block removed");
+//     } else {
+//         console.log("No block found to remove");
+//     }
+//     // block.remove();
+// });
 
 function mostrarDetalles() {
     var block = $(this).closest(".block-relieve");
