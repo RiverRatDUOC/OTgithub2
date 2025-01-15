@@ -640,7 +640,13 @@ class OrdenesController extends Controller
             }
 
             $feriados = $response->json(); // Decodifica la respuesta JSON
-
+            
+            // Verifica si hay un error en la respuesta
+            if (isset($feriados['error']) && $feriados['error']) {
+                \Log::warning("No se encontraron feriados: " . $feriados['message']);
+                return []; // Retorna un array vacío si hay un error
+            }
+            
             if (empty($feriados)) {
                 return [];
             }
